@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mulinda's World - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: lawngreen;
+      text-shadow: 1px 1px 4px #000;
+    }
+
+    .main-container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid lawngreen;
+      width: 90%;
+      max-width: 800px;
+      margin: 60px auto;
+      box-shadow: 0 0 20px rgba(50, 205, 50, 0.3);
+      text-align: center;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .profile-picture {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid lawngreen;
+      background: url('../static/photos/profilepic.jpg') no-repeat center/cover;
+      margin: 20px auto;
+      box-shadow: 0 0 15px lawngreen;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-picture:hover {
+      transform: scale(1.1);
+    }
+
+    p, li {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li::before {
+      content: "✔️";
+      margin-right: 8px;
+      color: lawngreen;
+    }
+
+    a {
+      color: lawngreen;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #00ffcc;
+      text-decoration: underline;
+    }
+
+    .footer-container {
+      background: #111;
+      padding: 30px 20px;
+      border-top: 2px solid lawngreen;
+      text-align: center;
+      box-shadow: 0 -2px 15px rgba(50, 205, 50, 0.3);
+    }
+
+    .footer-container ul {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0;
+      margin: 20px 0;
+    }
+
+    .footer-container i {
+      margin-right: 10px;
+    }
+
+    .footer-container p:last-child {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 20px;
+        margin: 30px auto;
+      }
+
+      .profile-picture {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-container {
+        padding: 15px;
+        margin: 20px auto;
+      }
+
+      .profile-picture {
+        width: 90px;
+        height: 90px;
+      }
+
+      p, li {
+        font-size: 1rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <h1>Welcome to Mulinda's World!</h1>
+    <div class="profile-picture"></div>
+    <p>I’m <strong>Mulinda Israel Negondeni</strong>, a creative, driven professional passionate about innovation, growth, and new technologies.</p>
+    <p>I am a:</p>
+    <ul>
+      <li>Conceptualizer</li>
+      <li>Full Stack Developer</li>
+      <li>AI-Assisted Developer</li>
+      <li>Data Analyst</li>
+    </ul>
+    <p>Navigate the top-left menu to explore my work and background.</p>
+  </div>
+
+  <div class="footer-container">
+    <p>Leave a comment for me here: <a href="https://forms.gle/26VeYKxNL98HJSBf7" target="_blank">Comment Form</a></p>
+    <h2>Or contact me directly:</h2>
+    <ul>
+      <li><a href="https://github.com/Mulinda2019" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+      <li><a href="https://linkedin.com/in/mulindaisrael" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+      <li><a href="mailto:negondenimulindaisrael@gmail.com" target="_blank"><i class="fas fa-envelope"></i> Email</a></li>
+    </ul>
+    <p>&copy; Mulinda Israel Negondeni. All rights reserved.</p>
+  </div>
+
+</body>
+</html>

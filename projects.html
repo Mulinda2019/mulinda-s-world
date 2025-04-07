@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects Showcase</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      color: white;
+      background-color: black;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: lawngreen;
+      text-shadow: 1px 1px 4px #000;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid lawngreen;
+      width: 90%;
+      margin: 40px auto;
+      box-shadow: 0 0 20px rgba(50, 205, 50, 0.3);
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .project-container img,
+    .project-container video {
+      width: 75%;
+      display: block;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(124, 252, 0, 0.4);
+    }
+
+    .toggle-btn {
+      background-color: #00ff00;
+      color: black;
+      border: none;
+      padding: 10px 18px;
+      font-size: 15px;
+      border-radius: 8px;
+      margin: 15px auto;
+      display: block;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background-color: #7fff00;
+    }
+
+    .details {
+      display: none;
+      margin-top: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .github-link {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #006400;
+      padding: 8px 14px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 10px lime;
+    }
+
+    .github-link:hover {
+      background-color: #32cd32;
+    }
+
+    .screenshots-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 12px;
+    }
+
+    .mini-shot {
+      width: 22%;
+      background-color: rgba(255,255,255,0.05);
+      padding: 8px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(50, 205, 50, 0.2);
+      text-align: center;
+    }
+
+    .mini-shot img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .mini-shot p {
+      font-size: 13px;
+      margin-top: 6px;
+      color: #cbd5e1;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li::before {
+      content: "✔️";
+      margin-right: 8px;
+      color: lawngreen;
+    }
+
+    a {
+      color: lawngreen;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #00ffcc;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .project-container img,
+      .project-container video {
+        width: 100%;
+      }
+
+      .screenshots-row {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .mini-shot {
+        width: 100%;
+      }
+    }
+  </style>
+  <script>
+    function toggleDetails(id) {
+      const details = document.getElementById(id);
+      details.style.display = details.style.display === "block" ? "none" : "block";
+    }
+  </script>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Projects</h1>
+  </div>
+
+  <!-- Project 1 -->
+  <div class="container project-container">
+    <h2>ISREAL AUTHENTICATION</h2>
+    <img src="../static/photos/isreal.jpg" alt="Authentication App Screenshot">
+    <button class="toggle-btn" onclick="toggleDetails('details1')">Show Details</button>
+
+    <div class="details" id="details1">
+      <p>This web authentication app helps protect user data through secure sign-ups, logins, and real-time email alerts.</p>
+      <ul>
+        <li><strong>Tech Stack:</strong> Python, Flask, PostgreSQL, HTML, CSS, JavaScript</li>
+        <li><strong>Role:</strong> Lead Developer</li>
+        <li><strong>Features:</strong> OTP, Email Notification, Flash alerts, Profile Dashboard</li>
+      </ul>
+      <video src="demo1.mp4" controls></video>
+      <a class="github-link" href="https://github.com/username/isreal-authentication" target="_blank"><i class="fab fa-github"></i> View Code on GitHub</a>
+    </div>
+
+    <div class="screenshots-row">
+      <div class="mini-shot">
+        <img src="../static/photos/auth_login.jpg" alt="Login Page">
+        <p>Login screen with email/OTP and Flash messages.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/auth_register.jpg" alt="Register Page">
+        <p>Registration form with email confirmation.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/auth_profile.jpg" alt="Profile Page">
+        <p>User profile post-login with data access.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/auth_error.jpg" alt="Error Page">
+        <p>Error alert page for failed attempts.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 2 -->
+  <div class="container project-container">
+    <h2>PYTHON TEACHER</h2>
+    <img src="../static/photos/pyguider.jpg" alt="Python Teaching App Screenshot">
+    <button class="toggle-btn" onclick="toggleDetails('details2')">Show Details</button>
+
+    <div class="details" id="details2">
+      <p>A beginner-friendly Python tutorial platform with a built-in code editor and interactive learning.</p>
+      <ul>
+        <li><strong>Tech Stack:</strong> Python, Flask, SQLite, JS, CodeMirror, HTML, CSS</li>
+        <li><strong>Role:</strong> Lead Developer</li>
+        <li><strong>Features:</strong> Editor, Task Challenges, Word Definitions, Syntax Tips</li>
+      </ul>
+      <video src="demo2.mp4" controls></video>
+      <a class="github-link" href="https://github.com/username/python-teacher" target="_blank"><i class="fab fa-github"></i> View Code on GitHub</a>
+    </div>
+
+    <div class="screenshots-row">
+      <div class="mini-shot">
+        <img src="../static/photos/py_editor.jpg" alt="Code Editor">
+        <p>Real-time editor with syntax highlighting.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/py_tasks.jpg" alt="Coding Tasks">
+        <p>Mini coding tasks to apply knowledge.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/py_tips.jpg" alt="Tips Page">
+        <p>Helpful popups for programming tips.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/py_definitions.jpg" alt="Definition Search">
+        <p>Search feature to explain key concepts.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 3 -->
+  <div class="container project-container">
+    <h2>UNIVERSITY MEMBERSHIP SYSTEM</h2>
+    <img src="../static/photos/umms.jpg" alt="Membership Management Screenshot">
+    <button class="toggle-btn" onclick="toggleDetails('details3')">Show Details</button>
+
+    <div class="details" id="details3">
+      <p>A comprehensive platform to manage university club memberships, events, and communications.</p>
+      <ul>
+        <li><strong>Tech Stack:</strong> HTML, CSS, JavaScript, React</li>
+        <li><strong>Role:</strong> Lead Developer</li>
+        <li><strong>Achievements:</strong> Improved engagement, reduced load time by 25%</li>
+      </ul>
+      <video src="demo3.mp4" controls></video>
+      <a class="github-link" href="https://github.com/username/university-membership-system" target="_blank"><i class="fab fa-github"></i> View Code on GitHub</a>
+    </div>
+
+    <div class="screenshots-row">
+      <div class="mini-shot">
+        <img src="../static/photos/umms_dashboard.jpg" alt="Dashboard">
+        <p>Member overview and stats dashboard.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/umms_register.jpg" alt="Registration Page">
+        <p>Member registration and edit form.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/umms_events.jpg" alt="Events Page">
+        <p>Manage and create events calendar.</p>
+      </div>
+      <div class="mini-shot">
+        <img src="../static/photos/umms_notifications.jpg" alt="Notifications Page">
+        <p>Send group messages and alerts.</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

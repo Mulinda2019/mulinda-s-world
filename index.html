@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mulinda's World</title>
+  <link rel="stylesheet" href="../static/index.css" />
+  <link rel="icon" href="../static/favicon.ico" sizes="16x16" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <style>
+    /* Menu Button */
+    #menu-icon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: lawngreen;
+      padding: 10px 12px;
+      z-index: 1000;
+      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    #menu-icon:hover {
+      transform: scale(1.1);
+    }
+
+    #menu-icon:hover::after {
+      content: " Open Menu";
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-left: 10px;
+      background: black;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+
+    /* Menu Styles */
+    #menu {
+  position: fixed;
+  top: 60px;
+  left: 15px;
+  width: 200px; /* Sidebar width */
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid lawngreen;
+  padding: 10px;
+  display: none;
+  border-radius: 10px;
+  z-index: 999;
+  animation: fadeIn 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(124, 252, 0, 0.5);
+}
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #menu button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: transparent;
+      color: white;
+      border: none;
+      border-left: 4px solid transparent;
+      text-align: left;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    #menu button:hover,
+    #menu button.active {
+      background-color: lawngreen;
+      color: black;
+      border-left: 4px solid white;
+    }
+
+    #menu button i {
+      margin-right: 10px;
+    }
+
+    #close-menu {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      float: right;
+      cursor: pointer;
+    }
+
+    #close-menu:hover::after {
+      content: "Close menu";
+      position: absolute;
+      left: 100%;
+      margin-left: 10px;
+      background: black;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+    }
+
+    .arrow-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.8rem;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.5);
+      color: lawngreen;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 900;
+      display: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .arrow-nav:hover {
+      transform: translateY(-50%) scale(1.2);
+      box-shadow: 0 0 12px 4px lawngreen;
+    }
+
+    #left-arrow { left: 10px; }
+    #right-arrow { right: 10px; }
+
+    @media (max-width: 768px) {
+      #menu {
+        width: 75%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #menu {
+        width: 90%;
+        left: 5%;
+      }
+      #menu-icon {
+        padding: 8px;
+        top: 10px;
+        left: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Menu Button -->
+  <div id="menu-icon"><i class="fa fa-bars"></i></div>
+
+  <!-- Slide Menu -->
+  <div id="menu">
+    <button id="close-menu">&times;</button>
+    <button data-section="home"><i class="fa fa-home"></i> Home</button>
+    <button data-section="projects"><i class="fa fa-briefcase"></i> Projects</button>
+    <button data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Project</button>
+    <button data-section="certifications"><i class="fa fa-certificate"></i> Certifications</button>
+    <button data-section="resume"><i class="fa fa-file-text"></i> Resume</button>
+    <button data-section="private-policy"><i class="fa fa-lock"></i> Private Policy</button>
+  </div>
+
+  <!-- Main Section -->
+  <div id="main-content"></div>
+
+  <!-- Navigation Arrows -->
+  <div id="left-arrow" class="arrow-nav">&#8592;</div>
+  <div id="right-arrow" class="arrow-nav">&#8594;</div>
+
+  <!-- JS for Interaction -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const menuIcon = document.getElementById('menu-icon');
+      const menu = document.getElementById('menu');
+      const closeMenu = document.getElementById('close-menu');
+      const buttons = document.querySelectorAll('#menu button[data-section]');
+      const mainContent = document.getElementById('main-content');
+      const leftArrow = document.getElementById("left-arrow");
+      const rightArrow = document.getElementById("right-arrow");
+
+      const sections = [
+        "home",
+        "projects",
+        "future-projects",
+        "certifications",
+        "resume",
+        "private-policy"
+      ];
+
+      let currentSectionIndex = 0;
+
+      // Show Menu
+      menuIcon.addEventListener('click', () => {
+        menu.style.display = 'block';
+        menuIcon.style.display = 'none';
+      });
+
+      // Hide Menu
+      closeMenu.addEventListener('click', () => {
+        menu.style.display = 'none';
+        menuIcon.style.display = 'block';
+      });
+
+      // Outside Click Hide
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
+          menu.style.display = 'none';
+          menuIcon.style.display = 'block';
+        }
+      });
+
+      // Load Section
+      buttons.forEach(button => {
+        button.addEventListener('click', function () {
+          const sectionId = this.getAttribute('data-section');
+          loadSection(sectionId, sectionId + '.html');
+          buttons.forEach(btn => btn.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+
+      // Load Section Content
+      function loadSection(sectionId, file) {
+        fetch(file)
+          .then(response => response.text())
+          .then(data => {
+            mainContent.innerHTML = data;
+            executeScripts(mainContent);
+            currentSectionIndex = sections.indexOf(sectionId);
+          })
+          .catch(error => console.error('Error loading ' + file, error));
+      }
+
+      function executeScripts(container) {
+        const scripts = container.querySelectorAll("script");
+        scripts.forEach(script => {
+          const newScript = document.createElement("script");
+          if (script.src) newScript.src = script.src;
+          else newScript.textContent = script.textContent;
+          document.body.appendChild(newScript);
+          script.remove();
+        });
+      }
+
+      // Scroll Arrows Show/Hide
+      let scrollTimeout;
+      window.addEventListener('scroll', () => {
+        leftArrow.style.display = 'none';
+        rightArrow.style.display = 'none';
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          leftArrow.style.display = 'block';
+          rightArrow.style.display = 'block';
+        }, 300);
+      });
+
+      // Arrows Navigate
+      leftArrow.addEventListener("click", () => {
+        let prev = (currentSectionIndex - 1 + sections.length) % sections.length;
+        loadSection(sections[prev], sections[prev] + ".html");
+      });
+
+      rightArrow.addEventListener("click", () => {
+        let next = (currentSectionIndex + 1) % sections.length;
+        loadSection(sections[next], sections[next] + ".html");
+      });
+
+      // First Load
+      loadSection("home", "home.html");
+    });
+  </script>
+</body>
+</html>

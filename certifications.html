@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificates, Education & Skills</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --main-dark: #0e0e0e;
+      --main-green: lawngreen;
+      --main-purple: #6a0dad;
+      --card-dark: #1c1c1c;
+      --text-light: #fff;
+      --text-muted: #ccc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--main-dark);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-light);
+    }
+
+    .container {
+      max-width: 85%;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--main-green);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(124, 252, 0, 0.1);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--main-green);
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: var(--main-green);
+      border-bottom: 1px solid var(--main-green);
+      padding-bottom: 5px;
+      margin-top: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 10px 25px;
+      border: 1px solid var(--main-purple);
+      background-color: transparent;
+      color: var(--text-light);
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover {
+      background-color: var(--main-purple);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background-color: var(--card-dark);
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .view-link {
+      color: var(--main-green);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .view-link:hover {
+      text-decoration: underline;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--main-green);
+      background: #111;
+      color: var(--text-light);
+      font-size: 16px;
+      margin-bottom: 25px;
+    }
+
+    .skill-category h3 {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--main-green);
+      margin-top: 25px;
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .skill-item {
+      background-color: #121212;
+      padding: 10px 15px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      transition: 0.3s ease;
+      color: var(--text-muted);
+    }
+
+    .skill-item:hover {
+      background-color: var(--main-purple);
+      color: var(--text-light);
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .skill-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Certificates, Education & Skills</h1>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('certificates')">Certificates</button>
+      <button class="tab-btn" onclick="showTab('education')">Education</button>
+      <button class="tab-btn" onclick="showTab('skills')">Skills</button>
+    </div>
+
+    <!-- Tab Contents -->
+    <div id="certificates" class="tab-content active">
+      <h2>Certificates</h2>
+      <ul>
+        <li>- Code Foundation <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/5b55e668646caa552f8e4d1d" target="_blank">View</a></li>
+        <li>- Learn How to Code <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/11a686a7fd57b8c214f7f92749388d42" target="_blank">View</a></li>
+      </ul>
+
+      <h2>Professional Certificates</h2>
+      <ul>
+        <li>- Computer Science <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/05009c20e9174378acd37e6c2d0fbfc4" target="_blank">View</a></li>
+        <li>- Data Scientist: Analytics <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/7dec503730a448c8b22bb251ada403f3" target="_blank">View</a></li>
+        <li>- Data Scientist: Machine Learning <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/8e9e59de3f924b33ad2371faf667129b" target="_blank">View</a></li>
+      </ul>
+    </div>
+
+    <div id="education" class="tab-content">
+      <h2>Education</h2>
+      <p><strong>University of Venda</strong><br>Bachelor’s Degree in Human Resource Management</p>
+      <p><strong>Codecademy</strong><br>Certificates in Data Science, Machine Learning, Computer Science, Data Analytics</p>
+    </div>
+
+    <div id="skills" class="tab-content">
+      <input type="text" class="search-box" id="skillSearch" placeholder="Search skills..." />
+
+      <div class="skill-category">
+        <h3 onclick="toggleSection(this)"><i class="fas fa-code"></i> Programming</h3>
+        <div class="skill-grid">
+          <div class="skill-item"><i class="fab fa-python"></i>Python</div>
+          <div class="skill-item"><i class="fab fa-js"></i>JavaScript</div>
+          <div class="skill-item"><i class="fab fa-html5"></i>HTML & CSS</div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h3 onclick="toggleSection(this)"><i class="fas fa-tools"></i> Tools & Frameworks</h3>
+        <div class="skill-grid">
+          <div class="skill-item"><i class="fas fa-fire"></i>Flask</div>
+          <div class="skill-item"><i class="fas fa-code-branch"></i>Git</div>
+          <div class="skill-item"><i class="fas fa-robot"></i>AI-assisted coding</div>
+          <div class="skill-item"><i class="fas fa-envelope"></i>Automated emails</div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h3 onclick="toggleSection(this)"><i class="fas fa-database"></i> Databases</h3>
+        <div class="skill-grid">
+          <div class="skill-item">MySQL</div>
+          <div class="skill-item">PostgreSQL</div>
+          <div class="skill-item">SQLite</div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h3 onclick="toggleSection(this)"><i class="fas fa-chart-line"></i> Data Analysis</h3>
+        <div class="skill-grid">
+          <div class="skill-item">Pandas</div>
+          <div class="skill-item">Matplotlib</div>
+          <div class="skill-item">Seaborn</div>
+          <div class="skill-item">Tableau</div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <h3 onclick="toggleSection(this)"><i class="fas fa-brain"></i> Soft Skills</h3>
+        <div class="skill-grid">
+          <div class="skill-item">Communication</div>
+          <div class="skill-item">Teamwork</div>
+          <div class="skill-item">Problem-solving</div>
+          <div class="skill-item">Critical Thinking</div>
+          <div class="skill-item">Leadership</div>
+          <div class="skill-item">Flexibility</div>
+          <div class="skill-item">Attention to Detail</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelector(`.tab-btn[onclick="showTab('${id}')"]`).classList.add('active');
+    }
+
+    document.getElementById("skillSearch").addEventListener("keyup", function () {
+      const value = this.value.toLowerCase();
+      document.querySelectorAll(".skill-item").forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(value) ? "flex" : "none";
+      });
+    });
+
+    function toggleSection(header) {
+      const grid = header.nextElementSibling;
+      grid.classList.toggle("hidden");
+    }
+  </script>
+</body>
+</html>
