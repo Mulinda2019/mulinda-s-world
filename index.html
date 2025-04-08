@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,13 +49,12 @@
       font-size: 0.9rem;
     }
 
-    /* Menu Styles */
+    /* Sidebar Menu */
     #menu {
       position: fixed;
       top: 70px;
       left: 15px;
-      width: max-content;
-      max-width: 20vw;
+      width: 220px;
       background: rgba(0, 0, 0, 0.95);
       border: 2px solid lawngreen;
       padding: 10px;
@@ -63,7 +63,8 @@
       z-index: 999;
       animation: fadeIn 0.3s ease-in-out;
       box-shadow: 0 0 10px rgba(124, 252, 0, 0.5);
-      overflow-x: auto;
+      overflow-y: auto;
+      max-height: 80vh;
     }
 
     @keyframes fadeIn {
@@ -73,14 +74,14 @@
 
     #menu button {
       width: 100%;
-      padding: 12px;
-      margin: 8px 0;
+      padding: 10px;
+      margin: 6px 0;
       background: transparent;
       color: white;
       border: none;
       border-left: 4px solid transparent;
       text-align: left;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       border-radius: 4px;
       transition: all 0.2s ease;
@@ -101,21 +102,22 @@
     #close-menu {
       background: none;
       border: none;
-      max-width: fit-content;
       color: white;
       font-size: 1.2rem;
-      float: right;
       cursor: pointer;
+      padding: 4px 8px;
+      display: inline-block;
+      margin-bottom: 8px;
     }
 
     #close-menu:hover::after {
-      content: "Close menu";
+      content: "Close";
       position: absolute;
       left: 100%;
-      margin-left: 10px;
+      margin-left: 8px;
       background: black;
       color: white;
-      padding: 4px 8px;
+      padding: 4px 6px;
       border-radius: 5px;
       font-size: 0.8rem;
     }
@@ -143,23 +145,27 @@
     #left-arrow { left: 10px; }
     #right-arrow { right: 10px; }
 
-    /* Responsive Tweaks */
     @media (max-width: 768px) {
       #menu {
+        width: 200px;
         font-size: 0.9rem;
-        max-width: 25vw;
       }
 
       #menu button {
         font-size: 0.9rem;
-        padding: 10px;
+        padding: 8px;
+      }
+
+      #close-menu {
+        font-size: 1rem;
+        padding: 3px 6px;
       }
     }
 
     @media (max-width: 480px) {
       #menu {
-        font-size: 0.8rem;
-        max-width: 20vw;
+        width: 180px;
+        font-size: 0.85rem;
       }
 
       #menu-icon {
@@ -170,7 +176,12 @@
 
       #menu button {
         font-size: 0.8rem;
-        padding: 8px;
+        padding: 6px;
+      }
+
+      #close-menu {
+        font-size: 1rem;
+        padding: 3px 6px;
       }
     }
   </style>
@@ -179,7 +190,7 @@
   <!-- Menu Button -->
   <div id="menu-icon"><i class="fa fa-bars"></i></div>
 
-  <!-- Slide Menu -->
+  <!-- Sidebar Menu -->
   <div id="menu">
     <button id="close-menu">&times;</button>
     <button data-section="home"><i class="fa fa-home"></i> Home</button>
