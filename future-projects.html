@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>School Management System Demo</title>
+  <title>ISREAL EDUPORTAL Demo</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Orbitron&display=swap" rel="stylesheet">
   <style>
@@ -168,6 +168,30 @@
       text-decoration: underline;
       color: #00ffcc;
     }
+
+    .blackboard {
+      background-color: #333;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .blackboard p {
+      font-family: 'Courier New', Courier, monospace;
+      color: #fff;
+    }
+
+    .child-selector {
+      margin-bottom: 20px;
+    }
+
+    .child-selector select {
+      padding: 10px;
+      border-radius: 8px;
+      background-color: #111;
+      color: #fff;
+      border: 1px solid #444;
+    }
   </style>
 </head>
 <body>
@@ -177,126 +201,149 @@
     <p style="text-align: center; font-size: 1.1rem;">
       We’re actively building the next phase of this system and welcome any developers who want to be part of it!
       <br><br>
-      👉 <a href="https://github.com/your-username/school-management-system" target="_blank"><strong>View the GitHub Repository</strong></a>
+      👉 <a href="https://github.com/your-username/isreal-eduportal" target="_blank"><strong>View the GitHub Repository</strong></a>
     </p>
   </div>
 
   <div class="disclaimer">
-    ⚠️ This is a demo version only. Nothing is connected to a backend. Some features may be incomplete or require customization.
+    ⚠️ This is a mock system demonstrating the concept to all viewers, including non-technical audiences. The final system may differ significantly, but the core idea remains.
   </div>
 
   <div class="container">
-    <h1>🎓 School Management System</h1>
+    <h1>🎓 ISREAL EDUPORTAL</h1>
+    <p style="text-align: center; font-size: 1.1rem;">
+      A demo School Management System showcasing roles for Admins, Teachers, Students, and Parents.
+      <br><br>
+      Each panel below demonstrates a different user role.
+    </p>
+
     <div class="dashboard">
-      <div class="dashboard-card" onclick="showSection('admin')">
-        <i class="fas fa-user-cog"></i>
-        <h2>Admin Panel</h2>
+      <div class="dashboard-card" onclick="toggleSection('admin')">
+        <i class="fas fa-user-shield"></i>
+        <h2>Admin</h2>
       </div>
-      <div class="dashboard-card" onclick="showSection('teacher')">
+      <div class="dashboard-card" onclick="toggleSection('teacher')">
         <i class="fas fa-chalkboard-teacher"></i>
-        <h2>Teacher Zone</h2>
+        <h2>Teacher</h2>
       </div>
-      <div class="dashboard-card" onclick="showSection('student')">
+      <div class="dashboard-card" onclick="toggleSection('student')">
         <i class="fas fa-user-graduate"></i>
-        <h2>Student Portal</h2>
+        <h2>Student</h2>
       </div>
-      <div class="dashboard-card" onclick="showSection('parent')">
-        <i class="fas fa-user-friends"></i>
-        <h2>Parent Login</h2>
+      <div class="dashboard-card" onclick="toggleSection('parent')">
+        <i class="fas fa-users"></i>
+        <h2>Parent</h2>
       </div>
     </div>
-  </div>
 
-  <!-- Admin Panel -->
-  <div class="container section" id="admin">
-    <h1>🧑‍💼 Admin Panel</h1>
-    <div class="info-box">
-      <h2>Teachers & Assigned Subjects</h2>
-      <ul>
-        <li>Mrs. Nemanashi – Physical Science – Grades 10, 11, 12</li>
-        <li>Mr. Netshitavhadulu – English – Grades 8 to 12</li>
-        <li>Mr. Ravhuhali – Mathematics – Grades 8 to 12</li>
-      </ul>
-      <button>Manage Teachers</button>
-    </div>
-    <div class="info-box">
-      <h2>Student Management</h2>
-      <button>Add New Student</button>
-      <button>Remove Student</button>
-    </div>
-  </div>
+    <!-- Admin Panel -->
+    <div id="admin" class="section">
+      <h2>Admin Panel</h2>
+      <div class="info-box">
+        <strong>Responsibilities:</strong>
+        <ul>
+          <li>Manage student data</li>
+          <li>Manage teacher accounts</li>
+          <li>Upload marks</li>
+        </ul>
+      </div>
+      <form>
+        <label for="admin-name">Full Name</label>
+        <input type="text" id="admin-name" placeholder="Enter full name" />
 
-  <!-- Teacher Panel -->
-  <div class="container section" id="teacher">
-    <h1>📚 Teacher Panel</h1>
-    <div class="info-box">
-      <h2>My Students</h2>
-      <ul>
-        <li>Negondeni Hakhakhi – Grade 11 – Maths, Physical Science</li>
-        <li>Phaswana Brighten – Grade 10 – English, Maths</li>
-        <li>Smith Enerst – Grade 12 – Physical Science, English</li>
-      </ul>
-      <button>Manage Marks</button>
-      <button>Post Message to Blackboard</button>
-      <button>Send Private Message</button>
-    </div>
-  </div>
+        <label for="school-name">School Name</label>
+        <input type="text" id="school-name" placeholder="Enter school name" />
 
-  <!-- Student Portal -->
-  <div class="container section" id="student">
-    <h1>🎒 Student Portal</h1>
-    <div class="info-box">
-      <h2>Welcome, Student</h2>
-      <p>Class: Grade 11</p>
-      <p>Subjects: Maths, English, Physical Science</p>
-      <p>Teachers:</p>
-      <ul>
-        <li>Mrs. Nemanashi – Physical Science</li>
-        <li>Mr. Netshitavhadulu – English</li>
-        <li>Mr. Ravhuhali – Mathematics</li>
-      </ul>
-      <p>Marks:</p>
-      <ul>
-        <li>Maths: 72%</li>
-        <li>English: 68%</li>
-        <li>Physical Science: 74%</li>
-      </ul>
-      <button>View Blackboard</button>
-      <button>Send Private Message</button>
-    </div>
-  </div>
+        <label for="subject">Subject Assigned</label>
+        <input type="text" id="subject" placeholder="e.g., Mathematics" />
 
-  <!-- Parent Portal -->
-  <div class="container section" id="parent">
-    <h1>👪 Parent Dashboard</h1>
-    <div class="info-box">
-      <h2>Your Child’s Academic Info</h2>
-      <p>Class: Grade 11</p>
-      <p>Subjects: Maths, English, Physical Science</p>
-      <p>Teachers:</p>
-      <ul>
-        <li>Mrs. Nemanashi – Physical Science</li>
-        <li>Mr. Netshitavhadulu – English</li>
-        <li>Mr. Ravhuhali – Mathematics</li>
-      </ul>
-      <p>Marks:</p>
-      <ul>
-        <li>Maths: 72%</li>
-        <li>English: 68%</li>
-        <li>Physical Science: 74%</li>
-      </ul>
-      <button>View Blackboard</button>
+        <input type="submit" value="Submit Admin Info" />
+      </form>
+    </div>
+
+    <!-- Teacher Panel -->
+    <div id="teacher" class="section">
+      <h2>Teacher Panel</h2>
+      <div class="info-box">
+        <strong>Responsibilities:</strong>
+        <ul>
+          <li>Send public/private messages</li>
+          <li>View and enter student marks</li>
+        </ul>
+      </div>
+      <form>
+        <label for="teacher-name">Teacher Name</label>
+        <input type="text" id="teacher-name" placeholder="Enter your name" />
+
+        <label for="message">Message to Students</label>
+        <textarea id="message" rows="4" placeholder="Write your message..."></textarea>
+
+        <div class="blackboard">
+          <p><strong>📝 Blackboard Message Board</strong></p>
+          <p>"Upcoming test on Friday. Please revise Chapters 3 & 4."</p>
+        </div>
+
+        <input type="submit" value="Send Message" />
+      </form>
+    </div>
+
+    <!-- Student Panel -->
+    <div id="student" class="section">
+      <h2>Student Panel</h2>
+      <div class="info-box">
+        <strong>What You Can Do:</strong>
+        <ul>
+          <li>Register as a student</li>
+          <li>View marks</li>
+          <li>See teacher messages</li>
+        </ul>
+      </div>
+      <form>
+        <label for="student-name">Student Name</label>
+        <input type="text" id="student-name" placeholder="Enter your name" />
+
+        <label for="grade">Grade</label>
+        <select id="grade">
+          <option value="">Select Grade</option>
+          <option>Grade 1</option>
+          <option>Grade 2</option>
+          <option>Grade 3</option>
+          <option>Grade 4</option>
+          <option>Grade 5</option>
+        </select>
+
+        <input type="submit" value="View Marks" />
+      </form>
+    </div>
+
+    <!-- Parent Panel -->
+    <div id="parent" class="section">
+      <h2>Parent Panel</h2>
+      <div class="child-selector">
+        <label for="child-select">Select Child</label>
+        <select id="child-select">
+          <option value="child1">Lisa (Grade 4)</option>
+          <option value="child2">Tim (Grade 2)</option>
+        </select>
+      </div>
+      <div class="info-box">
+        <p><strong>Lisa's Marks:</strong> Mathematics - 78%, English - 84%</p>
+        <p><strong>Teacher Comment:</strong> "Lisa is improving in math but needs more practice."</p>
+      </div>
     </div>
   </div>
 
   <script>
-    function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('show');
+    function toggleSection(sectionId) {
+      const sections = document.querySelectorAll(".section");
+      sections.forEach(section => {
+        section.classList.remove("show");
       });
-      const target = document.getElementById(sectionId);
-      target.classList.add('show');
-      target.scrollIntoView({ behavior: 'smooth' });
+      const selected = document.getElementById(sectionId);
+      if (selected) {
+        selected.classList.add("show");
+        selected.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
   </script>
 
