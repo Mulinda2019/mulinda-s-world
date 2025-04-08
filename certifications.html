@@ -51,11 +51,15 @@
       margin-bottom: 30px;
     }
 
-    h2 {
+    h2, h3.collapsible-header {
       color: var(--main-green);
       border-bottom: 1px solid var(--main-green);
       padding-bottom: 5px;
       margin-top: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .tabs {
@@ -185,14 +189,14 @@
 
     <!-- Tab Contents -->
     <div id="certificates" class="tab-content active">
-      <h2>Certificates</h2>
-      <ul>
+      <h3 class="collapsible-header" onclick="toggleSection(this)">Certificates <i class="fas fa-chevron-down"></i></h3>
+      <ul class="collapsible-content hidden">
         <li>- Code Foundation <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/5b55e668646caa552f8e4d1d" target="_blank">View</a></li>
         <li>- Learn How to Code <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/11a686a7fd57b8c214f7f92749388d42" target="_blank">View</a></li>
       </ul>
 
-      <h2>Professional Certificates</h2>
-      <ul>
+      <h3 class="collapsible-header" onclick="toggleSection(this)">Professional Certificates <i class="fas fa-chevron-down"></i></h3>
+      <ul class="collapsible-content hidden">
         <li>- Computer Science <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/05009c20e9174378acd37e6c2d0fbfc4" target="_blank">View</a></li>
         <li>- Data Scientist: Analytics <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/7dec503730a448c8b22bb251ada403f3" target="_blank">View</a></li>
         <li>- Data Scientist: Machine Learning <a class="view-link" href="https://www.codecademy.com/profiles/israelnegondeni/certificates/8e9e59de3f924b33ad2371faf667129b" target="_blank">View</a></li>
@@ -210,7 +214,7 @@
 
       <div class="skill-category">
         <h3 onclick="toggleSection(this)"><i class="fas fa-code"></i> Programming</h3>
-        <div class="skill-grid">
+        <div class="skill-grid hidden">
           <div class="skill-item"><i class="fab fa-python"></i>Python</div>
           <div class="skill-item"><i class="fab fa-js"></i>JavaScript</div>
           <div class="skill-item"><i class="fab fa-html5"></i>HTML & CSS</div>
@@ -219,7 +223,7 @@
 
       <div class="skill-category">
         <h3 onclick="toggleSection(this)"><i class="fas fa-tools"></i> Tools & Frameworks</h3>
-        <div class="skill-grid">
+        <div class="skill-grid hidden">
           <div class="skill-item"><i class="fas fa-fire"></i>Flask</div>
           <div class="skill-item"><i class="fas fa-code-branch"></i>Git</div>
           <div class="skill-item"><i class="fas fa-robot"></i>AI-assisted coding</div>
@@ -229,7 +233,7 @@
 
       <div class="skill-category">
         <h3 onclick="toggleSection(this)"><i class="fas fa-database"></i> Databases</h3>
-        <div class="skill-grid">
+        <div class="skill-grid hidden">
           <div class="skill-item">MySQL</div>
           <div class="skill-item">PostgreSQL</div>
           <div class="skill-item">SQLite</div>
@@ -238,7 +242,7 @@
 
       <div class="skill-category">
         <h3 onclick="toggleSection(this)"><i class="fas fa-chart-line"></i> Data Analysis</h3>
-        <div class="skill-grid">
+        <div class="skill-grid hidden">
           <div class="skill-item">Pandas</div>
           <div class="skill-item">Matplotlib</div>
           <div class="skill-item">Seaborn</div>
@@ -248,7 +252,7 @@
 
       <div class="skill-category">
         <h3 onclick="toggleSection(this)"><i class="fas fa-brain"></i> Soft Skills</h3>
-        <div class="skill-grid">
+        <div class="skill-grid hidden">
           <div class="skill-item">Communication</div>
           <div class="skill-item">Teamwork</div>
           <div class="skill-item">Problem-solving</div>
@@ -266,7 +270,8 @@
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-      document.querySelector(`.tab-btn[onclick="showTab('${id}')"]`).classList.add('active');
+      const clickedBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.toLowerCase().includes(id));
+      if (clickedBtn) clickedBtn.classList.add('active');
     }
 
     document.getElementById("skillSearch").addEventListener("keyup", function () {
@@ -277,8 +282,10 @@
     });
 
     function toggleSection(header) {
-      const grid = header.nextElementSibling;
-      grid.classList.toggle("hidden");
+      const next = header.nextElementSibling;
+      if (next) {
+        next.classList.toggle("hidden");
+      }
     }
   </script>
 </body>
