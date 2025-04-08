@@ -110,15 +110,17 @@
       color: #bbb;
     }
 
-    input[type="submit"] {
+    input[type="submit"], button {
       background-color: #ffd700;
       color: #000;
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      padding: 10px 20px;
+      border-radius: 8px;
     }
 
-    input[type="submit"]:hover {
+    input[type="submit"]:hover, button:hover {
       background-color: #ffbb00;
     }
 
@@ -129,6 +131,19 @@
     .show {
       display: block;
       animation: fadeIn 0.4s ease;
+    }
+
+    .info-box {
+      margin: 15px 0;
+      padding: 15px;
+      border: 1px solid #444;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+
+    ul {
+      list-style-type: square;
+      margin-left: 20px;
     }
 
     @keyframes fadeIn {
@@ -157,25 +172,19 @@
 </head>
 <body>
 
-  <!-- Future Projects Section -->
   <div class="container">
     <h1>🚀 Future Projects</h1>
-    <p style="text-align: center; font-size: 1.1rem; line-height: 1.6;">
-      We’re actively building the next phase of this system and welcome any developers who want to be part of it!<br>
-      Whether you’re experienced or just learning, feel free to contribute ideas or code.
-      <br><br>
-      This project is built with <strong>Flask</strong>, <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>, but we’re open to integrating other tools as long as they align with the core stack.
+    <p style="text-align: center; font-size: 1.1rem;">
+      We’re actively building the next phase of this system and welcome any developers who want to be part of it!
       <br><br>
       👉 <a href="https://github.com/your-username/school-management-system" target="_blank"><strong>View the GitHub Repository</strong></a>
     </p>
   </div>
 
-  <!-- Disclaimer -->
   <div class="disclaimer">
     ⚠️ This is a demo version only. Nothing is connected to a backend. Some features may be incomplete or require customization.
   </div>
 
-  <!-- Dashboard Section -->
   <div class="container">
     <h1>🎓 School Management System</h1>
     <div class="dashboard">
@@ -201,66 +210,83 @@
   <!-- Admin Panel -->
   <div class="container section" id="admin">
     <h1>🧑‍💼 Admin Panel</h1>
-    <form onsubmit="event.preventDefault(); location.reload();">
-      <label>Student Full Name:</label>
-      <input type="text" placeholder="Add or update student name" required />
-      <label>Assign Teacher:</label>
-      <input type="text" placeholder="Assign teacher" />
-      <input type="submit" value="Save Changes" />
-    </form>
+    <div class="info-box">
+      <h2>Teachers & Assigned Subjects</h2>
+      <ul>
+        <li>Mrs. Nemanashi – Physical Science – Grades 10, 11, 12</li>
+        <li>Mr. Netshitavhadulu – English – Grades 8 to 12</li>
+        <li>Mr. Ravhuhali – Mathematics – Grades 8 to 12</li>
+      </ul>
+      <button>Manage Teachers</button>
+    </div>
+    <div class="info-box">
+      <h2>Student Management</h2>
+      <button>Add New Student</button>
+      <button>Remove Student</button>
+    </div>
   </div>
 
   <!-- Teacher Panel -->
   <div class="container section" id="teacher">
     <h1>📚 Teacher Panel</h1>
-    <form onsubmit="event.preventDefault(); location.reload();">
-      <label>Message Type:</label>
-      <select>
-        <option>Public</option>
-        <option>Private</option>
-      </select>
-      <label>Student (if private):</label>
-      <input type="text" placeholder="Student Name" />
-      <label>Message Content:</label>
-      <textarea placeholder="Write your message..." rows="4"></textarea>
-      <hr>
-      <label>Upload Student Marks:</label>
-      <input type="text" placeholder="Student Name" />
-      <input type="text" placeholder="Subject: Marks" />
-      <input type="submit" value="Send & Upload" />
-    </form>
+    <div class="info-box">
+      <h2>My Students</h2>
+      <ul>
+        <li>Negondeni Hakhakhi – Grade 11 – Maths, Physical Science</li>
+        <li>Phaswana Brighten – Grade 10 – English, Maths</li>
+        <li>Smith Enerst – Grade 12 – Physical Science, English</li>
+      </ul>
+      <button>Manage Marks</button>
+      <button>Post Message to Blackboard</button>
+      <button>Send Private Message</button>
+    </div>
   </div>
 
   <!-- Student Portal -->
   <div class="container section" id="student">
     <h1>🎒 Student Portal</h1>
-    <form onsubmit="event.preventDefault(); location.reload();">
-      <label>Full Name:</label>
-      <input type="text" placeholder="Enter your full name" required />
-      <label>Email:</label>
-      <input type="email" placeholder="Enter your email" required />
-      <label>Grade:</label>
-      <select>
-        <option>Grade 1</option>
-        <option>Grade 2</option>
-        <option>Grade 3</option>
-      </select>
-      <input type="submit" value="Register & Access" />
-    </form>
+    <div class="info-box">
+      <h2>Welcome, Student</h2>
+      <p>Class: Grade 11</p>
+      <p>Subjects: Maths, English, Physical Science</p>
+      <p>Teachers:</p>
+      <ul>
+        <li>Mrs. Nemanashi – Physical Science</li>
+        <li>Mr. Netshitavhadulu – English</li>
+        <li>Mr. Ravhuhali – Mathematics</li>
+      </ul>
+      <p>Marks:</p>
+      <ul>
+        <li>Maths: 72%</li>
+        <li>English: 68%</li>
+        <li>Physical Science: 74%</li>
+      </ul>
+      <button>View Blackboard</button>
+      <button>Send Private Message</button>
+    </div>
   </div>
 
   <!-- Parent Portal -->
   <div class="container section" id="parent">
-    <h1>👪 Parent Login</h1>
-    <form onsubmit="event.preventDefault(); location.reload();">
-      <label>Parent Name:</label>
-      <input type="text" placeholder="Enter your name" required />
-      <label>Child’s Name:</label>
-      <input type="text" placeholder="Linked to student" required />
-      <label>Password:</label>
-      <input type="password" placeholder="Enter password" required />
-      <input type="submit" value="Login to View Reports" />
-    </form>
+    <h1>👪 Parent Dashboard</h1>
+    <div class="info-box">
+      <h2>Your Child’s Academic Info</h2>
+      <p>Class: Grade 11</p>
+      <p>Subjects: Maths, English, Physical Science</p>
+      <p>Teachers:</p>
+      <ul>
+        <li>Mrs. Nemanashi – Physical Science</li>
+        <li>Mr. Netshitavhadulu – English</li>
+        <li>Mr. Ravhuhali – Mathematics</li>
+      </ul>
+      <p>Marks:</p>
+      <ul>
+        <li>Maths: 72%</li>
+        <li>English: 68%</li>
+        <li>Physical Science: 74%</li>
+      </ul>
+      <button>View Blackboard</button>
+    </div>
   </div>
 
   <script>
@@ -268,8 +294,9 @@
       document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('show');
       });
-      document.getElementById(sectionId).classList.add('show');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const target = document.getElementById(sectionId);
+      target.classList.add('show');
+      target.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 
