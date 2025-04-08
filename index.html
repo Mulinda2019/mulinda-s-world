@@ -10,181 +10,194 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
   <style>
-    /* Menu Button */
-    #menu-icon {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background-color: lawngreen;
-      color: black;
-      padding: 10px 12px;
-      z-index: 1000;
-      cursor: pointer;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s ease;
-    }
+  /* Menu Button */
+  #menu-icon {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: lawngreen;
+    color: black;
+    padding: 10px 12px;
+    z-index: 1000;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+  }
 
-    #menu-icon i {
-      color: black;
-      font-size: 1.5rem;
-    }
+  #menu-icon i {
+    color: black;
+    font-size: 1.5rem;
+  }
 
-    #menu-icon:hover {
-      transform: scale(1.1);
-    }
+  #menu-icon:hover {
+    transform: scale(1.1);
+  }
 
-    #menu-icon:hover::after {
-      content: " Open Menu";
-      position: absolute;
-      left: 100%;
-      top: 50%;
-      transform: translateY(-50%);
-      margin-left: 10px;
-      background: black;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      white-space: nowrap;
-      font-size: 0.9rem;
-    }
+  #menu-icon:hover::after {
+    content: " Open Menu";
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 10px;
+    background: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
 
-    /* Sidebar Menu */
+  /* Menu Styles */
+  #menu {
+    position: fixed;
+    top: 70px;
+    left: 15px;
+    width: max-content;
+    max-width: 20vw;
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid lawngreen;
+    padding: 10px;
+    display: none;
+    border-radius: 10px;
+    z-index: 999;
+    animation: fadeIn 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(124, 252, 0, 0.5);
+    overflow: hidden;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #menu button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background: transparent;
+    color: white;
+    border: none;
+    border-left: 4px solid transparent;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  #menu button:hover,
+  #menu button.active {
+    background-color: lawngreen;
+    color: black;
+    border-left: 4px solid white;
+  }
+
+  #menu button i {
+    margin-right: 10px;
+  }
+
+  #close-menu {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    float: right;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  #close-menu:hover::after {
+    content: "Close menu";
+    position: absolute;
+    top: 50%;
+    left: 110%;
+    transform: translateY(-50%);
+    background: black;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1000;
+  }
+
+  .arrow-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.8rem;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    color: lawngreen;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 900;
+    display: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .arrow-nav:hover {
+    transform: translateY(-50%) scale(1.2);
+    box-shadow: 0 0 12px 4px lawngreen;
+  }
+
+  #left-arrow { left: 10px; }
+  #right-arrow { right: 10px; }
+
+  /* Responsive Tweaks */
+  @media (max-width: 768px) {
     #menu {
-      position: fixed;
-      top: 70px;
-      left: 15px;
-      width: 220px;
-      background: rgba(0, 0, 0, 0.95);
-      border: 2px solid lawngreen;
-      padding: 10px;
-      display: none;
-      border-radius: 10px;
-      z-index: 999;
-      animation: fadeIn 0.3s ease-in-out;
-      box-shadow: 0 0 10px rgba(124, 252, 0, 0.5);
-      overflow-y: auto;
-      max-height: 80vh;
+      font-size: 0.9rem;
+      max-width: 70vw;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+    #menu-icon {
+      padding: 10px 12px;
+      top: 15px;
+      left: 15px;
     }
 
     #menu button {
-      width: 100%;
+      font-size: 0.9rem;
       padding: 10px;
-      margin: 6px 0;
-      background: transparent;
-      color: white;
-      border: none;
-      border-left: 4px solid transparent;
-      text-align: left;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #menu {
+      font-size: 0.8rem;
+      max-width: 80vw;
     }
 
-    #menu button:hover,
-    #menu button.active {
-      background-color: lawngreen;
-      color: black;
-      border-left: 4px solid white;
+    #menu-icon {
+      padding: 8px 10px;
+      top: 10px;
+      left: 10px;
     }
 
-    #menu button i {
-      margin-right: 10px;
+    #menu button {
+      font-size: 0.8rem;
+      padding: 8px;
     }
 
     #close-menu {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      display: inline-block;
-      margin-bottom: 8px;
+      font-size: 1rem;
     }
 
     #close-menu:hover::after {
-      content: "Close";
-      position: absolute;
       left: 100%;
-      margin-left: 8px;
-      background: black;
-      color: white;
-      padding: 4px 6px;
-      border-radius: 5px;
-      font-size: 0.8rem;
     }
+  }
+</style>
 
-    .arrow-nav {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 2.8rem;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.5);
-      color: lawngreen;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 900;
-      display: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .arrow-nav:hover {
-      transform: translateY(-50%) scale(1.2);
-      box-shadow: 0 0 12px 4px lawngreen;
-    }
-
-    #left-arrow { left: 10px; }
-    #right-arrow { right: 10px; }
-
-    @media (max-width: 768px) {
-      #menu {
-        width: 200px;
-        font-size: 0.9rem;
-      }
-
-      #menu button {
-        font-size: 0.9rem;
-        padding: 8px;
-      }
-
-      #close-menu {
-        font-size: 1rem;
-        padding: 3px 6px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      #menu {
-        width: 180px;
-        font-size: 0.85rem;
-      }
-
-      #menu-icon {
-        padding: 8px;
-        top: 10px;
-        left: 10px;
-      }
-
-      #menu button {
-        font-size: 0.8rem;
-        padding: 6px;
-      }
-
-      #close-menu {
-        font-size: 1rem;
-        padding: 3px 6px;
-      }
-    }
-  </style>
 </head>
 <body>
   <!-- Menu Button -->
