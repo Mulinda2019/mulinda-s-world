@@ -239,98 +239,78 @@
     <!-- Admin Panel -->
     <div id="admin" class="section">
       <h2>Admin Panel</h2>
+      <p>Admins have access to all system features and manage overall data.</p>
       <div class="info-box">
-        <strong>Responsibilities:</strong>
-        <ul>
-          <li>Manage student data</li>
-          <li>Manage teacher accounts</li>
-          <li>Upload marks</li>
-        </ul>
+        <h3>All Students</h3>
+        <table>
+          <tr><th>Name</th><th>Grade</th><th>Status</th></tr>
+          <tr><td>Lisa Mokoena</td><td>4</td><td>Active</td></tr>
+          <tr><td>Timothy Baloyi</td><td>2</td><td>Active</td></tr>
+          <tr><td>Susan Mbedzi</td><td>5</td><td>Inactive</td></tr>
+        </table>
+        <h3>All Teachers</h3>
+        <table>
+          <tr><th>Name</th><th>Subject</th></tr>
+          <tr><td>Mr. Ndlovu</td><td>Mathematics</td></tr>
+          <tr><td>Ms. Netshifhefhe</td><td>English</td></tr>
+        </table>
       </div>
-      <form>
-        <label for="admin-name">Full Name</label>
-        <input type="text" id="admin-name" placeholder="Enter full name" />
-
-        <label for="school-name">School Name</label>
-        <input type="text" id="school-name" placeholder="Enter school name" />
-
-        <label for="subject">Subject Assigned</label>
-        <input type="text" id="subject" placeholder="e.g., Mathematics" />
-
-        <input type="submit" value="Submit Admin Info" />
-      </form>
     </div>
 
     <!-- Teacher Panel -->
     <div id="teacher" class="section">
       <h2>Teacher Panel</h2>
+      <p>Teachers can send messages, upload marks, and track student progress.</p>
       <div class="info-box">
-        <strong>Responsibilities:</strong>
+        <h3>Public Message Board</h3>
+        <p>📝 <em>Reminder: All students must submit their homework by Thursday.</em></p>
+
+        <h3>Private Messages</h3>
         <ul>
-          <li>Send public/private messages</li>
-          <li>View and enter student marks</li>
+          <li>To Lisa: "Great improvement in math!"</li>
+          <li>To Susan: "Please attend extra lessons."</li>
         </ul>
+
+        <h3>My Students - Mathematics</h3>
+        <table>
+          <tr><th>Student</th><th>Marks</th></tr>
+          <tr><td>Lisa Mokoena</td><td>78%</td></tr>
+          <tr><td>Timothy Baloyi</td><td>65%</td></tr>
+        </table>
       </div>
-      <form>
-        <label for="teacher-name">Teacher Name</label>
-        <input type="text" id="teacher-name" placeholder="Enter your name" />
-
-        <label for="message">Message to Students</label>
-        <textarea id="message" rows="4" placeholder="Write your message..."></textarea>
-
-        <div class="blackboard">
-          <p><strong>📝 Blackboard Message Board</strong></p>
-          <p>"Upcoming test on Friday. Please revise Chapters 3 & 4."</p>
-        </div>
-
-        <input type="submit" value="Send Message" />
-      </form>
     </div>
 
     <!-- Student Panel -->
     <div id="student" class="section">
       <h2>Student Panel</h2>
+      <p>Students can view their marks and messages from teachers.</p>
       <div class="info-box">
-        <strong>What You Can Do:</strong>
+        <h3>Welcome, Lisa Mokoena!</h3>
+        <p><strong>Grade:</strong> 4</p>
+        <h3>Recent Marks</h3>
         <ul>
-          <li>Register as a student</li>
-          <li>View marks</li>
-          <li>See teacher messages</li>
+          <li>Mathematics: 78%</li>
+          <li>English: 84%</li>
+          <li>Science: 72%</li>
         </ul>
+        <h3>Teacher Messages</h3>
+        <p>✅ "Great job on your recent math quiz!" - Mr. Ndlovu</p>
+        <p>📚 "Read Chapter 5 before next class." - Ms. Netshifhefhe</p>
       </div>
-      <form>
-        <label for="student-name">Student Name</label>
-        <input type="text" id="student-name" placeholder="Enter your name" />
-
-        <label for="grade">Grade</label>
-        <select id="grade">
-          <option value="">Select Grade</option>
-          <option>Grade 1</option>
-          <option>Grade 2</option>
-          <option>Grade 3</option>
-          <option>Grade 4</option>
-          <option>Grade 5</option>
-        </select>
-
-        <input type="submit" value="View Marks" />
-      </form>
     </div>
 
     <!-- Parent Panel -->
     <div id="parent" class="section">
       <h2>Parent Panel</h2>
-      <div class="child-selector">
-        <label for="child-select">Select Child</label>
-        <select id="child-select">
-          <option value="child1">Lisa (Grade 4)</option>
-          <option value="child2">Tim (Grade 2)</option>
-        </select>
-      </div>
+      <p>Parents can track their child's academic progress and view teacher comments.</p>
       <div class="info-box">
-        <p><strong>Lisa's Marks:</strong> Mathematics - 78%, English - 84%</p>
-        <p><strong>Teacher Comment:</strong> "Lisa is improving in math but needs more practice."</p>
+        <h3>Child: Lisa Mokoena (Grade 4)</h3>
+        <p><strong>Mathematics:</strong> 78%<br />
+        <strong>English:</strong> 84%<br />
+        <strong>Teacher Comment:</strong> "Lisa is doing very well and participates actively in class."</p>
       </div>
     </div>
+
   </div>
 
   <script>
