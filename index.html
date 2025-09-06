@@ -1,327 +1,508 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mulinda's World</title>
-  <link rel="stylesheet" href="index.css" />
-  <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <!-- Base styles you already have -->
+  <link rel="stylesheet" href="index.css"/>
+
+  <!-- Icons & Fonts (unified for all sections) -->
+  <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
 
   <style>
-  /* Menu Button */
-  #menu-icon {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: lawngreen;
-    color: black;
-    padding: 10px 12px;
-    z-index: 1000;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s ease;
-  }
-
-  #menu-icon i {
-    color: black;
-    font-size: 1.5rem;
-  }
-
-  #menu-icon:hover {
-    transform: scale(1.1);
-  }
-
-  #menu-icon:hover::after {
-    content: " Open Menu";
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: 10px;
-    background: black;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    white-space: nowrap;
-    font-size: 0.9rem;
-  }
-
-  /* Menu Styles */
-  #menu {
-    position: fixed;
-    top: 70px;
-    left: 15px;
-    width: max-content;
-    max-width: 20vw;
-    background: rgba(0, 0, 0, 0.95);
-    border: 2px solid lawngreen;
-    padding: 10px;
-    display: none;
-    border-radius: 10px;
-    z-index: 999;
-    animation: fadeIn 0.3s ease-in-out;
-    box-shadow: 0 0 10px rgba(124, 252, 0, 0.5);
-    overflow: hidden;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  #menu button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    background: transparent;
-    color: white;
-    border: none;
-    border-left: 4px solid transparent;
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-  }
-
-  #menu button:hover,
-  #menu button.active {
-    background-color: lawngreen;
-    color: black;
-    border-left: 4px solid white;
-  }
-
-  #menu button i {
-    margin-right: 10px;
-  }
-
-  #close-menu {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.2rem;
-    float: right;
-    cursor: pointer;
-    display: inline-block;
-    margin-bottom: 10px;
-    padding: 4px 8px;
-    border-radius: 5px;
-    white-space: nowrap;
-    position: relative;
-  }
-
-  #close-menu:hover::after {
-    content: "Close menu";
-    position: absolute;
-    top: 50%;
-    left: 110%;
-    transform: translateY(-50%);
-    background: black;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    z-index: 1000;
-  }
-
-  .arrow-nav {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2.8rem;
-    padding: 12px;
-    background: rgba(0, 0, 0, 0.5);
-    color: lawngreen;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 900;
-    display: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .arrow-nav:hover {
-    transform: translateY(-50%) scale(1.2);
-    box-shadow: 0 0 12px 4px lawngreen;
-  }
-
-  #left-arrow { left: 10px; }
-  #right-arrow { right: 10px; }
-
-  /* Responsive Tweaks */
-  @media (max-width: 768px) {
-    #menu {
-      font-size: 0.9rem;
-      max-width: 70vw;
+    :root{
+      --bg: rgba(0,0,0,0.9);
+      --card: rgba(255,255,255,0.06);
+      --accent: lawngreen;
+      --accent-2:#a78bfa;
+      --text:#fff;
+      --muted:#cbd5e1;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 14px;
+      --fast: .18s;
+      --e: cubic-bezier(.22,.61,.36,1);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+      /* gradient + animated waves come from index.css; we add wave nodes below */
     }
 
-    #menu-icon {
-      padding: 10px 12px;
-      top: 15px;
-      left: 15px;
+    /* ---- Layout ---- */
+    .app-frame{
+      min-height:100dvh;
+      display:flex;
+      flex-direction:column;
     }
 
-    #menu button {
-      font-size: 0.9rem;
-      padding: 10px;
+    header.topbar{
+      position:fixed; inset:0 0 auto 0;
+      display:flex; align-items:center; gap:8px;
+      padding:12px 16px;
+      background: linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,0));
+      z-index:1000;
+      pointer-events:none; /* keep buttons clickable individually */
     }
-  }
+    .brand{
+      margin-left:54px; /* room for menu button */
+      pointer-events:auto;
+      font-family: Orbitron, sans-serif; letter-spacing:.5px;
+      font-weight:700; color:var(--accent);
+      text-shadow:0 0 12px rgba(124,252,0,.25);
+      user-select:none;
+    }
+    .brand small{color:#e5ffe5; opacity:.8; font-weight:500}
 
-  @media (max-width: 480px) {
-    #menu {
-      font-size: 0.8rem;
-      max-width: 80vw;
+    /* Menu toggle button */
+    #menu-toggle{
+      position:fixed; top:16px; left:16px;
+      z-index:1100;
+      background:var(--accent); color:#000;
+      border:0; border-radius:10px;
+      padding:10px 12px; cursor:pointer;
+      box-shadow:0 8px 18px rgba(50,205,50,.35);
+      transition:transform var(--fast) var(--e), box-shadow var(--fast) var(--e);
+    }
+    #menu-toggle:hover{ transform:scale(1.06); box-shadow:0 10px 22px rgba(50,205,50,.45); }
+    #menu-toggle:active{ transform:scale(.98); }
+
+    /* Sidebar */
+    .backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      display:none; z-index:1050; opacity:0; transition:opacity .2s var(--e);
+    }
+    nav#sidebar{
+      position:fixed; top:0; left:0; height:100%;
+      width:min(320px,85vw);
+      background:var(--bg); border-right:2px solid var(--accent);
+      padding:14px 12px 16px; translate:-101% 0;
+      transition:translate .25s var(--e);
+      z-index:1060; box-shadow: var(--shadow);
+    }
+    nav.open{ translate:0 0; }
+    .backdrop.show{ display:block; opacity:1; }
+
+    .side-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:4px 6px 10px 8px; border-bottom:1px dashed rgba(144,238,144,.4);
+    }
+    .side-title{
+      font-weight:800; letter-spacing:.4px; color:var(--accent);
+      display:flex; align-items:center; gap:8px;
+    }
+    .side-close{
+      appearance:none; border:0; background:transparent; color:#fff; font-size:22px; cursor:pointer;
+      border-radius:8px; padding:4px 8px;
+    }
+    .menu{
+      margin:12px 4px 6px; display:flex; flex-direction:column; gap:6px;
+    }
+    .menu button{
+      appearance:none; border:0; border-radius:10px;
+      background:transparent; color:#fff; text-align:left;
+      display:flex; align-items:center; gap:10px;
+      padding:12px 10px; font-size:15px; font-weight:700;
+      border-left:4px solid transparent; cursor:pointer;
+      transition:background var(--fast) var(--e), color var(--fast) var(--e), border var(--fast) var(--e);
+      white-space:nowrap;
+    }
+    .menu button:hover{ background:var(--card); }
+    .menu button.active{ background:var(--accent); color:#000; border-left-color:#fff; }
+    .menu small{ color:var(--muted); font-weight:600 }
+
+    main#main{
+      width: min(1280px, 92vw);
+      margin: 80px auto 64px; /* leave room for fixed header */
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(124,252,0,.35);
+      border-radius: var(--radius);
+      box-shadow: 0 0 20px rgba(124,252,0,.2);
+      overflow: clip;
+      position:relative;
+      backdrop-filter: blur(4px);
+      min-height: 40vh;
     }
 
-    #menu-icon {
-      padding: 8px 10px;
-      top: 10px;
-      left: 10px;
+    /* Loader */
+    .loader{
+      position:absolute; inset:0; display:grid; place-items:center;
+      pointer-events:none; opacity:0; transition:opacity .2s var(--e);
+      background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,0));
+    }
+    .loader.show{opacity:1}
+    .spinner{
+      width:54px; height:54px; border-radius:50%;
+      border:4px solid rgba(255,255,255,.2);
+      border-top-color: var(--accent);
+      animation: spin .8s linear infinite;
+      box-shadow: 0 0 18px rgba(124,252,0,.35);
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    /* Page transition */
+    .page{
+      padding: min(4vw,32px);
+      animation: fadeIn .35s var(--e);
+    }
+    @keyframes fadeIn{
+      from{ opacity:0; transform: translateY(10px); }
+      to{ opacity:1; transform: translateY(0); }
     }
 
-    #menu button {
-      font-size: 0.8rem;
-      padding: 8px;
+    /* Arrow nav */
+    .arrow-nav{
+      position:fixed; top:50%; transform: translateY(-50%);
+      font-size:2.4rem; width:52px; height:52px; display:grid; place-items:center;
+      background:rgba(0,0,0,.55); color:var(--accent);
+      border-radius:50%; cursor:pointer; z-index:900;
+      box-shadow:0 8px 20px rgba(0,0,0,.35);
+      transition: transform var(--fast) var(--e), box-shadow var(--fast) var(--e), opacity .2s;
+      opacity:.9;
+    }
+    .arrow-nav:hover{ transform: translateY(-50%) scale(1.08); box-shadow:0 0 16px 3px var(--accent); }
+    #left-arrow{ left:12px; }
+    #right-arrow{ right:12px; }
+
+    /* Footer CTA */
+    .cta{
+      position:fixed; right:16px; bottom:16px; z-index:800;
+      background:var(--accent); color:#000; border:0; border-radius:999px;
+      padding:10px 14px; font-weight:800; cursor:pointer;
+      box-shadow:0 10px 24px rgba(50,205,50,.45);
+      transition: transform var(--fast) var(--e);
+    }
+    .cta:hover{ transform: translateY(-2px) }
+
+    /* Small tweaks */
+    @media (max-width:720px){
+      .brand{ display:none }
+      main#main{ margin: 76px auto 72px; }
     }
 
-    #close-menu {
-      font-size: 1rem;
+    /* Tooltip for menu icon */
+    #menu-toggle:hover::after{
+      content:" Open Menu";
+      position:absolute; left:100%; top:50%; transform: translateY(-50%);
+      background:#000; color:#fff; border-radius:8px; padding:6px 8px; margin-left:8px;
+      font-size:12px; white-space:nowrap; box-shadow:var(--shadow);
     }
-
-    #close-menu:hover::after {
-      left: 100%;
-    }
-  }
-</style>
-
+  </style>
 </head>
 <body>
-  <!-- Menu Button -->
-  <div id="menu-icon"><i class="fa fa-bars"></i></div>
+  <!-- Animated waves from index.css -->
+  <div class="wave"></div>
+  <div class="wave"></div>
+  <div class="wave"></div>
 
-  <!-- Sidebar Menu -->
-  <div id="menu">
-    <button id="close-menu">&times;</button>
-    <button data-section="home"><i class="fa fa-home"></i> Home</button>
-    <button data-section="projects"><i class="fa fa-briefcase"></i> Projects</button>
-    <button data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Project</button>
-    <button data-section="certifications"><i class="fa fa-certificate"></i> Certifications</button>
-    <button data-section="resume"><i class="fa fa-file-text"></i> Resume</button>
-    <button data-section="private-policy"><i class="fa fa-lock"></i> Private Policy</button>
+  <div class="app-frame">
+    <button id="menu-toggle" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu">
+      <i class="fa fa-bars"></i>
+    </button>
+
+    <header class="topbar" aria-hidden="true">
+      <div class="brand">Mulinda’s World <small>— Portfolio</small></div>
+    </header>
+
+    <div class="backdrop" id="backdrop" hidden></div>
+
+    <!-- Sidebar -->
+    <nav id="sidebar" aria-label="Primary">
+      <div class="side-head">
+        <div class="side-title"><i class="fa fa-compass"></i> Navigate</div>
+        <button class="side-close" id="close-sidebar" aria-label="Close menu">&times;</button>
+      </div>
+
+      <div class="menu" role="menu">
+        <button role="menuitem" data-section="home"><i class="fa fa-home"></i> Home</button>
+        <button role="menuitem" data-section="projects"><i class="fa fa-briefcase"></i> Projects</button>
+        <button role="menuitem" data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Projects</button>
+        <button role="menuitem" data-section="certifications"><i class="fa fa-certificate"></i> Certifications</button>
+        <button role="menuitem" data-section="resume"><i class="fa fa-file-lines"></i> Resume <small>(PDF ready)</small></button>
+        <button role="menuitem" data-section="private-policy"><i class="fa fa-lock"></i> Privacy Policy</button>
+      </div>
+    </nav>
+
+    <!-- Main app surface -->
+    <main id="main" role="main" tabindex="-1" aria-live="polite" aria-busy="false">
+      <div class="loader" id="loader" aria-hidden="true">
+        <div class="spinner" aria-label="Loading"></div>
+      </div>
+      <!-- Injected pages land here -->
+    </main>
+
+    <!-- Navigation arrows -->
+    <div id="left-arrow" class="arrow-nav" title="Previous (←)" aria-label="Previous section" tabindex="0">&#8592;</div>
+    <div id="right-arrow" class="arrow-nav" title="Next (→)" aria-label="Next section" tabindex="0">&#8594;</div>
+
+    <!-- Quick contact CTA -->
+    <a class="cta" href="mailto:negondenimulindaisrael@gmail.com" title="Contact me">
+      <i class="fa fa-paper-plane"></i> Hire Me
+    </a>
   </div>
 
-  <!-- Main Section -->
-  <div id="main-content"></div>
+  <noscript>
+    <main style="max-width:920px;margin:96px auto;padding:24px;border-radius:12px;background:#111;color:#fff;border:1px solid lawngreen;">
+      <h1>Mulinda’s World</h1>
+      <p>Please enable JavaScript to explore the site. You can still visit the pages directly:</p>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="future-projects.html">Future Projects</a></li>
+        <li><a href="certifications.html">Certifications</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="private-policy.html">Privacy Policy</a></li>
+      </ul>
+    </main>
+  </noscript>
 
-  <!-- Navigation Arrows -->
-  <div id="left-arrow" class="arrow-nav">&#8592;</div>
-  <div id="right-arrow" class="arrow-nav">&#8594;</div>
-
-  <!-- JS for Interaction -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const menuIcon = document.getElementById('menu-icon');
-      const menu = document.getElementById('menu');
-      const closeMenu = document.getElementById('close-menu');
-      const buttons = document.querySelectorAll('#menu button[data-section]');
-      const mainContent = document.getElementById('main-content');
-      const leftArrow = document.getElementById("left-arrow");
-      const rightArrow = document.getElementById("right-arrow");
+    (function(){
+      const main = document.getElementById('main');
+      const loader = document.getElementById('loader');
+      const menuBtn = document.getElementById('menu-toggle');
+      const sidebar = document.getElementById('sidebar');
+      const closeSidebarBtn = document.getElementById('close-sidebar');
+      const backdrop = document.getElementById('backdrop');
+      const navButtons = Array.from(sidebar.querySelectorAll('.menu button[data-section]'));
+      const leftArrow = document.getElementById('left-arrow');
+      const rightArrow = document.getElementById('right-arrow');
 
-      const sections = [
-        "home",
-        "projects",
-        "future-projects",
-        "certifications",
-        "resume",
-        "private-policy"
-      ];
+      const sections = ["home","projects","future-projects","certifications","resume","private-policy"];
+      const files = {
+        "home":"home.html",
+        "projects":"projects.html",
+        "future-projects":"future-projects.html",
+        "certifications":"certifications.html",
+        "resume":"resume.html",
+        "private-policy":"private-policy.html"
+      };
 
-      let currentSectionIndex = 0;
+      // simple in-memory cache
+      const pageCache = new Map();
 
-      // Show Menu
-      menuIcon.addEventListener('click', () => {
-        menu.style.display = 'block';
-        menuIcon.style.display = 'none';
-      });
+      // Track dynamic assets so we can clean them between page switches
+      const dynamicAssets = { scripts: [], styles: [], links: [] };
 
-      // Hide Menu
-      closeMenu.addEventListener('click', () => {
-        menu.style.display = 'none';
-        menuIcon.style.display = 'block';
-      });
+      // --- Sidebar open/close with focus trap ---
+      function openSidebar(){
+        sidebar.classList.add('open');
+        backdrop.hidden = false;
+        backdrop.classList.add('show');
+        menuBtn.setAttribute('aria-expanded', 'true');
+        trapFocus(sidebar);
+      }
+      function closeSidebar(){
+        sidebar.classList.remove('open');
+        backdrop.classList.remove('show');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        // allow the fade to finish before hiding for a11y
+        setTimeout(()=>{ backdrop.hidden = true; }, 180);
+        releaseFocusTrap();
+      }
+      menuBtn.addEventListener('click', openSidebar);
+      closeSidebarBtn.addEventListener('click', closeSidebar);
+      backdrop.addEventListener('click', closeSidebar);
 
-      // Outside Click Hide
-      document.addEventListener('click', (e) => {
-        if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
-          menu.style.display = 'none';
-          menuIcon.style.display = 'block';
+      // Focus trap
+      let lastFocused = null;
+      let trapHandler = null;
+      function trapFocus(container){
+        lastFocused = document.activeElement;
+        const focusable = container.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])');
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        (first || container).focus();
+        trapHandler = (e)=>{
+          if(e.key === 'Tab'){
+            if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+            else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+          } else if(e.key === 'Escape'){ closeSidebar(); }
+        };
+        document.addEventListener('keydown', trapHandler);
+      }
+      function releaseFocusTrap(){
+        if(trapHandler){ document.removeEventListener('keydown', trapHandler); trapHandler = null; }
+        if(lastFocused){ lastFocused.focus(); lastFocused = null; }
+      }
+
+      // --- Loader helpers ---
+      function showLoader(){ loader.classList.add('show'); main.setAttribute('aria-busy','true'); }
+      function hideLoader(){ loader.classList.remove('show'); main.setAttribute('aria-busy','false'); }
+
+      // --- Utilities ---
+      function setActive(section){
+        navButtons.forEach(b => b.classList.toggle('active', b.dataset.section === section));
+        // reflect in hash for deep link
+        const targetHash = '#/' + section;
+        if(location.hash !== targetHash) history.replaceState({}, '', targetHash);
+      }
+
+      function cleanupDynamic(){
+        dynamicAssets.scripts.forEach(n=>n.remove());
+        dynamicAssets.styles.forEach(n=>n.remove());
+        dynamicAssets.links.forEach(n=>n.remove());
+        dynamicAssets.scripts.length = 0;
+        dynamicAssets.styles.length = 0;
+        dynamicAssets.links.length = 0;
+      }
+
+      async function getPage(file){
+        if(pageCache.has(file)) return pageCache.get(file);
+        const res = await fetch(file, { credentials:'same-origin' });
+        if(!res.ok) throw new Error('Failed to load ' + file);
+        const html = await res.text();
+        pageCache.set(file, html);
+        return html;
+      }
+
+      async function loadSection(section){
+        const file = files[section];
+        if(!file) return;
+
+        showLoader();
+        cleanupDynamic();
+
+        try{
+          const html = await getPage(file);
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+
+          // Extract inner body (safer than dumping full html) and mount
+          const bodyHTML = (doc.body && doc.body.innerHTML) ? doc.body.innerHTML : html;
+          main.innerHTML = `
+            <div class="loader${loader.classList.contains('show') ? ' show' : ''}" id="loader-inner" aria-hidden="true">
+              <div class="spinner" aria-label="Loading"></div>
+            </div>
+            <section class="page" data-section="${section}" tabindex="-1">${bodyHTML}</section>
+          `;
+
+          // Adopt <style> from anywhere in doc
+          doc.querySelectorAll('style').forEach(st=>{
+            const node = document.createElement('style');
+            node.textContent = st.textContent;
+            node.dataset.section = section;
+            document.head.appendChild(node);
+            dynamicAssets.styles.push(node);
+          });
+
+          // Adopt <link rel="stylesheet"> (dedupe by href)
+          doc.querySelectorAll('link[rel="stylesheet"]').forEach(lk=>{
+            const href = lk.getAttribute('href');
+            if(!href) return;
+            if(document.querySelector(`link[data-dynamic-href="${href}"]`)) return;
+            const node = document.createElement('link');
+            node.rel = 'stylesheet';
+            node.href = href;
+            node.dataset.dynamicHref = href;
+            node.dataset.section = section;
+            document.head.appendChild(node);
+            dynamicAssets.links.push(node);
+          });
+
+          // Execute scripts from doc (both head & body)
+          const scripts = Array.from(doc.querySelectorAll('script'));
+          for(const s of scripts){
+            const node = document.createElement('script');
+            node.dataset.section = section;
+            if(s.src){
+              // Dedupe by absolute src
+              const abs = new URL(s.getAttribute('src'), location.href).href;
+              if(document.querySelector(`script[data-dynamic-src="${abs}"]`)) continue;
+              node.src = abs;
+              node.dataset.dynamicSrc = abs;
+            }else{
+              node.textContent = s.textContent;
+            }
+            // Ensure they run now
+            document.body.appendChild(node);
+            dynamicAssets.scripts.push(node);
+          }
+
+          // Focus first heading or container for a11y
+          const page = main.querySelector('.page');
+          (page.querySelector('h1, h2, [tabindex]') || page).focus({preventScroll:true});
+
+          setActive(section);
+        } catch(err){
+          console.error(err);
+          main.innerHTML = `
+            <section class="page" data-section="${section}">
+              <div style="padding:24px">
+                <h2 style="color:var(--accent)">Oops, something went wrong.</h2>
+                <p>Couldn’t load <code>${file}</code>. Please try again.</p>
+                <p><a href="${file}">Open the page directly</a></p>
+              </div>
+            </section>
+          `;
+        } finally {
+          hideLoader();
+          closeSidebar();
+          updateArrows();
         }
-      });
+      }
 
-      // Load Section
-      buttons.forEach(button => {
-        button.addEventListener('click', function () {
-          const sectionId = this.getAttribute('data-section');
-          loadSection(sectionId, sectionId + '.html');
-          buttons.forEach(btn => btn.classList.remove("active"));
-          this.classList.add("active");
+      // Menu clicks
+      navButtons.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const section = btn.dataset.section;
+          loadSection(section);
         });
       });
 
-      // Load Section Content
-      function loadSection(sectionId, file) {
-        fetch(file)
-          .then(response => response.text())
-          .then(data => {
-            mainContent.innerHTML = data;
-            executeScripts(mainContent);
-            currentSectionIndex = sections.indexOf(sectionId);
-          })
-          .catch(error => console.error('Error loading ' + file, error));
+      // Arrow navigation + keyboard
+      function updateArrows(){
+        leftArrow.style.display = 'block';
+        rightArrow.style.display = 'block';
       }
+      function currentIndex(){
+        const hash = (location.hash || '').replace(/^#\/?/,'');
+        const key = hash || 'home';
+        return Math.max(0, sections.indexOf(key));
+      }
+      function gotoIndex(i){
+        const idx = (i + sections.length) % sections.length;
+        const sec = sections[idx];
+        loadSection(sec);
+      }
+      leftArrow.addEventListener('click', ()=> gotoIndex(currentIndex()-1));
+      rightArrow.addEventListener('click', ()=> gotoIndex(currentIndex()+1));
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'ArrowLeft') gotoIndex(currentIndex()-1);
+        else if(e.key === 'ArrowRight') gotoIndex(currentIndex()+1);
+        else if(e.key.toLowerCase() === 'm') openSidebar();
+      });
 
-      function executeScripts(container) {
-        const scripts = container.querySelectorAll("script");
-        scripts.forEach(script => {
-          const newScript = document.createElement("script");
-          if (script.src) newScript.src = script.src;
-          else newScript.textContent = script.textContent;
-          document.body.appendChild(newScript);
-          script.remove();
+      // Deep links via hash (#/resume etc.)
+      window.addEventListener('hashchange', ()=>{
+        const section = (location.hash || '').replace(/^#\/?/,'') || 'home';
+        loadSection(files[section] ? section : 'home');
+      });
+
+      // Prefetch all pages once idle
+      function prefetchAll(){
+        sections.forEach(sec=>{
+          const f = files[sec];
+          if(!pageCache.has(f)){
+            getPage(f).catch(()=>{});
+          }
         });
       }
+      if('requestIdleCallback' in window){
+        requestIdleCallback(prefetchAll, { timeout: 2000 });
+      }else{
+        setTimeout(prefetchAll, 1200);
+      }
 
-      // Scroll Arrows Show/Hide
-      let scrollTimeout;
-      window.addEventListener('scroll', () => {
-        leftArrow.style.display = 'none';
-        rightArrow.style.display = 'none';
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          leftArrow.style.display = 'block';
-          rightArrow.style.display = 'block';
-        }, 300);
-      });
-
-      // Arrows Navigate
-      leftArrow.addEventListener("click", () => {
-        let prev = (currentSectionIndex - 1 + sections.length) % sections.length;
-        loadSection(sections[prev], sections[prev] + ".html");
-      });
-
-      rightArrow.addEventListener("click", () => {
-        let next = (currentSectionIndex + 1) % sections.length;
-        loadSection(sections[next], sections[next] + ".html");
-      });
-
-      // First Load
-      loadSection("home", "home.html");
-    });
+      // Initial load (from hash or default)
+      const initial = (location.hash || '').replace(/^#\/?/,'') || 'home';
+      loadSection(files[initial] ? initial : 'home');
+    })();
   </script>
 </body>
 </html>
