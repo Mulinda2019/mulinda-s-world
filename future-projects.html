@@ -1,331 +1,686 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ISREAL EDUPORTAL Demo</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Orbitron&display=swap" rel="stylesheet">
+  <title>Mulinda’s World — Future Projects</title>
+
+  <!-- Fonts & Icons (safe if duplicated across pages; SPA dedupes dynamically) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      font-family: 'Roboto', sans-serif;
-      color: white;
+    :root{
+      --fp-accent: lawngreen;
+      --fp-accent-2:#00ffcc;
+      --fp-ink:#eaffea;
+      --fp-muted:#b6c2cf;
+      --fp-card: rgba(255,255,255,0.06);
+      --fp-border: rgba(124,252,0,.28);
+      --fp-shadow: 0 10px 30px rgba(0,0,0,.35);
+      --fp-radius:16px;
+      --fp-e: cubic-bezier(.22,.61,.36,1);
     }
 
-    h1, h2 {
-      font-family: 'Orbitron', sans-serif;
-      color: lawngreen;
-      text-shadow: 1px 1px 4px #000;
-      text-align: center;
+    /* ===== Namespaced base ===== */
+    body.fp{
+      margin:0; color:#fff; background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(167,139,250,.07), transparent 60%),
+        linear-gradient(180deg,#0b0f19 0%,#0a0e17 60%,#0a0a0a 100%);
+      background-attachment: fixed;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .fp a{ color: var(--fp-accent); text-decoration: none; }
+    .fp a:hover{ color: var(--fp-accent-2); }
+    .fp .wrap{ width:min(1200px,92vw); margin-inline:auto; padding: clamp(16px,3vw,28px); }
+    .fp .muted{ color:var(--fp-muted) }
+
+    /* ===== Header ===== */
+    .fp-hero{
+      padding: min(7vh,36px) 0 8px; position:relative; isolation:isolate;
+    }
+    .fp-title{
+      font-family: Orbitron, sans-serif; letter-spacing:.6px;
+      font-size: clamp(26px, 4.6vw, 46px);
+      margin:6px 0 4px;
+      background: linear-gradient(90deg,#fff,var(--fp-accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 0 18px rgba(124,252,0,.12);
+    }
+    .fp-sub{ max-width: 70ch; color:var(--fp-muted); font-size: clamp(15px, 2.2vw, 18px); }
+
+    .fp-banner{
+      margin-top:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.5));
+      border:1px solid var(--fp-border);
+      border-radius: var(--fp-radius);
+      padding:10px 12px;
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      box-shadow: var(--fp-shadow);
+    }
+    .fp-chip{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--fp-border); color:#eaffea;
+      background: rgba(0,0,0,.5);
+      padding:6px 10px; border-radius:999px; font-weight:800; font-size:14px;
     }
 
-    h1 {
-      font-size: 2.5rem;
+    /* ===== Filters ===== */
+    .filters{ margin: 14px 0 6px; display:flex; gap:8px; flex-wrap:wrap; }
+    .filter-btn{
+      appearance:none; border:1px solid var(--fp-border);
+      background: rgba(0,0,0,.55); color:#fff; border-radius:999px;
+      padding:8px 12px; font-weight:800; cursor:pointer;
+      transition: transform .15s var(--fp-e), background .2s var(--fp-e), box-shadow .2s var(--fp-e);
+    }
+    .filter-btn:hover{ transform: translateY(-2px); }
+    .filter-btn.active{
+      background: var(--fp-accent); color:#041e0e; box-shadow:0 10px 22px rgba(124,252,0,.35);
+      border-color: transparent;
     }
 
-    h2 {
-      font-size: 1.4rem;
-      color: #ffd700;
+    /* ===== Grid ===== */
+    .grid{
+      margin-top: 10px;
+      display:grid; gap:14px;
+      grid-template-columns: repeat(3,1fr);
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      position:relative; overflow:hidden;
+      border:1px solid var(--fp-border); border-radius: var(--fp-radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.45));
+      box-shadow: var(--fp-shadow);
+      transition: transform .18s var(--fp-e), box-shadow .18s var(--fp-e);
+      cursor:pointer;
+    }
+    .card:hover{ transform: translateY(-4px); box-shadow: 0 12px 26px rgba(0,0,0,.45); }
+    .card-head{
+      height: 140px; display:grid; place-items:center;
+      background:
+        radial-gradient(800px 220px at 20% 0%, rgba(124,252,0,.18), transparent 60%),
+        linear-gradient(135deg, #0b1218, #0a0e14);
+      color: var(--fp-accent-2); font-size: 40px;
+    }
+    .card-body{ padding: 14px; }
+    .stage{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--fp-border); background:rgba(0,0,0,.5);
+      color:#eaffea; border-radius:999px; font-size:12px; padding:4px 8px; font-weight:800;
+    }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .chip{
+      font-size:12px; padding:4px 8px; border-radius:999px;
+      border:1px solid var(--fp-border); background: rgba(0,0,0,.5); color:#eaffea; font-weight:700;
     }
 
-    .disclaimer {
-      background-color: #dc3545;
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-      color: #fff;
-      border-top: 3px solid lawngreen;
-      box-shadow: 0 0 15px rgba(50, 205, 50, 0.3);
-      margin-bottom: 20px;
+    /* Progress bar */
+    .meter{ height:10px; background:#0c1016; border-radius:999px; overflow:hidden; border:1px solid var(--fp-border); margin-top:10px; }
+    .meter > span{
+      display:block; height:100%;
+      background: linear-gradient(90deg, var(--fp-accent), var(--fp-accent-2));
+      width:0%;
+      transition: width 1.2s var(--fp-e);
     }
 
-    .container {
-      max-width: 90%;
-      width: 100%;
-      margin: 30px auto;
-      padding: 20px;
-      border: 1px solid lawngreen;
-      background-color: rgba(255, 255, 255, 0.04);
-      border-radius: 20px;
-      box-shadow: 0 4px 30px rgba(0, 255, 0, 0.1);
-      backdrop-filter: blur(8px);
-      animation: fadeIn 1.2s ease-in-out;
+    /* ===== Drawer (details) ===== */
+    .drawer{
+      position: fixed; inset:0; display:none; z-index: 1000;
+    }
+    .drawer.show{ display:block; }
+    .drawer-backdrop{
+      position:absolute; inset:0; background: rgba(0,0,0,.6); opacity:0;
+      transition: opacity .18s var(--fp-e);
+    }
+    .drawer-panel{
+      position:absolute; right:0; top:0; height:100%; width:min(560px, 92vw);
+      background:#090e15; border-left:2px solid var(--fp-accent);
+      transform: translateX(102%); transition: transform .24s var(--fp-e);
+      display:flex; flex-direction:column;
+    }
+    .drawer.show .drawer-backdrop{ opacity:1; }
+    .drawer.show .drawer-panel{ transform: translateX(0); }
+    .drawer-head{
+      padding:12px; display:flex; align-items:center; justify-content:space-between;
+      border-bottom:1px dashed var(--fp-border);
+    }
+    .drawer-body{ padding:14px; overflow:auto; }
+    .drawer-close{
+      appearance:none; border:0; background:transparent; color:#fff; font-size:22px; cursor:pointer;
+      border-radius:8px; padding:6px 10px;
     }
 
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
+    .dl{
+      display:grid; gap:8px;
+      grid-template-columns: 120px 1fr;
+      margin: 8px 0 10px;
     }
+    .dl div:nth-child(odd){ color:#eaffea; font-weight:800; }
+    .dl div:nth-child(even){ color:var(--fp-muted); }
 
-    .dashboard-card {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 25px;
-      border-radius: 15px;
-      text-align: center;
-      cursor: pointer;
-      border: 1px solid lawngreen;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .milestones{ margin-top:6px; }
+    .ms{
+      display:grid; grid-template-columns: 22px 1fr; gap:10px; align-items: start;
+      margin:8px 0;
     }
-
-    .dashboard-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 15px rgba(144, 238, 144, 0.3);
+    .ms .dot{
+      width:12px; height:12px; border-radius:50%;
+      border:2px solid var(--fp-accent); margin-top:4px;
+      box-shadow:0 0 10px rgba(124,252,0,.35);
     }
+    .ms .txt small{ color:var(--fp-muted) }
 
-    .dashboard-card i {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      color: #ffd700;
+    .cta{
+      display:inline-flex; align-items:center; gap:10px;
+      background: var(--fp-accent); color:#041e0e; border:0; border-radius:999px;
+      padding:10px 14px; font-weight:900; cursor:pointer;
+      box-shadow:0 10px 24px rgba(50,205,50,.45);
+      transition: transform .15s var(--fp-e);
     }
+    .cta:hover{ transform: translateY(-2px); }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-top: 20px;
+    /* ===== Roadmap ===== */
+    .roadmap{
+      margin-top:18px; background: var(--fp-card); border:1px solid var(--fp-border);
+      border-radius: var(--fp-radius); padding:14px; box-shadow: var(--fp-shadow);
     }
-
-    label {
-      font-weight: bold;
-      color: lawngreen;
+    .rm-grid{
+      display:grid; gap:12px; grid-template-columns: repeat(4,1fr);
     }
-
-    input, select, textarea {
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      background-color: #111;
-      color: #fff;
-      border: 1px solid #444;
+    @media (max-width: 980px){ .rm-grid{ grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 640px){ .rm-grid{ grid-template-columns: 1fr; } }
+    .rm-card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.45));
+      border:1px solid var(--fp-border); border-radius: var(--fp-radius); padding:12px;
+      box-shadow: var(--fp-shadow);
     }
+    .rm-card h4{ margin: 6px 0 4px; }
+    .rm-card ul{ margin:8px 0 0 18px; }
 
-    input::placeholder, textarea::placeholder {
-      color: #bbb;
+    /* ===== Contact ===== */
+    .contact{
+      margin-top:18px; display:grid; gap:16px; grid-template-columns: 1.1fr .9fr; align-items:start;
     }
-
-    input[type="submit"], button {
-      background-color: #ffd700;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      padding: 10px 20px;
-      border-radius: 8px;
+    @media (max-width: 860px){ .contact{ grid-template-columns: 1fr; } }
+    .pane{
+      background: var(--fp-card); border:1px solid var(--fp-border);
+      border-radius: var(--fp-radius); padding:14px; box-shadow: var(--fp-shadow);
     }
-
-    input[type="submit"]:hover, button:hover {
-      background-color: #ffbb00;
+    label{ display:block; font-weight:800; margin-bottom:6px; color:#eaffea; }
+    input, textarea{
+      width:100%; padding:12px; border-radius:10px; border:1px solid var(--fp-border);
+      background:#0b0f15; color:#fff; font:inherit; outline:none;
+      transition:border-color .15s var(--fp-e), box-shadow .15s var(--fp-e);
     }
+    input:focus, textarea:focus{ border-color: var(--fp-accent); box-shadow:0 0 0 3px rgba(124,252,0,.18); }
+    .form-row{ display:flex; gap:10px; }
+    .form-row > div{ flex:1; }
+    .form-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
 
-    .section {
-      display: none;
-    }
+    /* Reveal */
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .5s var(--fp-e), transform .5s var(--fp-e); }
+    .reveal.in{ opacity:1; transform: translateY(0); }
 
-    .show {
-      display: block;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .info-box {
-      margin: 15px 0;
-      padding: 15px;
-      border: 1px solid #444;
-      border-radius: 12px;
-      background-color: rgba(255, 255, 255, 0.04);
-    }
-
-    ul {
-      list-style-type: square;
-      margin-left: 20px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 600px) {
-      .dashboard {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      }
-
-      h1 { font-size: 2rem; }
-    }
-
-    a {
-      text-decoration: none;
-      color: lawngreen;
-    }
-
-    a:hover {
-      text-decoration: underline;
-      color: #00ffcc;
-    }
-
-    .blackboard {
-      background-color: #333;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-
-    .blackboard p {
-      font-family: 'Courier New', Courier, monospace;
-      color: #fff;
-    }
-
-    .child-selector {
-      margin-bottom: 20px;
-    }
-
-    .child-selector select {
-      padding: 10px;
-      border-radius: 8px;
-      background-color: #111;
-      color: #fff;
-      border: 1px solid #444;
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ transition: none !important; opacity:1 !important; transform:none !important; }
+      .meter > span{ transition:none !important; }
+      .drawer .drawer-panel{ transition:none !important; }
+      .drawer .drawer-backdrop{ transition:none !important; }
+      .filter-btn{ transition:none !important; }
+      .card{ transition:none !important; }
     }
   </style>
 </head>
-<body>
+<body class="fp">
+  <div class="wrap">
 
-  <div class="container">
-    <h1>🚀 Future Projects</h1>
-    <p style="text-align: center; font-size: 1.1rem;">
-      We’re actively building the next phase of this system and welcome any developers who want to be part of it!
-      <br><br>
-      👉 <a href="https://github.com/your-username/isreal-eduportal" target="_blank"><strong>View the GitHub Repository</strong></a>
-    </p>
+    <!-- ===== HERO ===== -->
+    <header class="fp-hero reveal">
+      <span class="fp-chip"><i class="fa fa-flask"></i> R&D · Prototypes · Learning in public</span>
+      <h1 class="fp-title">Future Projects & Experiments</h1>
+      <p class="fp-sub">
+        A living roadmap of what I’m exploring next — front-end heavy builds, polished UX, and small tools that solve real problems.
+        I iterate fast, ship minimum lovable versions, and refine with feedback.
+      </p>
+      <div class="fp-banner" role="note" aria-label="Disclaimer">
+        <span class="fp-chip"><i class="fa fa-circle-info"></i> Concept demos — content and UI subject to change.</span>
+        <span class="fp-chip"><i class="fa fa-clock"></i> Updated: <span id="fp-updated"></span></span>
+      </div>
+    </header>
+
+    <!-- ===== FILTERS ===== -->
+    <nav class="filters reveal" aria-label="Project filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="education">Education</button>
+      <button class="filter-btn" data-filter="auth">Auth/Platforms</button>
+      <button class="filter-btn" data-filter="tools">Dev Tools</button>
+      <button class="filter-btn" data-filter="web">Web Apps</button>
+    </nav>
+
+    <!-- ===== PROJECT GRID ===== -->
+    <section class="grid reveal" id="fp-grid" aria-live="polite">
+      <!-- Card: EduPortal -->
+      <article class="card" data-tags="education web" data-id="eduportal" tabindex="0" aria-label="Open details: ISREAL EduPortal">
+        <div class="card-head"><i class="fa fa-school"></i></div>
+        <div class="card-body">
+          <div class="stage"><i class="fa fa-seedling"></i> Stage: Design & data model</div>
+          <h3 style="margin:8px 0 4px">ISREAL EduPortal</h3>
+          <p class="muted">Lightweight school portal with clean roles (Admin/Teacher/Student/Parent), offline-friendly UI, and fast mark capture.</p>
+          <div class="chips">
+            <span class="chip">HTML/CSS/JS</span><span class="chip">A11y</span><span class="chip">IndexedDB</span>
+          </div>
+          <div class="meter" aria-label="Project progress"><span style="--pct:32%"></span></div>
+        </div>
+      </article>
+
+      <!-- Card: Auth v2 -->
+      <article class="card" data-tags="auth web" data-id="authv2" tabindex="0" aria-label="Open details: ISREALAI Auth v2">
+        <div class="card-head"><i class="fa fa-user-shield"></i></div>
+        <div class="card-body">
+          <div class="stage"><i class="fa fa-hammer"></i> Stage: Build</div>
+          <h3 style="margin:8px 0 4px">ISREALAI Authentication v2</h3>
+          <p class="muted">Gateway app with token rotation, device sessions, magic links, and a tidy component kit for forms.</p>
+          <div class="chips">
+            <span class="chip">Vanilla JS</span><span class="chip">Accessible UI</span><span class="chip">JWT</span>
+          </div>
+          <div class="meter" aria-label="Project progress"><span style="--pct:54%"></span></div>
+        </div>
+      </article>
+
+      <!-- Card: Electronics Helper Pro -->
+      <article class="card" data-tags="tools web" data-id="elechelper" tabindex="0" aria-label="Open details: Electronics Helper Pro">
+        <div class="card-head"><i class="fa fa-microchip"></i></div>
+        <div class="card-body">
+          <div class="stage"><i class="fa fa-lightbulb"></i> Stage: Prototype</div>
+          <h3 style="margin:8px 0 4px">Electronics Helper Pro</h3>
+          <p class="muted">Ohm’s Law calculators, component notes, exportable circuit checklists, and quick reference sheets.</p>
+          <div class="chips">
+            <span class="chip">JS Utilities</span><span class="chip">Export</span><span class="chip">DX</span>
+          </div>
+          <div class="meter" aria-label="Project progress"><span style="--pct:40%"></span></div>
+        </div>
+      </article>
+
+      <!-- Card: MicroLearn SA -->
+      <article class="card" data-tags="education web" data-id="microlearn" tabindex="0" aria-label="Open details: MicroLearn SA">
+        <div class="card-head"><i class="fa fa-graduation-cap"></i></div>
+        <div class="card-body">
+          <div class="stage"><i class="fa fa-pen-ruler"></i> Stage: Research</div>
+          <h3 style="margin:8px 0 4px">MicroLearn SA</h3>
+          <p class="muted">Mobile-first micro-learning with short lessons, quizzes, and spaced-repetition built for South African contexts.</p>
+          <div class="chips">
+            <span class="chip">Accessibility</span><span class="chip">Responsive</span><span class="chip">PWAs</span>
+          </div>
+          <div class="meter" aria-label="Project progress"><span style="--pct:22%"></span></div>
+        </div>
+      </article>
+
+      <!-- Card: Portfolio UI Kit -->
+      <article class="card" data-tags="tools web" data-id="uikit" tabindex="0" aria-label="Open details: Portfolio UI Kit">
+        <div class="card-head"><i class="fa fa-layer-group"></i></div>
+        <div class="card-body">
+          <div class="stage"><i class="fa fa-cubes-stacked"></i> Stage: Build</div>
+          <h3 style="margin:8px 0 4px">Portfolio UI Kit</h3>
+          <p class="muted">Reusable, accessible components (cards, menus, forms, toasts) extracted from this portfolio for rapid builds.</p>
+          <div class="chips">
+            <span class="chip">ARIA</span><span class="chip">Focus Mgmt</span><span class="chip">Theming</span>
+          </div>
+          <div class="meter" aria-label="Project progress"><span style="--pct:48%"></span></div>
+        </div>
+      </article>
+
+      <!-- Card: SA Job Trail -->
+      <article class="card" data-tags="web" data-id="sajobtrail" tabindex="0" aria-label="Open details: SA Job Trail">
+        <div class="card-head"><i class="fa fa-briefcase"></i></div>
+        <div class="card-body">
+          <div class="stage"><i class="fa fa-magnifying-glass"></i> Stage: Concept</div>
+          <h3 style="margin:8px 0 4px">SA Job Trail</h3>
+          <p class="muted">Simple job-tracking board with saved searches, checklists, and exportable applications timeline.</p>
+          <div class="chips">
+            <span class="chip">Client-side</span><span class="chip">IndexedDB</span><span class="chip">CSV Export</span>
+          </div>
+          <div class="meter" aria-label="Project progress"><span style="--pct:18%"></span></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===== ROADMAP ===== -->
+    <section class="roadmap reveal">
+      <h2 style="font-family:Orbitron,sans-serif; letter-spacing:.5px; margin:6px 0 10px;">Roadmap</h2>
+      <div class="rm-grid">
+        <div class="rm-card">
+          <h4>Q4 2025</h4>
+          <ul>
+            <li>Auth v2: device sessions + magic links</li>
+            <li>EduPortal: gradebook UX & offline sync</li>
+          </ul>
+        </div>
+        <div class="rm-card">
+          <h4>Q1 2026</h4>
+          <ul>
+            <li>UI Kit: component docs site</li>
+            <li>Electronics Helper: export to PNG/PDF</li>
+          </ul>
+        </div>
+        <div class="rm-card">
+          <h4>Q2 2026</h4>
+          <ul>
+            <li>MicroLearn SA: spaced repetition</li>
+            <li>SA Job Trail: CSV import/export</li>
+          </ul>
+        </div>
+        <div class="rm-card">
+          <h4>Q3 2026</h4>
+          <ul>
+            <li>Public betas & feedback rounds</li>
+            <li>Performance & a11y audits</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="reveal contact" style="margin-top:18px">
+      <div class="pane">
+        <h2 style="font-family:Orbitron,sans-serif; letter-spacing:.5px; margin:0 0 8px;">Propose an idea</h2>
+        <form id="fp-contact" novalidate>
+          <div class="form-row">
+            <div>
+              <label for="fp-name">Name</label>
+              <input id="fp-name" name="name" autocomplete="name" required placeholder="Your name"/>
+            </div>
+            <div>
+              <label for="fp-email">Email</label>
+              <input id="fp-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com"/>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <label for="fp-project">Which project?</label>
+            <input id="fp-project" name="project" list="fp-projects" placeholder="e.g., ISREAL EduPortal"/>
+            <datalist id="fp-projects">
+              <option value="ISREAL EduPortal"></option>
+              <option value="ISREALAI Authentication v2"></option>
+              <option value="Electronics Helper Pro"></option>
+              <option value="MicroLearn SA"></option>
+              <option value="Portfolio UI Kit"></option>
+              <option value="SA Job Trail"></option>
+            </datalist>
+          </div>
+          <div style="margin-top:10px">
+            <label for="fp-message">Message</label>
+            <textarea id="fp-message" name="message" rows="5" required placeholder="Tell me what you have in mind…"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="cta" type="submit"><i class="fa fa-paper-plane"></i> Send</button>
+            <button class="filter-btn" type="button" id="fp-copy"><i class="fa fa-copy"></i> Copy message</button>
+            <span id="fp-status" class="muted" role="status" aria-live="polite"></span>
+          </div>
+          <small class="muted">No server needed — your email app will open. If not, use “Copy message”.</small>
+        </form>
+      </div>
+      <div class="pane">
+        <p><strong>Email</strong><br><a href="mailto:negondenimulindaisrael@gmail.com">negondenimulindaisrael@gmail.com</a></p>
+        <p><strong>LinkedIn</strong><br><a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener">linkedin.com/in/mulindaisrael</a></p>
+        <p><strong>GitHub</strong><br><a href="https://github.com/Mulinda2019" target="_blank" rel="noopener">github.com/Mulinda2019</a></p>
+        <p class="muted">Open to collaborations and front-end roles. Based in South Africa (remote friendly).</p>
+      </div>
+    </section>
+
+    <footer class="reveal" style="text-align:center; margin:20px 0 6px" aria-hidden="true">
+      <small class="muted">© <span id="fp-year"></span> Mulinda Israel Negondeni — Roadmap evolves with learning.</small>
+    </footer>
   </div>
 
-  <div class="disclaimer">
-    ⚠️ This is a mock system demonstrating the concept to all viewers, including non-technical audiences. The final system may differ significantly, but the core idea remains.
-  </div>
-
-  <div class="container">
-    <h1>🎓 ISREAL EDUPORTAL</h1>
-    <p style="text-align: center; font-size: 1.1rem;">
-      A demo School Management System showcasing roles for Admins, Teachers, Students, and Parents.
-      <br><br>
-      Each panel below demonstrates a different user role.
-    </p>
-
-    <div class="dashboard">
-      <div class="dashboard-card" onclick="toggleSection('admin')">
-        <i class="fas fa-user-shield"></i>
-        <h2>Admin</h2>
+  <!-- ===== Drawer (details) ===== -->
+  <aside class="drawer" id="fp-drawer" aria-hidden="true" aria-labelledby="fp-d-title" role="dialog">
+    <div class="drawer-backdrop" data-close></div>
+    <div class="drawer-panel" role="document">
+      <div class="drawer-head">
+        <strong id="fp-d-title">Project</strong>
+        <button class="drawer-close" aria-label="Close details" data-close>&times;</button>
       </div>
-      <div class="dashboard-card" onclick="toggleSection('teacher')">
-        <i class="fas fa-chalkboard-teacher"></i>
-        <h2>Teacher</h2>
-      </div>
-      <div class="dashboard-card" onclick="toggleSection('student')">
-        <i class="fas fa-user-graduate"></i>
-        <h2>Student</h2>
-      </div>
-      <div class="dashboard-card" onclick="toggleSection('parent')">
-        <i class="fas fa-users"></i>
-        <h2>Parent</h2>
+      <div class="drawer-body" id="fp-d-body">
+        <!-- Filled by JS -->
       </div>
     </div>
-
-    <!-- Admin Panel -->
-    <div id="admin" class="section">
-      <h2>Admin Panel</h2>
-      <p>Admins have access to all system features and manage overall data.</p>
-      <div class="info-box">
-        <h3>All Students</h3>
-        <table>
-          <tr><th>Name</th><th>Grade</th><th>Status</th></tr>
-          <tr><td>Lisa Mokoena</td><td>4</td><td>Active</td></tr>
-          <tr><td>Timothy Baloyi</td><td>2</td><td>Active</td></tr>
-          <tr><td>Susan Mbedzi</td><td>5</td><td>Inactive</td></tr>
-        </table>
-        <h3>All Teachers</h3>
-        <table>
-          <tr><th>Name</th><th>Subject</th></tr>
-          <tr><td>Mr. Ndlovu</td><td>Mathematics</td></tr>
-          <tr><td>Ms. Netshifhefhe</td><td>English</td></tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- Teacher Panel -->
-    <div id="teacher" class="section">
-      <h2>Teacher Panel</h2>
-      <p>Teachers can send messages, upload marks, and track student progress.</p>
-      <div class="info-box">
-        <h3>Public Message Board</h3>
-        <p>📝 <em>Reminder: All students must submit their homework by Thursday.</em></p>
-
-        <h3>Private Messages</h3>
-        <ul>
-          <li>To Lisa: "Great improvement in math!"</li>
-          <li>To Susan: "Please attend extra lessons."</li>
-        </ul>
-
-        <h3>My Students - Mathematics</h3>
-        <table>
-          <tr><th>Student</th><th>Marks</th></tr>
-          <tr><td>Lisa Mokoena</td><td>78%</td></tr>
-          <tr><td>Timothy Baloyi</td><td>65%</td></tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- Student Panel -->
-    <div id="student" class="section">
-      <h2>Student Panel</h2>
-      <p>Students can view their marks and messages from teachers.</p>
-      <div class="info-box">
-        <h3>Welcome, Lisa Mokoena!</h3>
-        <p><strong>Grade:</strong> 4</p>
-        <h3>Recent Marks</h3>
-        <ul>
-          <li>Mathematics: 78%</li>
-          <li>English: 84%</li>
-          <li>Science: 72%</li>
-        </ul>
-        <h3>Teacher Messages</h3>
-        <p>✅ "Great job on your recent math quiz!" - Mr. Ndlovu</p>
-        <p>📚 "Read Chapter 5 before next class." - Ms. Netshifhefhe</p>
-      </div>
-    </div>
-
-    <!-- Parent Panel -->
-    <div id="parent" class="section">
-      <h2>Parent Panel</h2>
-      <p>Parents can track their child's academic progress and view teacher comments.</p>
-      <div class="info-box">
-        <h3>Child: Lisa Mokoena (Grade 4)</h3>
-        <p><strong>Mathematics:</strong> 78%<br />
-        <strong>English:</strong> 84%<br />
-        <strong>Teacher Comment:</strong> "Lisa is doing very well and participates actively in class."</p>
-      </div>
-    </div>
-
-  </div>
+  </aside>
 
   <script>
-    function toggleSection(sectionId) {
-      const sections = document.querySelectorAll(".section");
-      sections.forEach(section => {
-        section.classList.remove("show");
-      });
-      const selected = document.getElementById(sectionId);
-      if (selected) {
-        selected.classList.add("show");
-        selected.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
-  </script>
+    (function(){
+      const root = document.body.classList.contains('fp') ? document : null;
+      if(!root) return;
 
+      // ===== Reveal on scroll =====
+      const reveals = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+        });
+      }, {rootMargin:'0px 0px -10% 0px', threshold:.05});
+      reveals.forEach(el=> io.observe(el));
+
+      // ===== Updated date & year =====
+      document.getElementById('fp-updated').textContent =
+        new Date().toLocaleDateString(undefined, {year:'numeric', month:'short', day:'2-digit'});
+      document.getElementById('fp-year').textContent = new Date().getFullYear();
+
+      // ===== Progress meters animate in-view =====
+      const meters = document.querySelectorAll('.meter > span');
+      const mo = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            const pct = e.target.style.getPropertyValue('--pct') || '0%';
+            e.target.style.width = pct;
+            mo.unobserve(e.target);
+          }
+        });
+      }, {threshold:.4});
+      meters.forEach(m=> mo.observe(m));
+
+      // ===== Filters =====
+      const grid = document.getElementById('fp-grid');
+      const filters = Array.from(document.querySelectorAll('.filter-btn'));
+      function applyFilter(tag){
+        filters.forEach(b=> b.classList.toggle('active', b.dataset.filter === tag || (tag==='all' && b.dataset.filter==='all')));
+        const cards = Array.from(grid.children);
+        cards.forEach(card=>{
+          const tags = (card.getAttribute('data-tags')||'').split(/\s+/);
+          const show = tag === 'all' || tags.includes(tag);
+          card.style.display = show ? '' : 'none';
+        });
+      }
+      filters.forEach(b=> b.addEventListener('click', ()=> applyFilter(b.dataset.filter)));
+      applyFilter('all');
+
+      // ===== Drawer (details) =====
+      const drawer = document.getElementById('fp-drawer');
+      const body = document.getElementById('fp-d-body');
+      const title = document.getElementById('fp-d-title');
+      const closeEls = drawer.querySelectorAll('[data-close]');
+
+      const PROJECTS = {
+        eduportal: {
+          icon:'fa-school',
+          name:'ISREAL EduPortal',
+          stage:'Design & data model',
+          desc:'A simple, fast school portal with clear roles, offline-friendly mark entry, and easy reporting.',
+          stack:['HTML/CSS/JS','A11y','IndexedDB','Export'],
+          roles:['Admin','Teacher','Student','Parent'],
+          milestones:[
+            ['Data model & mock data','Sep 2025'],
+            ['Mark capture UX & validation','Oct 2025'],
+            ['Offline sync & conflict rules','Nov 2025'],
+            ['Beta & feedback loop','Q1 2026'],
+          ]
+        },
+        authv2: {
+          icon:'fa-user-shield',
+          name:'ISREALAI Authentication v2',
+          stage:'Build',
+          desc:'A clean gateway with device sessions, token rotation, magic links, and a reusable form kit.',
+          stack:['Vanilla JS','ARIA','JWT','Device Sessions'],
+          roles:['User','Admin'],
+          milestones:[
+            ['Component kit (forms, toasts)','Sep 2025'],
+            ['Session dashboard & revocation','Oct 2025'],
+            ['Magic links & rate limits','Nov 2025'],
+            ['Hardening & docs','Q1 2026'],
+          ]
+        },
+        elechelper: {
+          icon:'fa-microchip',
+          name:'Electronics Helper Pro',
+          stage:'Prototype',
+          desc:'Ohm’s Law tools, component notes, exportable circuit checklists, and printable references.',
+          stack:['JS Utilities','Export','PWA'],
+          roles:['Maker','Student'],
+          milestones:[
+            ['Calculator modules','Oct 2025'],
+            ['Notes & export flows','Nov 2025'],
+            ['PWA install & offline','Q1 2026'],
+          ]
+        },
+        microlearn: {
+          icon:'fa-graduation-cap',
+          name:'MicroLearn SA',
+          stage:'Research',
+          desc:'Mobile-first microlearning with short lessons, quizzes, and spaced repetition for SA learners.',
+          stack:['Responsive','Accessibility','Spaced repetition'],
+          roles:['Learner','Reviewer'],
+          milestones:[
+            ['Lesson format & quiz engine','Q1 2026'],
+            ['Spaced repetition algorithm','Q2 2026'],
+          ]
+        },
+        uikit: {
+          icon:'fa-layer-group',
+          name:'Portfolio UI Kit',
+          stage:'Build',
+          desc:'Reusable, accessible UI components extracted from this portfolio for future speed.',
+          stack:['ARIA','Focus mgmt','Theming'],
+          roles:['Dev'],
+          milestones:[
+            ['Card/Menu/Form primitives','Sep 2025'],
+            ['Docs site & examples','Q4 2025'],
+          ]
+        },
+        sajobtrail: {
+          icon:'fa-briefcase',
+          name:'SA Job Trail',
+          stage:'Concept',
+          desc:'Simple job-tracking board with saved searches, checklists, and CSV import/export.',
+          stack:['Client-side','IndexedDB','CSV'],
+          roles:['Applicant'],
+          milestones:[
+            ['Board & checklists','Q1 2026'],
+            ['CSV import/export','Q2 2026'],
+          ]
+        }
+      };
+
+      function openDrawer(id){
+        const p = PROJECTS[id]; if(!p) return;
+        title.textContent = p.name;
+        body.innerHTML = `
+          <div class="dl">
+            <div>Stage</div><div>${p.stage}</div>
+            <div>Summary</div><div class="muted">${p.desc}</div>
+            <div>Roles</div><div>${p.roles.map(r=>`<span class="chip">${r}</span>`).join(' ')}</div>
+            <div>Stack</div><div>${p.stack.map(s=>`<span class="chip">${s}</span>`).join(' ')}</div>
+          </div>
+          <div class="milestones">
+            <h3 style="margin:8px 0 6px; font-family:Orbitron,sans-serif;">Milestones</h3>
+            ${p.milestones.map(([t,d])=>`
+              <div class="ms">
+                <div class="dot"></div>
+                <div class="txt"><strong>${t}</strong><br/><small>${d}</small></div>
+              </div>
+            `).join('')}
+          </div>
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="cta" id="fp-collab"><i class="fa fa-handshake"></i> Collaborate</button>
+            <a class="filter-btn" href="#/projects"><i class="fa fa-briefcase"></i> Related work</a>
+          </div>
+        `;
+        drawer.classList.add('show');
+        drawer.setAttribute('aria-hidden','false');
+        // focus
+        setTimeout(()=> drawer.querySelector('.drawer-panel').focus?.(), 0);
+        // quick collab hook to contact form prefill
+        const collab = document.getElementById('fp-collab');
+        if(collab){
+          collab.addEventListener('click', ()=>{
+            drawer.classList.remove('show');
+            drawer.setAttribute('aria-hidden','true');
+            const sel = document.getElementById('fp-project');
+            sel.value = p.name;
+            document.getElementById('fp-message').focus();
+          }, {once:true});
+        }
+      }
+      function closeDrawer(){
+        drawer.classList.remove('show');
+        drawer.setAttribute('aria-hidden','true');
+      }
+      closeEls.forEach(el=> el.addEventListener('click', closeDrawer));
+      drawer.addEventListener('click', (e)=>{ if(e.target.dataset.close !== undefined) closeDrawer(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('show')) closeDrawer(); });
+
+      // Cards open drawer
+      grid.addEventListener('click', (e)=>{
+        const card = e.target.closest('.card'); if(!card) return;
+        openDrawer(card.dataset.id);
+      });
+      grid.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){
+          const card = e.target.closest('.card'); if(!card) return;
+          e.preventDefault();
+          openDrawer(card.dataset.id);
+        }
+      });
+
+      // Deep link like #/future-projects?proj=eduportal (works in SPA & standalone)
+      try{
+        const hash = location.hash || '';
+        const m = hash.match(/future-projects\??.*?(?:proj=|project=)([a-z0-9-]+)/i);
+        if(m && PROJECTS[m[1]]) openDrawer(m[1]);
+      }catch{}
+
+      // ===== Contact form (mailto + clipboard) =====
+      const form = document.getElementById('fp-contact');
+      const status = document.getElementById('fp-status');
+      const nameEl = document.getElementById('fp-name');
+      const emailEl = document.getElementById('fp-email');
+      const projEl = document.getElementById('fp-project');
+      const msgEl = document.getElementById('fp-message');
+
+      function valid(){ return nameEl.checkValidity() && emailEl.checkValidity() && msgEl.checkValidity(); }
+
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        if(!valid()){ [nameEl,emailEl,msgEl].forEach(f=>f.reportValidity()); return; }
+        const to = 'negondenimulindaisrael@gmail.com';
+        const subject = encodeURIComponent('Future Project Idea — ' + (projEl.value || 'General'));
+        const body = `Name: ${nameEl.value.trim()}\nEmail: ${emailEl.value.trim()}\nProject: ${projEl.value.trim()}\n\n${msgEl.value.trim()}`;
+        const href = `mailto:${to}?subject=${subject}&body=${encodeURIComponent(body)}`;
+        const a = document.createElement('a'); a.href = href; a.style.display='none'; document.body.appendChild(a); a.click(); a.remove();
+        status.textContent = 'If your email app didn’t open, click “Copy message”.';
+      });
+
+      document.getElementById('fp-copy').addEventListener('click', async ()=>{
+        try{
+          const text = `To: negondenimulindaisrael@gmail.com\nSubject: Future Project Idea — ${projEl.value || '(project)'}\n\n${msgEl.value || '(your message)'}\n\nFrom: ${nameEl.value} <${emailEl.value}>`;
+          await navigator.clipboard.writeText(text);
+          status.textContent = 'Copied! Paste it into your email.';
+        }catch{
+          status.textContent = 'Copy failed. Select and copy manually.';
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
