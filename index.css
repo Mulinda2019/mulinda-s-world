@@ -1,90 +1,166 @@
+/* ===========================
+   Mulinda's World — index.css
+   Works with the SPA index.html
+   =========================== */
 
-body {
-  margin: auto;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  overflow: auto;
-  background: linear-gradient(315deg, rgb(94, 1, 87) 3%, rgb(10, 63, 117) 38%, rgb(6, 121, 113) 68%, #a10909 98%);
-  animation: gradient 15s ease infinite;
-  background-size: 400% 400%;
-  background-attachment: fixed;
+/* ---- Theme tokens (kept in sync with index.html inline styles) ---- */
+:root{
+  --bg: rgba(0,0,0,0.9);
+  --card: rgba(255,255,255,0.06);
+  --accent: lawngreen;
+  --accent-2:#a78bfa;
+  --text:#ffffff;
+  --muted:#cbd5e1;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 14px;
+  --fast: .18s;
+  --e: cubic-bezier(.22,.61,.36,1);
 }
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+/* ---- Reset / base ---- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
 
-.wave {
-  background: rgb(255 255 255 / 25%);
-  border-radius: 1000% 1000% 0 0;
-  position: fixed;
-  width: 200%;
-  height: 12em;
-  animation: wave 10s -3s linear infinite;
-  transform: translate3d(0, 0, 0);
-  opacity: 0.8;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-}
+html, body { height: 100%; }
 
-.wave:nth-of-type(2) {
-  bottom: -1.25em;
-  animation: wave 18s linear infinite;
-  opacity: 0.9;
-}
-
-.wave:nth-of-type(3) {
-  bottom: -2.5em;
-  animation: wave 20s -1s reverse infinite;
-  opacity: 0.8;
-}
-
-@keyframes wave {
-  2% {
-    transform: translateX(1);
-  }
-  25% {
-    transform: translateX(-25%);
-  }
-  50% {
-    transform: translateX(-50%);
-  }
-  75% {
-    transform: translateX(-25%);
-  }
-  100% {
-    transform: translateX(1);
-  }
-}
-       
-       /* STYLES THAT ARE FOR REUSABLE */
-
-       /*SOCIAL LINKS*/
-.social-links {
-  list-style: none;
+body{
   margin: 0;
-  padding: 0;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
+    radial-gradient(1000px 700px at 110% 10%, rgba(167,139,250,.07), transparent 60%),
+    linear-gradient(180deg, #0b0f19 0%, #0a0e17 60%, #0a0a0a 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
-.social-links li {
-  display: inline-block;
-  margin-right: 20px;
+/* Keep app content above decorative layers */
+.app-frame { position: relative; z-index: 1; }
+
+/* ---- Ambient animated “wave” blobs (3 layers) ---- */
+.wave{
+  position: fixed;
+  pointer-events: none;
+  inset: auto auto auto auto;
+  width: 70vmax;
+  height: 70vmax;
+  filter: blur(42px);
+  opacity: .85;
+  mix-blend-mode: screen;
+  z-index: 0;
+  animation: blobFloatA 22s var(--e) infinite alternate;
+  background:
+    radial-gradient(closest-side at 60% 40%, rgba(124,252,0,.19), transparent 70%),
+    radial-gradient(closest-side at 40% 60%, rgba(167,139,250,.16), transparent 70%);
+}
+.wave:nth-of-type(1){
+  top:-12vmax; left:-12vmax;
+  transform: rotate(-8deg);
+}
+.wave:nth-of-type(2){
+  top: 20vmax; right:-16vmax;
+  background:
+    radial-gradient(closest-side at 70% 35%, rgba(124,252,0,.14), transparent 70%),
+    radial-gradient(closest-side at 35% 70%, rgba(0,255,204,.10), transparent 70%);
+  animation: blobFloatB 26s var(--e) infinite alternate;
+  filter: blur(46px);
+}
+.wave:nth-of-type(3){
+  bottom:-18vmax; left: 10vmax;
+  background:
+    radial-gradient(closest-side at 55% 45%, rgba(167,139,250,.15), transparent 70%),
+    radial-gradient(closest-side at 30% 70%, rgba(124,252,0,.12), transparent 70%);
+  animation: blobFloatC 28s var(--e) infinite alternate;
+  filter: blur(50px);
 }
 
-.social-links a {
-  color: #333;
+@keyframes blobFloatA{
+  0%   { transform: translate3d(0,0,0) scale(1) rotate(-8deg); }
+  100% { transform: translate3d(4vmax,3vmax,0) scale(1.05) rotate(4deg); }
+}
+@keyframes blobFloatB{
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  100% { transform: translate3d(-3vmax,2vmax,0) scale(1.06); }
+}
+@keyframes blobFloatC{
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  100% { transform: translate3d(3vmax,-2vmax,0) scale(1.04); }
+}
+
+/* ---- Subtle grain overlay (pure CSS, very light) ---- */
+body::after{
+  content:"";
+  position: fixed; inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(1200px 800px at 50% -20%, rgba(255,255,255,.02), transparent 60%),
+    repeating-conic-gradient(from 0deg, rgba(255,255,255,.008) 0deg 2deg, rgba(0,0,0,0) 2deg 4deg);
+  mix-blend-mode: soft-light;
+  opacity:.6;
+  z-index:0;
+}
+
+/* ---- Focus outlines (accessible, consistent) ---- */
+:where(a, button, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible{
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* ---- Selection color ---- */
+::selection{
+  background: rgba(124,252,0,.35);
+  color: #051b0a;
+}
+
+/* ---- Scrollbar styling ---- */
+:root{
+  scrollbar-color: rgba(124,252,0,.45) #0a0f16;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar{ width: 10px; height: 10px; }
+::-webkit-scrollbar-track{ background: #0a0f16; }
+::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg, rgba(124,252,0,.7), rgba(0,255,204,.6));
+  border-radius: 999px;
+  border: 2px solid #0a0f16;
+}
+::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(180deg, rgba(124,252,0,.85), rgba(0,255,204,.8));
+}
+
+/* ---- Links (global) ---- */
+a{
+  color: var(--accent);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--fast) var(--e), opacity var(--fast) var(--e);
+}
+a:hover{ color: #00ffcc; }
+a:active{ opacity:.9; }
+
+/* ---- Utility helpers ---- */
+.hidden{ display:none !important; }
+.vishidden{ position:absolute !important; clip:rect(0 0 0 0); clip-path: inset(50%); width:1px; height:1px; overflow:hidden; white-space:nowrap; }
+
+/* ---- Motion-reduction friendly ---- */
+@media (prefers-reduced-motion: reduce){
+  html { scroll-behavior: auto; }
+  .wave,
+  body::after{
+    animation: none !important;
+    transition: none !important;
+  }
+  .wave{ opacity:.3; }
 }
 
-.social-links a:hover {
-  color: #3e8e41;
+/* ---- Small devices tweaks ---- */
+@media (max-width: 720px){
+  /* Give a touch more contrast behind content on small screens */
+  main#main{
+    background: rgba(0,0,0,.5);
+    border-color: rgba(124,252,0,.3);
+  }
 }
