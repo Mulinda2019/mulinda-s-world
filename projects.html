@@ -1,357 +1,677 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Projects Showcase</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto&display=swap" rel="stylesheet">
+  <title>Mulinda’s World — Projects</title>
+
+  <!-- Fonts & Icons (safe duplicated; SPA dedupes dynamically) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-      color: white;
-      background-color: black;
-      overflow-x: hidden;
+    :root{
+      --p-accent: lawngreen;
+      --p-accent-2:#00ffcc;
+      --p-ink:#eaffea;
+      --p-muted:#b6c2cf;
+      --p-card: rgba(255,255,255,0.06);
+      --p-border: rgba(124,252,0,.28);
+      --p-shadow: 0 10px 30px rgba(0,0,0,.35);
+      --p-radius:16px;
+      --p-e: cubic-bezier(.22,.61,.36,1);
     }
 
-    h1, h2 {
-      font-family: 'Orbitron', sans-serif;
-      color: lawngreen;
-      text-shadow: 1px 1px 4px #000;
-      text-align: center;
+    /* ===== Namespaced base ===== */
+    body.proj{
+      margin:0; color:#fff; background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(167,139,250,.07), transparent 60%),
+        linear-gradient(180deg,#0b0f19 0%,#0a0e17 60%,#0a0a0a 100%);
+      background-attachment: fixed;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .proj a{ color: var(--p-accent); text-decoration: none; }
+    .proj a:hover{ color: var(--p-accent-2); }
+    .proj .wrap{ width:min(1200px,92vw); margin-inline:auto; padding: clamp(16px,3vw,28px); }
+    .proj .muted{ color:var(--p-muted); }
+
+    /* ===== Header ===== */
+    .p-hero{ padding: min(7vh,36px) 0 6px; }
+    .p-kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      background: linear-gradient(90deg, rgba(124,252,0,.18), rgba(0,255,204,.18));
+      border:1px solid var(--p-border);
+      color: var(--p-ink);
+      padding:6px 10px; border-radius:999px; font-weight:800; letter-spacing:.3px;
+      box-shadow: inset 0 0 18px rgba(124,252,0,.15);
+    }
+    .p-title{
+      font-family: Orbitron, sans-serif; letter-spacing:.6px;
+      font-size: clamp(26px, 4.6vw, 46px);
+      margin:8px 0 4px;
+      background: linear-gradient(90deg,#fff,var(--p-accent));
+      -webkit-background-clip: text;      /* Safari/old Chrome */
+      background-clip: text;               /* Standard */
+      -webkit-text-fill-color: transparent;/* Safari needs this */
+      color: transparent;                  /* Fallback */
+      text-shadow:0 0 18px rgba(124,252,0,.12);
+    }
+    .p-sub{ max-width:70ch; color:var(--p-muted); font-size: clamp(15px, 2.2vw, 18px); }
+
+    .p-banner{
+      margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.5));
+      border:1px solid var(--p-border); border-radius: var(--p-radius);
+      padding:10px 12px; box-shadow: var(--p-shadow);
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--p-border); color:#eaffea; background: rgba(0,0,0,.5);
+      padding:6px 10px; border-radius:999px; font-weight:800; font-size:14px;
     }
 
-    .container {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 30px;
-      border-radius: 15px;
-      border: 1px solid lawngreen;
-      width: 90%;
-      margin: 40px auto;
-      box-shadow: 0 0 20px rgba(50, 205, 50, 0.3);
-      animation: fadeIn 1.2s ease-in-out;
+    /* ===== Controls ===== */
+    .controls{
+      margin: 12px 0 6px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .ctl{
+      background: var(--p-card); border:1px solid var(--p-border);
+      border-radius: 12px; padding:8px 10px; display:flex; align-items:center; gap:8px;
+    }
+    .ctl input, .ctl select{ background: transparent; border:0; outline:0; color:#fff; font:inherit; }
+    .filters{ display:flex; gap:8px; flex-wrap:wrap; }
+    .filter-btn{
+      appearance:none; border:1px solid var(--p-border);
+      background: rgba(0,0,0,.55); color:#fff; border-radius:999px;
+      padding:8px 12px; font-weight:800; cursor:pointer;
+      transition: transform .15s var(--p-e), background .2s var(--p-e), box-shadow .2s var(--p-e);
+    }
+    .filter-btn:hover{ transform: translateY(-2px); }
+    .filter-btn.active{
+      background: var(--p-accent); color:#041e0e; box-shadow:0 10px 22px rgba(124,252,0,.35);
+      border-color: transparent;
+    }
+    .toggle{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+      background: rgba(0,0,0,.55); border:1px solid var(--p-border); font-weight:800;
+    }
+    .toggle input{ accent-color: var(--p-accent); }
+
+    /* ===== Tech chip row ===== */
+    .tech-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+    .tech{
+      font-size:12px; padding:4px 8px; border-radius:999px;
+      border:1px solid var(--p-border); background: rgba(0,0,0,.5); color:#eaffea; font-weight:700;
+      cursor:pointer; user-select:none;
+    }
+    .tech.on{ background: var(--p-accent); color:#041e0e; border-color: transparent; }
+
+    /* ===== Grid ===== */
+    .grid{
+      display:grid; gap:14px; grid-template-columns: repeat(3,1fr);
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      position:relative; overflow:hidden; cursor:pointer;
+      border:1px solid var(--p-border); border-radius: var(--p-radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.45));
+      box-shadow: var(--p-shadow);
+      transition: transform .18s var(--p-e), box-shadow .18s var(--p-e);
+    }
+    .card:hover{ transform: translateY(-4px); box-shadow: 0 12px 26px rgba(0,0,0,.45); }
+    .card-head{
+      height: 140px; display:grid; place-items:center;
+      background:
+        radial-gradient(800px 220px at 20% 0%, rgba(124,252,0,.18), transparent 60%),
+        linear-gradient(135deg, #0b1218, #0a0e14);
+      color: var(--p-accent-2); font-size: 40px;
+    }
+    .card-body{ padding: 14px; }
+    .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .tag{
+      font-size:12px; padding:4px 8px; border-radius:999px;
+      border:1px solid var(--p-border); background: rgba(0,0,0,.5); color:#eaffea; font-weight:700;
+    }
+    .meta{ display:flex; align-items:center; gap:8px; color:var(--p-muted); font-size:13px; margin-top:6px; }
+
+    .card-foot{
+      display:flex; justify-content:space-between; align-items:center; gap:8px; padding: 0 14px 14px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      background: var(--p-accent); color:#041e0e; border:0; border-radius:999px;
+      padding:8px 12px; font-weight:900; cursor:pointer;
+      box-shadow:0 10px 24px rgba(50,205,50,.45);
+      transition: transform .15s var(--p-e);
+    }
+    .btn:hover{ transform: translateY(-2px); }
+    .btn[disabled]{ opacity:.6; cursor:not-allowed; box-shadow:none; }
+
+    /* ===== Load more ===== */
+    .loadmore{
+      display:flex; justify-content:center; margin:12px 0 2px;
     }
 
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* ===== Drawer ===== */
+    .drawer{ position:fixed; inset:0; display:none; z-index:1000; }
+    .drawer.show{ display:block; }
+    .drawer-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.6); opacity:0; transition:opacity .18s var(--p-e); }
+    .drawer-panel{
+      position:absolute; right:0; top:0; height:100%; width:min(640px, 92vw);
+      background:#090e15; border-left:2px solid var(--p-accent);
+      transform: translateX(102%); transition: transform .24s var(--p-e);
+      display:flex; flex-direction:column;
+    }
+    .drawer.show .drawer-backdrop{ opacity:1; }
+    .drawer.show .drawer-panel{ transform: translateX(0); }
+    .drawer-head{
+      padding:12px; display:flex; align-items:center; justify-content:space-between;
+      border-bottom:1px dashed var(--p-border);
+    }
+    .drawer-body{ padding:14px; overflow:auto; }
+    .drawer-close{
+      appearance:none; border:0; background:transparent; color:#fff; font-size:22px; cursor:pointer;
+      border-radius:8px; padding:6px 10px;
     }
 
-    .project-container img,
-    .project-container video {
-      width: 75%;
-      display: block;
-      margin: 20px auto;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(124, 252, 0, 0.4);
+    /* ===== Reveal ===== */
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .5s var(--p-e), transform .5s var(--p-e); }
+    .reveal.in{ opacity:1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ transition:none !important; opacity:1 !important; transform:none !important; }
+      .drawer .drawer-panel, .drawer .drawer-backdrop{ transition:none !important; }
+      .filter-btn, .card{ transition:none !important; }
     }
 
-    .toggle-btn {
-      background-color: #00ff00;
-      color: black;
-      border: none;
-      padding: 10px 18px;
-      font-size: 15px;
-      border-radius: 8px;
-      margin: 15px auto;
-      display: block;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .toggle-btn:hover {
-      background-color: #7fff00;
-    }
-
-    .details {
-      display: none;
-      margin-top: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    .github-link {
-      display: inline-block;
-      margin-top: 10px;
-      background-color: #006400;
-      padding: 8px 14px;
-      border-radius: 8px;
-      color: white;
-      text-decoration: none;
-      box-shadow: 0 0 10px lime;
-    }
-
-    .github-link:hover {
-      background-color: #32cd32;
-    }
-
-    .screenshots-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-top: 20px;
-      gap: 12px;
-    }
-
-    .mini-shot {
-      width: 22%;
-      background-color: rgba(255,255,255,0.05);
-      padding: 8px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(50, 205, 50, 0.2);
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .mini-shot:hover {
-      transform: scale(1.05);
-    }
-
-    .mini-shot img {
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    .mini-shot p {
-      font-size: 13px;
-      margin-top: 6px;
-      color: #cbd5e1;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    ul li::before {
-      content: "✔️";
-      margin-right: 8px;
-      color: lawngreen;
-    }
-
-    a {
-      color: lawngreen;
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: #00ffcc;
-      text-decoration: underline;
-    }
-
-    hr.divider {
-      border: none;
-      border-top: 2px dashed lawngreen;
-      margin: 50px auto;
-      width: 80%;
-    }
-
-    /* Modal styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      padding-top: 60px;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.9);
-    }
-
-    .modal-content {
-      margin: auto;
-      display: block;
-      max-width: 80%;
-    }
-
-    .close {
-      position: absolute;
-      top: 25px;
-      right: 35px;
-      color: #fff;
-      font-size: 35px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    @media (max-width: 600px) {
-      .project-container img,
-      .project-container video {
-        width: 100%;
-      }
-
-      .screenshots-row {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .mini-shot {
-        width: 100%;
-        cursor: default;
-      }
-
-      .mini-shot:hover {
-        transform: none;
-      }
+    /* ===== Print (simple) ===== */
+    @media print{
+      body{ background:#fff; color:#000; }
+      .p-banner, .controls, .drawer, .btn, .loadmore{ display:none !important; }
+      .grid{ grid-template-columns: repeat(2,1fr); gap:10px; }
+      .card{ border:1px solid #000 !important; box-shadow:none !important; background:#fff !important; }
+      .card-head{ background:#eee !important; color:#000 !important; }
+      .tag{ border:1px solid #000 !important; color:#000 !important; }
+      .p-title{ color:#000 !important; -webkit-background-clip:initial; background:none; text-shadow:none; }
     }
   </style>
-  <script>
-    function toggleDetails(id) {
-      const details = document.getElementById(id);
-      details.style.display = details.style.display === "block" ? "none" : "block";
-    }
-
-    function showModal(src) {
-      const modal = document.getElementById("imgModal");
-      const modalImg = document.getElementById("modalImage");
-      modal.style.display = "block";
-      modalImg.src = src;
-    }
-
-    function closeModal() {
-      document.getElementById("imgModal").style.display = "none";
-    }
-  </script>
 </head>
-<body>
+<body class="proj">
+  <div class="wrap">
+    <!-- ===== HERO ===== -->
+    <header class="p-hero reveal">
+      <span class="p-kicker"><i class="fa fa-rocket"></i> Shipped & In-progress</span>
+      <h1 class="p-title">Projects & Case Studies</h1>
+      <p class="p-sub">A selection of work across web, tools, desktop, and data. Built fast, accessible, and clean — with a focus on UI quality and smooth UX.</p>
+      <div class="p-banner">
+        <span class="chip"><i class="fa fa-diagram-project"></i> <strong id="p-count">0</strong> shown</span>
+        <button class="chip" id="p-export"><i class="fa fa-file-export"></i> Export CSV</button>
+        <button class="chip" id="p-share"><i class="fa fa-link"></i> Share current view</button>
+        <span class="chip"><i class="fa fa-clock"></i> Updated: <span id="p-updated"></span></span>
+      </div>
+    </header>
 
-  <!-- Modal -->
-  <div id="imgModal" class="modal" onclick="closeModal()">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="modalImage">
+    <!-- ===== CONTROLS ===== -->
+    <section class="controls reveal" aria-label="Project controls">
+      <div class="ctl"><i class="fa fa-search"></i><input id="p-search" placeholder="Search projects, tags or stack" aria-label="Search projects"/></div>
+
+      <nav class="filters" aria-label="Categories">
+        <button class="filter-btn active" data-cat="all">All</button>
+        <button class="filter-btn" data-cat="web">Web</button>
+        <button class="filter-btn" data-cat="tools">Dev Tools</button>
+        <button class="filter-btn" data-cat="desktop">Desktop</button>
+        <button class="filter-btn" data-cat="data">Data/Algo</button>
+      </nav>
+
+      <div class="ctl">
+        <i class="fa fa-arrow-down-a-z"></i>
+        <select id="p-sort" aria-label="Sort">
+          <option value="recent">Newest first</option>
+          <option value="alpha">A → Z</option>
+          <option value="status">Status</option>
+        </select>
+      </div>
+
+      <label class="toggle"><input type="checkbox" id="p-concepts"/> Show concepts</label>
+    </section>
+
+    <!-- ===== TECH FILTER CHIPS ===== -->
+    <section class="tech-row reveal" id="p-tech-row" aria-label="Filter by technology">
+      <!-- generated chips -->
+    </section>
+
+    <!-- ===== GRID ===== -->
+    <section class="grid reveal" id="p-grid" aria-live="polite">
+      <!-- cards injected -->
+    </section>
+
+    <div class="loadmore reveal">
+      <button class="btn" id="p-more"><i class="fa fa-plus"></i> Load more</button>
+    </div>
+
+    <footer class="reveal" style="text-align:center; margin:20px 0 6px" aria-hidden="true">
+      <small class="muted">© <span id="p-year"></span> Mulinda Israel Negondeni — Built with care.</small>
+    </footer>
   </div>
 
-  <div class="container">
-    <h1>Projects</h1>
-  </div>
-
-  <!-- Project 1 -->
-  <div class="container project-container">
-    <h2>ISREAL AUTHENTICATION</h2>
-    <img src='https://mulinda2019.github.io/mulinda-s-world/isreal.jpg' alt="Authentication App Screenshot">
-    <button class="toggle-btn" onclick="toggleDetails('details1')">Show Details</button>
-
-    <div class="details" id="details1">
-      <p>This web authentication app helps protect user data through secure sign-ups, logins, and real-time email alerts.</p>
-      <ul>
-        <li><strong>Tech Stack:</strong> Python, Flask, PostgreSQL, HTML, CSS, JavaScript</li>
-        <li><strong>Role:</strong> Lead Developer</li>
-        <li><strong>Features:</strong> OTP, Email Notification, Flash alerts, Profile Dashboard</li>
-      </ul>
-      <video src="demo1.mp4" controls></video>
-      <a class="github-link" href="https://github.com/username/isreal-authentication" target="_blank"><i class="fab fa-github"></i> View Code on GitHub</a>
-    </div>
-
-    <div class="screenshots-row">
-      <div class="mini-shot" onclick="showModal('auth-login.jpg')">
-        <img src="auth-login.jpg" alt="Login Page">
-        <p>Login screen with email/OTP and Flash messages.</p>
+  <!-- ===== Drawer (details) ===== -->
+  <aside class="drawer" id="p-drawer" aria-hidden="true" aria-labelledby="p-d-title" role="dialog">
+    <div class="drawer-backdrop" data-close></div>
+    <div class="drawer-panel" role="document" tabindex="-1">
+      <div class="drawer-head">
+        <strong id="p-d-title">Project</strong>
+        <button class="drawer-close" aria-label="Close details" data-close>&times;</button>
       </div>
-      <div class="mini-shot" onclick="showModal('auth-signup.jpg')">
-        <img src="auth-signup.jpg" alt="Register Page">
-        <p>Registration form with email confirmation.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('auth-dashboard.jpg')">
-        <img src="auth-dashboard.jpg" alt="Profile Page">
-        <p>User profile post-login with data access.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('auth-reset.jpg')">
-        <img src="auth-reset.jpg" alt="Reset Page">
-        <p>Password reset page with OTP verification.</p>
+      <div class="drawer-body" id="p-d-body">
+        <!-- filled by JS -->
       </div>
     </div>
-  </div>
+  </aside>
 
-  <hr class="divider">
+  <script>
+    (function(){
+      if(!document.body.classList.contains('proj')) return;
 
-  <!-- Project 2 -->
-  <div class="container project-container">
-    <h2>PYTHON TEACHER</h2>
-    <img src="pyguider.jpg" alt="Python Teaching App Screenshot">
-    <button class="toggle-btn" onclick="toggleDetails('details2')">Show Details</button>
+      // ====== Data ======
+      // You can add/adjust projects here. 'status' can be 'Shipped', 'In Progress', 'Concept'.
+      const PROJECTS = [
+        {
+          id:'portfolio-spa',
+          name:'Portfolio SPA',
+          date:'2025-09-01',
+          category:'web',
+          status:'Shipped',
+          icon:'fa-chart-line',
+          summary:'Hash-routed single-page portfolio with prefetch & cache, a11y focus, and smooth transitions.',
+          stack:['Vanilla JS','A11y','Performance','CSS'],
+          tags:['SPA','Hash routing','Prefetch','Accessibility'],
+          highlights:[
+            'Dynamic loader injects/cleans assets between pages to prevent conflicts.',
+            'Focus management, keyboard navigation, and reduced-motion support.',
+            'Idle-time prefetching for instant navigation.'
+          ],
+          links:{ demo:'#', source:'#' }
+        },
+        {
+          id:'auth',
+          name:'ISREALAI Authentication',
+          date:'2025-08-15',
+          category:'web',
+          status:'In Progress',
+          icon:'fa-user-shield',
+          summary:'Modular gateway app with token rotation, device sessions, and a reusable form component kit.',
+          stack:['Flask','JWT','Vanilla JS','Forms'],
+          tags:['Blueprints','Magic links','Rate limits'],
+          highlights:[
+            'Device session dashboard with revoke + activity logs.',
+            'Accessible form primitives (labels, errors, keyboard traps avoided).'
+          ],
+          links:{ demo:'#', source:'#' }
+        },
+        {
+          id:'elec-helper',
+          name:'Electronics Helper',
+          date:'2025-07-10',
+          category:'tools',
+          status:'Shipped',
+          icon:'fa-microchip',
+          summary:'Ohm’s Law tools, component notes, and circuit checklists with export.',
+          stack:['JS','PWA','Export'],
+          tags:['Utilities','DX'],
+          highlights:[
+            'Small, focused modules with instant results.',
+            'Export notes and checklists to CSV/PNG.'
+          ],
+          links:{ demo:'#', source:'#' }
+        },
+        {
+          id:'qt-utility',
+          name:'Qt Multi-Page Utility (PyQt)',
+          date:'2025-09-03',
+          category:'desktop',
+          status:'In Progress',
+          icon:'fa-desktop',
+          summary:'Four-page desktop GUI (login + 3 tools) built with Qt Designer and PyQt.',
+          stack:['PyQt','Qt Designer','Python'],
+          tags:['Desktop','GUI'],
+          highlights:[
+            'Clean separation of UI and logic; signals/slots for actions.',
+            'Calendar integration and working buttons across pages.'
+          ],
+          links:{ demo:'#', source:'#' }
+        },
+        {
+          id:'sa-transport',
+          name:'Southern Africa Transport Graph (C++)',
+          date:'2025-09-02',
+          category:'data',
+          status:'Shipped',
+          icon:'fa-route',
+          summary:'Graph of cities/roads with adjacency list & matrix, BFS reachability, and Dijkstra shortest paths.',
+          stack:['C++','Graphs','Dijkstra','BFS'],
+          tags:['Algorithms','Visualization'],
+          highlights:[
+            'Readable adjacency matrix rendering and explainable comments for non-programmers.',
+            'Handles weighted edges with clear path output.'
+          ],
+          links:{ demo:'#', source:'#' }
+        },
+        {
+          id:'uikit',
+          name:'Portfolio UI Kit',
+          date:'2025-09-04',
+          category:'tools',
+          status:'In Progress',
+          icon:'fa-layer-group',
+          summary:'Reusable, accessible components extracted from this portfolio (cards, menus, forms, toasts).',
+          stack:['ARIA','Focus mgmt','Theming','CSS'],
+          tags:['Components','Docs soon'],
+          highlights:[
+            'Keyboard and screen-reader friendly primitives.',
+            'Theme tokens and utility classes for speed.'
+          ],
+          links:{ demo:'#', source:'#' }
+        },
+        {
+          id:'sajobtrail',
+          name:'SA Job Trail',
+          date:'2026-02-01',
+          category:'web',
+          status:'Concept',
+          icon:'fa-briefcase',
+          summary:'Job-tracking board with saved searches, checklists, and CSV import/export.',
+          stack:['IndexedDB','CSV','Client-side'],
+          tags:['Productivity'],
+          highlights:[
+            'Local-first storage with optional export.',
+            'Simple funnels and reminders.'
+          ],
+          links:{ demo:'#', source:'#' }
+        },
+      ];
 
-    <div class="details" id="details2">
-      <p>A beginner-friendly Python tutorial platform with a built-in code editor and interactive learning.</p>
-      <ul>
-        <li><strong>Tech Stack:</strong> Python, Flask, SQLite, JS, CodeMirror, HTML, CSS</li>
-        <li><strong>Role:</strong> Lead Developer</li>
-        <li><strong>Features:</strong> Editor, Task Challenges, Word Definitions, Syntax Tips</li>
-      </ul>
-      <video src="demo2.mp4" controls></video>
-      <a class="github-link" href="https://github.com/username/python-teacher" target="_blank"><i class="fab fa-github"></i> View Code on GitHub</a>
-    </div>
+      // ===== Utilities =====
+      const $ = (sel, el=document)=> el.querySelector(sel);
+      const $$ = (sel, el=document)=> Array.from(el.querySelectorAll(sel));
+      const fmtDate = d => new Date(d||'1970-01-01');
 
-    <div class="screenshots-row">
-      <div class="mini-shot" onclick="showModal('../static/photos/py_editor.jpg')">
-        <img src="../static/photos/py_editor.jpg" alt="Code Editor">
-        <p>Real-time editor with syntax highlighting.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('../static/photos/py_tasks.jpg')">
-        <img src="../static/photos/py_tasks.jpg" alt="Coding Tasks">
-        <p>Mini coding tasks to apply knowledge.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('../static/photos/py_tips.jpg')">
-        <img src="../static/photos/py_tips.jpg" alt="Tips Page">
-        <p>Helpful popups for programming tips.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('../static/photos/py_definitions.jpg')">
-        <img src="../static/photos/py_definitions.jpg" alt="Definition Search">
-        <p>Search feature to explain key concepts.</p>
-      </div>
-    </div>
-  </div>
+      // ===== Elements =====
+      const updatedEl = $('#p-updated');
+      const yearEl = $('#p-year');
+      const countEl = $('#p-count');
+      const searchEl = $('#p-search');
+      const sortEl = $('#p-sort');
+      const catBtns = $$('.filter-btn[data-cat]');
+      const techRow = $('#p-tech-row');
+      const grid = $('#p-grid');
+      const moreBtn = $('#p-more');
 
-  <hr class="divider">
+      const drawer = $('#p-drawer');
+      const dTitle = $('#p-d-title');
+      const dBody = $('#p-d-body');
 
-  <!-- Project 3 -->
-  <div class="container project-container">
-    <h2>UNITY MEMBERSHIP MANAGEMENT SYSTEM</h2>
-    <img src="umms.jpg" alt="Membership Management Screenshot">
-    <button class="toggle-btn" onclick="toggleDetails('details3')">Show Details</button>
+      // ===== Init meta =====
+      updatedEl.textContent = new Date().toLocaleDateString(undefined, {year:'numeric', month:'short', day:'2-digit'});
+      yearEl.textContent = new Date().getFullYear();
 
-    <div class="details" id="details3">
-      <p>A comprehensive platform to manage university club memberships, events, and communications.</p>
-      <ul>
-        <li><strong>Tech Stack:</strong> HTML, CSS, JavaScript, React</li>
-        <li><strong>Role:</strong> Lead Developer</li>
-        <li><strong>Achievements:</strong> Improved engagement, reduced load time by 25%</li>
-      </ul>
-      <video src="demo3.mp4" controls></video>
-      <a class="github-link" href="https://github.com/username/university-membership-system" target="_blank"><i class="fab fa-github"></i> View Code on GitHub</a>
-    </div>
+      // ===== Build tech chips (unique stack names) =====
+      const allTech = Array.from(new Set(PROJECTS.flatMap(p=>p.stack))).sort();
+      const techState = new Set(); // active tech filters
+      allTech.forEach(t=>{
+        const span = document.createElement('span');
+        span.className = 'tech';
+        span.textContent = t;
+        span.setAttribute('role','button');
+        span.tabIndex = 0;
+        span.addEventListener('click', ()=> toggleTech(span, t));
+        span.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); toggleTech(span,t); } });
+        techRow.appendChild(span);
+      });
+      function toggleTech(el, t){
+        if(techState.has(t)) techState.delete(t); else techState.add(t);
+        el.classList.toggle('on');
+        render(true);
+      }
 
-    <div class="screenshots-row">
-      <div class="mini-shot" onclick="showModal('../static/photos/umms_dashboard.jpg')">
-        <img src="../static/photos/umms_dashboard.jpg" alt="Dashboard">
-        <p>Member overview and stats dashboard.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('../static/photos/umms_register.jpg')">
-        <img src="../static/photos/umms_register.jpg" alt="Registration Page">
-        <p>Member registration and edit form.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('../static/photos/umms_events.jpg')">
-        <img src="../static/photos/umms_events.jpg" alt="Events Page">
-        <p>Manage and create events calendar.</p>
-      </div>
-      <div class="mini-shot" onclick="showModal('../static/photos/umms_notifications.jpg')">
-        <img src="../static/photos/umms_notifications.jpg" alt="Notifications Page">
-        <p>Send group messages and alerts.</p>
-      </div>
-    </div>
-  </div>
+      // ===== State =====
+      const params = new URLSearchParams((location.hash.split('?')[1]||'') || location.search.replace(/^\?/,''));
+      let state = {
+        q: params.get('q') || '',
+        cat: params.get('cat') || 'all',
+        sort: params.get('sort') || 'recent',
+        showConcepts: params.get('concepts') === '1' ? true : false,
+        limit: 6
+      };
+      if(state.q) searchEl.value = state.q;
+      if(state.sort) sortEl.value = state.sort;
+      if(state.cat){
+        catBtns.forEach(b=> b.classList.toggle('active', b.dataset.cat===state.cat));
+      }
+      if(params.get('tech')){
+        params.get('tech').split(',').forEach(t=>{
+          if(allTech.includes(t)){
+            techState.add(t);
+            const chip = Array.from(techRow.children).find(x=>x.textContent===t);
+            chip?.classList.add('on');
+          }
+        });
+      }
+      $('#p-concepts').checked = state.showConcepts;
 
+      // ===== Filtering / sorting / rendering =====
+      function applyFilters(){
+        let list = PROJECTS.slice();
+
+        // concepts
+        if(!state.showConcepts){
+          list = list.filter(p=> p.status !== 'Concept');
+        }
+
+        // category
+        if(state.cat !== 'all'){
+          list = list.filter(p=> p.category === state.cat);
+        }
+
+        // tech
+        if(techState.size){
+          list = list.filter(p=> {
+            const s = new Set(p.stack);
+            for(const t of techState) if(!s.has(t)) return false;
+            return true;
+          });
+        }
+
+        // search
+        if(state.q){
+          const v = state.q.toLowerCase();
+          list = list.filter(p=>
+            p.name.toLowerCase().includes(v) ||
+            p.summary.toLowerCase().includes(v) ||
+            (p.tags||[]).some(t=> t.toLowerCase().includes(v)) ||
+            (p.stack||[]).some(s=> s.toLowerCase().includes(v))
+          );
+        }
+
+        // sort
+        if(state.sort === 'alpha') list.sort((a,b)=> a.name.localeCompare(b.name));
+        else if(state.sort === 'status'){
+          const order = { 'Shipped':0, 'In Progress':1, 'Concept':2 };
+          list.sort((a,b)=> (order[a.status]??9) - (order[b.status]??9) || fmtDate(b.date)-fmtDate(a.date));
+        }else{
+          list.sort((a,b)=> fmtDate(b.date) - fmtDate(a.date)); // recent
+        }
+
+        return list;
+      }
+
+      function render(resetLimit=false){
+        if(resetLimit) state.limit = Math.max(6, state.limit); // keep at least 6
+        const list = applyFilters();
+        countEl.textContent = list.length;
+
+        const shown = list.slice(0, state.limit);
+        grid.innerHTML = shown.map(p => cardHTML(p)).join('') || `<p class="muted" style="padding:8px">No projects match your filters.</p>`;
+        moreBtn.style.display = list.length > state.limit ? '' : 'none';
+      }
+
+      function cardHTML(p){
+        const y = fmtDate(p.date).toLocaleDateString(undefined, {year:'numeric', month:'short'});
+        const demoable = p.links?.demo && p.links.demo !== '#';
+        const srcable = p.links?.source && p.links.source !== '#';
+        return `
+          <article class="card" data-id="${p.id}" tabindex="0" aria-label="Open details: ${p.name}">
+            <div class="card-head"><i class="fa ${p.icon||'fa-cube'}"></i></div>
+            <div class="card-body">
+              <div class="meta"><span class="muted"><strong>${p.status}</strong> · ${y}</span></div>
+              <h3 style="margin:8px 0 4px">${p.name}</h3>
+              <p class="muted" style="margin:0">${p.summary}</p>
+              <div class="tags">${(p.stack||[]).map(t=>`<span class="tag">${t}</span>`).join(' ')}</div>
+            </div>
+            <div class="card-foot">
+              <button class="btn p-details"><i class="fa fa-circle-info"></i> Case study</button>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a class="filter-btn" ${demoable?'':'aria-disabled="true"'} href="${demoable?p.links.demo:'#'}" target="${demoable?'_blank':''}" ${demoable?'rel="noopener"':''}><i class="fa fa-play"></i> Demo</a>
+                <a class="filter-btn" ${srcable?'':'aria-disabled="true"'} href="${srcable?p.links.source:'#'}" target="${srcable?'_blank':''}" ${srcable?'rel="noopener"':''}><i class="fa fa-code-branch"></i> Source</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      // first render
+      render(true);
+
+      // ===== Controls wiring =====
+      searchEl.addEventListener('input', e=> { state.q = e.target.value.trim(); render(true); });
+      sortEl.addEventListener('change', e=> { state.sort = e.target.value; render(true); });
+      $('#p-concepts').addEventListener('change', e=> { state.showConcepts = e.target.checked; render(true); });
+
+      catBtns.forEach(b=>{
+        b.addEventListener('click', ()=>{
+          catBtns.forEach(x=> x.classList.toggle('active', x===b));
+          state.cat = b.dataset.cat;
+          render(true);
+        });
+      });
+
+      moreBtn.addEventListener('click', ()=>{
+        state.limit += 6;
+        render();
+      });
+
+      // Grid: open drawer on click/Enter/Space
+      grid.addEventListener('click', e=>{
+        const card = e.target.closest('.card'); if(!card) return;
+        if(e.target.closest('.p-details')) { openDrawer(card.dataset.id); return; }
+        // clicking anywhere on card also opens
+        openDrawer(card.dataset.id);
+      });
+      grid.addEventListener('keydown', e=>{
+        if(e.key==='Enter' || e.key===' '){
+          const card = e.target.closest('.card'); if(!card) return;
+          e.preventDefault();
+          openDrawer(card.dataset.id);
+        }
+      });
+
+      // ===== Drawer =====
+      function openDrawer(id){
+        const p = PROJECTS.find(x=> x.id===id);
+        if(!p) return;
+        dTitle.textContent = p.name;
+        const when = fmtDate(p.date).toLocaleDateString(undefined, {year:'numeric', month:'short'});
+        dBody.innerHTML = `
+          <div style="display:grid; gap:8px; grid-template-columns: 120px 1fr;">
+            <div>Status</div><div><strong>${p.status}</strong> · ${when}</div>
+            <div>Category</div><div>${p.category}</div>
+            <div>Summary</div><div class="muted">${p.summary}</div>
+            <div>Stack</div><div>${(p.stack||[]).map(s=>`<span class="tag">${s}</span>`).join(' ')}</div>
+            <div>Tags</div><div>${(p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join(' ')||'-'}</div>
+          </div>
+          ${p.highlights?.length ? `
+            <div style="margin-top:10px">
+              <h3 style="margin:6px 0 6px; font-family:Orbitron,sans-serif; letter-spacing:.4px;">Highlights</h3>
+              <ul style="margin:8px 0 0 18px">${p.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>
+            </div>` : ''}
+
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn" id="p-email"><i class="fa fa-envelope"></i> Request case study</button>
+            <a class="filter-btn" href="#/resume"><i class="fa fa-file"></i> See resume</a>
+          </div>
+        `;
+        drawer.classList.add('show');
+        drawer.setAttribute('aria-hidden','false');
+        setTimeout(()=> $('.drawer-panel', drawer).focus(), 0);
+
+        $('#p-email')?.addEventListener('click', ()=>{
+          const to = 'negondenimulindaisrael@gmail.com';
+          const subject = encodeURIComponent('Request: Case study — ' + (p.name||''));
+          const body = `Hi Mulinda,%0D%0A%0D%0APlease share the detailed case study for:%0D%0A- Project: ${encodeURIComponent(p.name||'')}` +
+                       `%0D%0A- Status: ${encodeURIComponent(p.status||'')}` +
+                       `%0D%0A- Key areas I care about: (architecture, UX, performance, tests, etc.)%0D%0A%0D%0AThanks!`;
+          location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+        });
+      }
+      function closeDrawer(){ drawer.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); }
+      drawer.addEventListener('click', (e)=>{ if(e.target.dataset.close !== undefined) closeDrawer(); });
+      $$('.drawer-close', drawer).forEach(el=> el.addEventListener('click', closeDrawer));
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('show')) closeDrawer(); });
+
+      // ===== Reveal on scroll =====
+      const reveals = $$('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+        });
+      }, {rootMargin:'0px 0px -10% 0px', threshold:.05});
+      reveals.forEach(el=> io.observe(el));
+
+      // ===== Export CSV =====
+      $('#p-export').addEventListener('click', ()=>{
+        const rows = [['Name','Date','Status','Category','Stack','Tags','Summary']];
+        applyFilters().forEach(p=>{
+          rows.push([
+            p.name,
+            fmtDate(p.date).toISOString().slice(0,10),
+            p.status,
+            p.category,
+            (p.stack||[]).join(' | '),
+            (p.tags||[]).join(' | '),
+            p.summary.replace(/\n/g,' ')
+          ]);
+        });
+        const csv = rows.map(r=> r.map(v=> `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], {type:'text/csv'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'projects.csv'; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=> URL.revokeObjectURL(url), 0);
+      });
+
+      // ===== Share current view (query params) =====
+      $('#p-share').addEventListener('click', async ()=>{
+        const qp = new URLSearchParams();
+        if(state.q) qp.set('q', state.q);
+        if(state.cat && state.cat!=='all') qp.set('cat', state.cat);
+        if(state.sort && state.sort!=='recent') qp.set('sort', state.sort);
+        if(state.showConcepts) qp.set('concepts','1');
+        if(techState.size) qp.set('tech', Array.from(techState).join(','));
+        const link = `${location.origin}${location.pathname}${location.search}#/projects?${qp.toString()}`;
+        try{ await navigator.clipboard.writeText(link); alert('Copied shareable link!'); }catch{ prompt('Copy link:', link); }
+      });
+
+      // ===== Deep link: #/projects?id=... or with filters =====
+      try{
+        const hash = location.hash || '';
+        const idMatch = hash.match(/[?#&]id=([a-z0-9-]+)/i);
+        if(idMatch){ openDrawer(idMatch[1]); }
+      }catch{}
+
+    })();
+  </script>
 </body>
 </html>
