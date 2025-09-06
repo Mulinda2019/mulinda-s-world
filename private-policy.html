@@ -1,152 +1,387 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mulinda's World Privacy Policy</title>
+  <title>Mulinda’s World — Privacy Policy</title>
 
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Fonts & Icons (safe duplicated; SPA dedupes dynamically) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
+    :root{
+      --pp-accent: lawngreen;
+      --pp-accent-2:#00ffcc;
+      --pp-ink:#eaffea;
+      --pp-muted:#b6c2cf;
+      --pp-card: rgba(255,255,255,0.06);
+      --pp-border: rgba(124,252,0,.28);
+      --pp-shadow: 0 10px 30px rgba(0,0,0,.35);
+      --pp-radius:16px;
+      --pp-e: cubic-bezier(.22,.61,.36,1);
     }
 
-    :root {
-      --primary-color: #6b21a8;
-      --bg-light: #111827;
-      --text-light: #e5e7eb;
-      --text-dark: #333;
-      --link-light: #a78bfa;
-      --card-bg: rgba(255, 255, 255, 0.05);
+    /* ===== Namespaced base ===== */
+    body.pp{
+      margin:0; color:#fff; background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(167,139,250,.07), transparent 60%),
+        linear-gradient(180deg,#0b0f19 0%,#0a0e17 60%,#0a0a0a 100%);
+      background-attachment: fixed;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .pp a{ color: var(--pp-accent); text-decoration: none; }
+    .pp a:hover{ color: var(--pp-accent-2); }
+    .pp .wrap{ width:min(1200px,92vw); margin-inline:auto; padding: clamp(16px,3vw,28px); }
+    .pp .muted{ color:var(--pp-muted) }
+
+    /* ===== Header ===== */
+    .pp-hero{ padding: min(7vh,36px) 0 8px; }
+    .pp-title{
+      font-family: Orbitron, sans-serif; letter-spacing:.6px;
+      font-size: clamp(26px, 4.6vw, 46px);
+      margin:8px 0 4px;
+      background: linear-gradient(90deg,#fff,var(--pp-accent));
+      -webkit-background-clip: text;      /* Safari/old Chrome */
+      background-clip: text;               /* Standard */
+      -webkit-text-fill-color: transparent;/* Safari needs this */
+      color: transparent;                  /* Fallback */
+      text-shadow:0 0 18px rgba(124,252,0,.12);
+    }
+    .pp-sub{ max-width:70ch; color:var(--pp-muted); font-size: clamp(15px, 2.2vw, 18px); }
+
+    .pp-banner{
+      margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.5));
+      border:1px solid var(--pp-border); border-radius: var(--pp-radius);
+      padding:10px 12px; box-shadow: var(--pp-shadow);
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--pp-border); color:#eaffea; background: rgba(0,0,0,.5);
+      padding:6px 10px; border-radius:999px; font-weight:800; font-size:14px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      background: var(--pp-accent); color:#041e0e; border:0; border-radius:999px;
+      padding:8px 12px; font-weight:900; cursor:pointer;
+      box-shadow:0 10px 24px rgba(50,205,50,.45);
+      transition: transform .15s var(--pp-e);
+    }
+    .btn:hover{ transform: translateY(-2px); }
+    .btn.ghost{ background: rgba(0,0,0,.55); color:#fff; border:1px solid var(--pp-border); }
+
+    /* ===== Layout ===== */
+    .pp-grid{
+      display:grid; gap:14px; grid-template-columns: 280px 1fr; align-items:start;
+    }
+    @media (max-width: 980px){ .pp-grid{ grid-template-columns: 1fr; } }
+
+    /* TOC */
+    .toc{
+      position:sticky; top:12px;
+      background: var(--pp-card); border:1px solid var(--pp-border);
+      border-radius: var(--pp-radius); padding:14px; box-shadow: var(--pp-shadow);
+    }
+    .toc h2{ margin:0 0 8px; font-family: Orbitron, sans-serif; letter-spacing:.4px; font-size: 18px; }
+    .toc .ctl{
+      background: rgba(0,0,0,.55); border:1px solid var(--pp-border);
+      border-radius: 10px; padding:8px 10px; display:flex; align-items:center; gap:8px; margin-bottom:10px;
+    }
+    .toc input{ background: transparent; border:0; outline:0; color:#fff; font:inherit; width:100%; }
+    .toc nav a{
+      display:block; padding:8px 8px; border-radius:10px; color:#eaffea; font-weight:700; font-size:14px;
+    }
+    .toc nav a:hover, .toc nav a.active{ background: rgba(255,255,255,.06); }
+    .toc .small{ font-size:12px; color:var(--pp-muted); margin-top:8px; display:block; }
+
+    /* Sections */
+    .pp-pane{
+      background: var(--pp-card); border:1px solid var(--pp-border);
+      border-radius: var(--pp-radius); padding:14px; box-shadow: var(--pp-shadow);
+    }
+    .pp-section + .pp-section{ margin-top:12px; }
+    .pp-section h2{ margin:0 0 6px; font-family: Orbitron, sans-serif; letter-spacing:.4px; font-size: 20px; }
+    .pp-section p{ margin:6px 0; }
+    .pp-section ul{ margin:6px 0 0 18px; }
+    .collapser{
+      display:inline-flex; align-items:center; gap:8px; margin-left:6px;
+      background: rgba(0,0,0,.55); border:1px solid var(--pp-border);
+      border-radius:999px; padding:4px 8px; font-size:12px; cursor:pointer;
     }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      transition: all 0.3s ease;
-      padding: 0 16px;
+    /* Highlights (search) */
+    mark{ background: rgba(124,252,0,.3); color:#041e0e; padding:0 2px; border-radius:4px; }
+
+    /* Back to top */
+    .backtop{
+      position:fixed; right:16px; bottom:16px; z-index:20;
+      border:1px solid var(--pp-border); background: rgba(0,0,0,.65);
+      color:#fff; border-radius:999px; padding:8px 10px; display:none; cursor:pointer;
+    }
+    .backtop.show{ display:block; }
+
+    /* Reveal */
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .5s var(--pp-e), transform .5s var(--pp-e); }
+    .reveal.in{ opacity:1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ transition:none !important; opacity:1 !important; transform:none !important; }
     }
 
-    #privacy-policy {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 24px;
-      border-radius: 12px;
-      background-color: var(--card-bg);
-      border: 1px solid lawngreen;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-      animation: fadeIn 0.8s ease;
-    }
-
-    #privacy-policy h2 {
-      text-align: center;
-      color: lawngreen;
-      font-size: 32px;
-      margin-bottom: 30px;
-      font-weight: 800;
-    }
-
-    #privacy-policy h3 {
-      color: #a78bfa;
-      margin-top: 35px;
-      font-size: 20px;
-    }
-
-    #privacy-policy p {
-      color: var(--text-light);
-      font-size: 15px;
-      line-height: 1.7;
-      margin: 10px 0;
-    }
-
-    #privacy-policy a {
-      color: var(--link-light);
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    #privacy-policy a:hover {
-      text-decoration: underline;
-    }
-
-    #privacy-policy::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    #privacy-policy::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-
-    #privacy-policy::-webkit-scrollbar-thumb {
-      background-color: #a78bfa;
-      border-radius: 10px;
-    }
-
-    @media (max-width: 600px) {
-      #privacy-policy {
-        padding: 16px;
-        margin: 20px auto;
-        border-radius: 10px;
-      }
-
-      #privacy-policy h2 {
-        font-size: 24px;
-      }
-
-      #privacy-policy h3 {
-        font-size: 18px;
-      }
-
-      #privacy-policy p {
-        font-size: 14px;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Print */
+    @media print{
+      body{ background:#fff; color:#000; }
+      .pp-banner, .toc .ctl, .backtop, .btn{ display:none !important; }
+      .pp-pane{ background:#fff !important; box-shadow:none !important; border:1px solid #000 !important; }
+      
+      a{ color:#000 !important; text-decoration: underline; }
+      mark{ background:#ff0 !important; color:#000 !important; }
     }
   </style>
 </head>
+<body class="pp">
+  <div class="wrap">
+    <!-- ===== HERO ===== -->
+    <header class="pp-hero reveal">
+      <h1 class="pp-title">Privacy Policy</h1>
+      <p class="pp-sub">This site is a personal portfolio and uses no trackers. It collects only what you choose to send to me — for example via email. Below is a clear summary of what happens with your data.</p>
+      <div class="pp-banner">
+        <span class="chip"><i class="fa fa-cookie-bite"></i> Cookies: none</span>
+        <span class="chip"><i class="fa fa-chart-simple"></i> Analytics: none</span>
+        <span class="chip"><i class="fa fa-server"></i> Server storage: none</span>
+        <span class="chip"><i class="fa fa-clock"></i> Updated: <span id="pp-updated"></span></span>
+        <button class="btn" id="pp-print"><i class="fa fa-file-pdf"></i> Save as PDF</button>
+        <button class="btn ghost" id="pp-share"><i class="fa fa-link"></i> Copy link</button>
+      </div>
+    </header>
 
-<body>
+    <!-- ===== GRID ===== -->
+    <div class="pp-grid">
+      <!-- TOC -->
+      <aside class="toc reveal">
+        <h2>On this page</h2>
+        <div class="ctl"><i class="fa fa-search"></i><input id="pp-search" placeholder="Search policy…" aria-label="Search policy"/></div>
+        <nav id="pp-toc" aria-label="Table of contents">
+          <!-- links populated by JS -->
+        </nav>
+        <span class="small">Need help? <a href="mailto:negondenimulindaisrael@gmail.com">Email me</a>.</span>
+      </aside>
 
-  <div id="privacy-policy">
-    <h2>Privacy Policy</h2>
-    <p><strong>Effective Date:</strong> November 5, 2024</p>
+      <!-- CONTENT -->
+      <main class="pp-pane reveal" id="pp-content" role="main">
+        <section class="pp-section" id="intro">
+          <h2>1) Who I am <button class="collapser" data-collapse="#intro"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>Hi! I’m <strong>Mulinda Israel Negondeni</strong>, an individual developer based in South Africa. This website ("Mulinda’s World") showcases my projects and provides ways to contact me.</p>
+          <p class="muted" style="font-size:14px">This policy explains, in plain language, what data is collected and why. It’s not legal advice.</p>
+        </section>
 
-    <h3>Introduction</h3>
-    <p>Welcome to Mulinda's World. I value your privacy and want to be transparent about how I handle your personal information. This Privacy Policy explains what data I collect, how I use it, and how I keep it secure.</p>
+        <section class="pp-section" id="data">
+          <h2>2) What data is collected <button class="collapser" data-collapse="#data"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <ul>
+            <li><strong>Contact information you send</strong>: If you email me or use the mailto forms on this site, I will see the name, email address, and message you provide.</li>
+            <li><strong>No account system</strong>: This site does not create accounts or store passwords.</li>
+            <li><strong>No analytics trackers</strong>: I don’t use Google Analytics or similar tools.</li>
+            <li><strong>Basic technical logs (indirect)</strong>: My hosting provider and third-party CDNs used for fonts/icons may log standard web requests (e.g., IP, user agent) for security/diagnostics.</li>
+          </ul>
+        </section>
 
-    <h3>Information I Collect</h3>
-    <p>I collect your name and email address only when you choose to fill out a Google Form to send me a comment or provide feedback. Apart from that, no personal data is collected from visitors browsing my website.</p>
+        <section class="pp-section" id="use">
+          <h2>3) How your data is used <button class="collapser" data-collapse="#use"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <ul>
+            <li><strong>To reply</strong> to your messages and follow up on collaborations or hiring opportunities.</li>
+            <li><strong>To maintain site security</strong> (via hosting/CDN logs if issues arise).</li>
+            <li><strong>Not for ads</strong>, profiling, or resale.</li>
+          </ul>
+        </section>
 
-    <h3>How I Use Your Information</h3>
-    <p>Your name and email are solely used to receive and respond to your comments or feedback. I do not share, sell, or use your data for marketing purposes.</p>
+        <section class="pp-section" id="sharing">
+          <h2>4) Sharing and disclosure <button class="collapser" data-collapse="#sharing"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>I don’t sell your data. I only share personal details if:</p>
+          <ul>
+            <li>You ask me to (e.g., references for job applications).</li>
+            <li>I’m required to by law or to protect rights and safety.</li>
+          </ul>
+        </section>
 
-    <h3>Cookies and Tracking</h3>
-    <p>I do not use cookies or any tracking technologies to monitor visitors. You can browse my website without any concerns about hidden data collection.</p>
+        <section class="pp-section" id="cookies">
+          <h2>5) Cookies and local storage <button class="collapser" data-collapse="#cookies"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>This site does not set cookies. Some pages may use client-side storage (e.g., your filter choices) to remember simple preferences on your device only.</p>
+        </section>
 
-    <h3>Data Security</h3>
-    <p>Your privacy is important to me. The information you submit through the Google Form is stored securely by Google. I do not store this data on my website or personal servers.</p>
+        <section class="pp-section" id="thirdparties">
+          <h2>6) Third-party services <button class="collapser" data-collapse="#thirdparties"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>To deliver fonts/icons quickly, pages may load resources from:</p>
+          <ul>
+            <li><strong>Google Fonts</strong> (fonts.gstatic.com)</li>
+            <li><strong>CDNJS / Cloudflare</strong> for Font Awesome</li>
+          </ul>
+          <p>These providers may receive your IP address and user agent when your browser requests those files. You can block third-party resources at the browser level; the site will still work (with fallback fonts/icons).</p>
+        </section>
 
-    <h3>Your Rights</h3>
-    <p>If you want to request the removal of your submitted information, you can contact me, and I will ensure it is deleted from my records.</p>
+        <section class="pp-section" id="security">
+          <h2>7) Security <button class="collapser" data-collapse="#security"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>I take reasonable steps to protect any emails or messages I receive. However, no method of transmission or storage is 100% secure.</p>
+        </section>
 
-    <h3>Changes to this Policy</h3>
-    <p>I may update this Privacy Policy from time to time. Any changes will be reflected on this page, so I encourage you to check periodically for the latest updates.</p>
+        <section class="pp-section" id="rights">
+          <h2>8) Your rights <button class="collapser" data-collapse="#rights"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>If you’ve shared personal data with me, you can request to <strong>access</strong>, <strong>correct</strong>, or <strong>delete</strong> it by emailing me. I aim to respect global privacy principles (e.g., GDPR) and South Africa’s <strong>POPIA</strong> in good faith as an individual developer.</p>
+        </section>
 
-    <h3>Contact Me</h3>
-    <p>If you have any questions or concerns regarding this Privacy Policy, feel free to reach out to me at:</p>
-    <p>
-      <a href="mailto:negondenimulindaisrael@gmail.com">negondenimulindaisrael@gmail.com</a>
-    </p>
+        <section class="pp-section" id="children">
+          <h2>9) Children’s privacy <button class="collapser" data-collapse="#children"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>This site is not directed to children under 13. If you believe a child has provided personal information, please contact me so I can remove it.</p>
+        </section>
+
+        <section class="pp-section" id="changes">
+          <h2>10) Changes to this policy <button class="collapser" data-collapse="#changes"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>Minor updates may be made from time to time. I’ll update the “Last updated” date above and, for material changes, I can note them on this page.</p>
+        </section>
+
+        <section class="pp-section" id="contact">
+          <h2>11) Contact <button class="collapser" data-collapse="#contact"><i class="fa fa-chevron-up"></i> Collapse</button></h2>
+          <p>Email: <a href="mailto:negondenimulindaisrael@gmail.com">negondenimulindaisrael@gmail.com</a></p>
+          <p>LinkedIn: <a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener">linkedin.com/in/mulindaisrael</a></p>
+          <p>GitHub: <a href="https://github.com/Mulinda2019" target="_blank" rel="noopener">github.com/Mulinda2019</a></p>
+        </section>
+      </main>
+    </div>
+
+    <footer class="reveal" style="text-align:center; margin:20px 0 6px" aria-hidden="true">
+      <small class="muted">© <span id="pp-year"></span> Mulinda Israel Negondeni — Simple, transparent privacy.</small>
+    </footer>
   </div>
 
+  <button class="backtop" id="pp-top" aria-label="Back to top"><i class="fa fa-arrow-up"></i></button>
+
+  <script>
+    (function(){
+      if(!document.body.classList.contains('pp')) return;
+
+      const $ = (sel, el=document)=> el.querySelector(sel);
+      const $$ = (sel, el=document)=> Array.from(el.querySelectorAll(sel));
+
+      // Updated date + year
+      $('#pp-updated').textContent = new Date().toLocaleDateString(undefined, {year:'numeric', month:'short', day:'2-digit'});
+      $('#pp-year').textContent = new Date().getFullYear();
+
+      // Print / Share
+      $('#pp-print').addEventListener('click', ()=> window.print());
+      $('#pp-share').addEventListener('click', async ()=>{
+        const link = `${location.origin}${location.pathname}${location.search}#/private-policy`;
+        try{ await navigator.clipboard.writeText(link); alert('Copied link to clipboard!'); }catch{ prompt('Copy link:', link); }
+      });
+
+      // Reveal on scroll
+      const reveals = $$('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }});
+      }, {rootMargin:'0px 0px -10% 0px', threshold:.05});
+      reveals.forEach(el=> io.observe(el));
+
+      // Build TOC
+      const toc = $('#pp-toc');
+      const sections = $$('.pp-section');
+      sections.forEach(sec=>{
+        const id = sec.id;
+        const h = sec.querySelector('h2')?.textContent.replace(/\s+Collapse$/,'') || id;
+        const a = document.createElement('a');
+        a.href = `#${id}`;
+        a.textContent = h;
+        toc.appendChild(a);
+      });
+
+      // TOC highlight on scroll
+      const map = new Map();
+      $$('#pp-toc a').forEach(a=>{
+        const id = a.getAttribute('href').replace('#','');
+        const sec = document.getElementById(id);
+        if(sec) map.set(sec, a);
+      });
+      const o2 = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          const a = map.get(e.target);
+          if(!a) return;
+          if(e.isIntersecting) {
+            $$('#pp-toc a').forEach(x=> x.classList.remove('active'));
+            a.classList.add('active');
+          }
+        });
+      }, {rootMargin:'-40% 0% -55% 0%', threshold:.05});
+      map.forEach((_, sec)=> o2.observe(sec));
+
+      // Smooth scroll for TOC links
+      toc.addEventListener('click', (e)=>{
+        const a = e.target.closest('a'); if(!a) return;
+        const id = a.getAttribute('href').slice(1);
+        const target = document.getElementById(id);
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+          history.replaceState({}, '', '#'+id);
+        }
+      });
+
+      // Collapsers
+      $$('.collapser').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const sel = btn.getAttribute('data-collapse');
+          const sec = document.querySelector(sel);
+          if(!sec) return;
+          const body = Array.from(sec.children).slice(1); // everything after h2
+          const currentlyHidden = body[0]?.style.display === 'none';
+          body.forEach(n=> n.style.display = currentlyHidden ? '' : 'none');
+          btn.querySelector('i')?.classList.toggle('fa-chevron-up', currentlyHidden);
+          btn.querySelector('i')?.classList.toggle('fa-chevron-down', !currentlyHidden);
+        });
+      });
+
+      // Live search with highlights
+      const search = $('#pp-search');
+      function clearMarks(){
+        $$('#pp-content mark').forEach(m=>{
+          const t = document.createTextNode(m.textContent);
+          m.replaceWith(t);
+        });
+      }
+      function highlight(q){
+        if(!q) return;
+        const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+        sections.forEach(sec=>{
+          sec.querySelectorAll('p, li').forEach(node=>{
+            node.innerHTML = node.textContent.replace(re, m=> `<mark>${m}</mark>`);
+          });
+        });
+      }
+      let timer;
+      search.addEventListener('input', ()=>{
+        clearTimeout(timer);
+        timer = setTimeout(()=>{
+          clearMarks();
+          const q = search.value.trim();
+          if(!q) return;
+          highlight(q);
+          const first = $('#pp-content mark');
+          first?.scrollIntoView({behavior:'smooth', block:'center'});
+        }, 180);
+      });
+
+      // Back to top
+      const topBtn = $('#pp-top');
+      window.addEventListener('scroll', ()=>{
+        topBtn.classList.toggle('show', window.scrollY > 300);
+      });
+      topBtn.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+      // Deep link support (#section)
+      if(location.hash){
+        const target = document.getElementById(location.hash.slice(1));
+        target?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    })();
+  </script>
 </body>
 </html>

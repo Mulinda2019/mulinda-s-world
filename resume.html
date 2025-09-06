@@ -1,273 +1,378 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mulida Israel NegondenI | Resume</title>
+  <title>Mulinda’s World — Resume</title>
+
+  <!-- Fonts & Icons (safe if duplicated; SPA dedupes) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
-    * {
-      box-sizing: border-box;
+    :root{
+      --r-accent: lawngreen;
+      --r-accent-2:#00ffcc;
+      --r-ink:#eaffea;
+      --r-muted:#b6c2cf;
+      --r-card: rgba(255,255,255,0.06);
+      --r-border: rgba(124,252,0,.28);
+      --r-shadow: 0 10px 30px rgba(0,0,0,.35);
+      --r-radius:16px;
+      --r-e: cubic-bezier(.22,.61,.36,1);
+      --r-max: 1024px;         /* content width on screen */
+      --r-a4w: 210mm;          /* A4 width for print */
+      --r-a4h: 297mm;          /* A4 height for print */
     }
-  
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0f172a;
-      color: white;
-      transition: all 0.3s ease;
+
+    /* ========= Namespaced base ========= */
+    body.resume{
+      margin:0; color:#fff; background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(167,139,250,.07), transparent 60%),
+        linear-gradient(180deg,#0b0f19 0%,#0a0e17 60%,#0a0a0a 100%);
+      background-attachment: fixed;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-  
-    .container {
-      width: 100%;
-      max-width: 850px;
-      margin: 30px auto;
-      padding: 20px;
-      border-radius: 12px;
-      background-color: whitesmoke;
-      border: 2px solid lawngreen;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.8s ease;
-      color: #1f2937;
+    .wrap{ width:min(var(--r-max), 92vw); margin-inline:auto; padding: clamp(16px,3vw,28px); }
+    .muted{ color:var(--r-muted) }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--r-border); color:#eaffea; background: rgba(0,0,0,.5);
+      padding:6px 10px; border-radius:999px; font-weight:800; font-size:14px;
     }
-  
-    h1 {
-      color: #1e3a8a;
-      font-size: 30px;
-      text-align: center;
-      margin-top: 0;
+    a{ color: var(--r-accent); text-decoration: none; }
+    a:hover{ color: var(--r-accent-2); }
+
+    /* ========= Header / identity ========= */
+    .r-head{
+      position:relative; padding: min(7vh,36px) 0 8px; display:grid; gap:10px;
     }
-  
-    h2 {
-      text-align: center;
-      color: #4b5563;
-      font-size: 20px;
-      margin: 5px 0 20px;
+    .r-title{
+      font-family: Orbitron, sans-serif; letter-spacing:.6px;
+      font-size: clamp(28px, 5vw, 48px);
+      margin:4px 0 2px;
+      background: linear-gradient(90deg,#fff,var(--r-accent));
+      -webkit-background-clip: text;      /* Safari/old Chrome */
+      background-clip: text;               /* Standard */
+      -webkit-text-fill-color: transparent;/* Safari needs this */
+      color: transparent;                  /* Fallback */
+      text-shadow:0 0 18px rgba(124,252,0,.12);
     }
-  
-    h3 {
-      color: #1e40af;
-      margin: 24px 0 8px;
+    .r-sub{ font-size: clamp(15px,2.2vw,18px); color:var(--r-muted); }
+
+    .r-meta{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:6px;
     }
-  
-    hr {
-      border: none;
-      border-top: 2px solid #e5e7eb;
-      margin: 20px 0;
+    .r-actions{
+      margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;
     }
-  
-    .section {
-      margin-bottom: 20px;
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      background: var(--r-accent); color:#041e0e; border:0; border-radius:999px;
+      padding:8px 12px; font-weight:900; cursor:pointer;
+      box-shadow:0 10px 24px rgba(50,205,50,.45);
+      transition: transform .15s var(--r-e);
     }
-  
-    ul {
-      padding-left: 20px;
+    .btn:hover{ transform: translateY(-2px); }
+    .btn.ghost{
+      background: rgba(0,0,0,.55); color:#fff; border:1px solid var(--r-border);
     }
-  
-    ul li {
-      margin-bottom: 6px;
-      color: #374151;
+
+    /* ========= Layout blocks ========= */
+    .grid{
+      display:grid; gap:14px; grid-template-columns: 2fr 1fr; align-items:start;
     }
-  
-    .contact a {
-      color: #2563eb;
-      text-decoration: none;
+    @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+
+    .pane{
+      background: var(--r-card); border:1px solid var(--r-border);
+      border-radius: var(--r-radius); padding:14px; box-shadow: var(--r-shadow);
     }
-  
-    .contact a:hover {
-      text-decoration: underline;
+    .pane h2{
+      margin:0 0 8px; font-family: Orbitron, sans-serif; letter-spacing:.4px; font-size: 20px;
     }
-  
-    .download-btn {
-      display: block;
-      width: max-content;
-      margin: 30px auto 10px;
-      padding: 10px 20px;
-      background: #1e40af;
-      color: white;
-      border: 2px solid lawngreen;
-      border-radius: 8px;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.3s ease;
+
+    /* ========= Experience ========= */
+    .xp-item{ padding:10px; border-radius:12px; border:1px dashed rgba(124,252,0,.25); margin-bottom:10px; }
+    .xp-head{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .xp-role{ font-weight:800; }
+    .xp-org{ color:var(--r-muted); }
+    .xp-badges{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+    .xp-list{ margin:8px 0 0 18px; }
+
+    /* ========= Skills ========= */
+    .skills{ display:grid; gap:10px; grid-template-columns: 1fr; }
+    .skill{
+      display:grid; grid-template-columns: 120px 1fr; gap:10px; align-items:center;
     }
-  
-    .download-btn:hover {
-      background: #2563eb;
+    .meter{
+      height:10px; background:#0c1016; border-radius:999px; overflow:hidden; border:1px solid var(--r-border);
     }
-  
-    .loading {
-      display: none;
-      text-align: center;
-      font-size: 18px;
-      padding: 20px;
+    .meter > span{
+      display:block; height:100%;
+      background: linear-gradient(90deg, var(--r-accent), var(--r-accent-2));
+      width:0%;
+      transition: width 1.2s var(--r-e);
     }
-  
-    .loading img {
-      width: 40px;
+
+    /* ========= Cards & lists ========= */
+    .list{ display:flex; flex-wrap:wrap; gap:8px; }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      border:1px solid var(--r-border); background: rgba(0,0,0,.5); color:#eaffea;
+      padding:6px 10px; border-radius:999px; font-weight:700; font-size:13px;
     }
-  
-    /* Scrollbar for inner container */
-    .container::-webkit-scrollbar {
-      width: 8px;
+
+    /* ========= Reveal ========= */
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .5s var(--r-e), transform .5s var(--r-e); }
+    .reveal.in{ opacity:1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ transition:none !important; opacity:1 !important; transform:none !important; }
+      .meter > span{ transition:none !important; }
     }
-  
-    .container::-webkit-scrollbar-track {
-      background: #e5e7eb;
-      border-radius: 10px;
+
+    /* ========= Compact mode ========= */
+    .compact .xp-list{ margin-left: 16px; }
+    .compact .xp-item{ padding:8px; }
+    .compact .pane{ padding:12px; }
+
+    /* ========= Print (A4, clean one-pager) ========= */
+    @page{
+      size: A4;
+      margin: 14mm 14mm 14mm 14mm;
     }
-  
-    .container::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 10px;
-    }
-  
-    .container::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
-  
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    @media print{
+      :root{ --r-accent:#000; }
+      body{ background:#fff; color:#000; }
+      .wrap{ width: auto; padding:0; }
+      .r-actions, .chip.btn, .btn.ghost{ display:none !important; }
+      .pane{ box-shadow:none !important; background:#fff !important; border:1px solid #000 !important; }
+      
+      a{ color:#000 !important; text-decoration: underline; }
+      .xp-item{ border-color:#000 !important; }
+      .pill{ border:1px solid #000 !important; color:#000 !important; }
+      .meter{ border:1px solid #000 !important; }
+      .meter > span{ background:#000 !important; }
+      .grid{ grid-template-columns: 2fr 1fr; gap:8px; }
     }
   </style>
-  
 </head>
-<body>
-  <div class="container" id="resume-content">
-    <h1>Mulida Israel NegondenI</h1>
-    <h2>Software Developer & Data Scientist</h2>
-    <hr>
+<body class="resume">
+  <div class="wrap">
+    <!-- ===== HEADER ===== -->
+    <header class="r-head reveal">
+      <h1 class="r-title">Mulinda Israel Negondeni</h1>
+      <p class="r-sub">Front-end Developer — clean, accessible, and fast user interfaces. Comfortable across the stack; strongest on the client.</p>
 
-    <div class="section contact">
-      <h3>Contact Information</h3>
-      <ul>
-        <li>Phone: 071 127 2226</li>
-        <li>Email: <a href="mailto:negondenimulindaisrael@gmail.com">negondenimulindaisrael@gmail.com</a></li>
-        <li>LinkedIn: <a href="https://www.linkedin.com/in/mulida-israel-negondeni">linkedin.com/in/mulida-israel-negondeni</a></li>
-        <li>GitHub: <a href="https://github.com/MulidaNegondeni">github.com/MulidaNegondeni</a></li>
-      </ul>
-    </div>
+      <div class="r-meta">
+        <span class="chip" id="r-email"><i class="fa fa-envelope"></i> negondenimulindaisrael@gmail.com</span>
+        <span class="chip" id="r-phone"><i class="fa fa-phone"></i> +27 ·••• ·••• ·•••</span>
+        <a class="chip" href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener"><i class="fa fa-linkedin"></i> LinkedIn</a>
+        <a class="chip" href="https://github.com/Mulinda2019" target="_blank" rel="noopener"><i class="fa fa-github"></i> GitHub</a>
+        <span class="chip"><i class="fa fa-location-dot"></i> South Africa · Remote friendly</span>
+      </div>
 
-    <div class="section">
-      <h3>Summary</h3>
-      <p>Results-driven professional with expertise in university student tutoring, teacher assistance, transcription, and data analytics. Proficient in communicating complex concepts, navigating the internet for research, and utilizing software tools for data analysis and reporting. Eager to contribute to AI advancements and expand knowledge in algorithms and data training methodologies.</p>
-    </div>
+      <div class="r-actions">
+        <button class="btn" id="r-print"><i class="fa fa-file-pdf"></i> Save as PDF</button>
+        <button class="btn ghost" id="r-vcard"><i class="fa fa-address-card"></i> Download vCard</button>
+        <button class="btn ghost" id="r-compact"><i class="fa fa-compress"></i> Toggle compact</button>
+        <a class="btn ghost" href="#/projects"><i class="fa fa-briefcase"></i> Projects</a>
+        <a class="btn ghost" href="#/certifications"><i class="fa fa-certificate"></i> Certifications</a>
+      </div>
+    </header>
 
-    <div class="section">
-      <h3>Technical Skills</h3>
-      <ul>
-        <li><strong>Programming:</strong> Python, JavaScript, HTML, CSS</li>
-        <li><strong>Frameworks:</strong> Flask, SQLAlchemy</li>
-        <li><strong>Databases:</strong> MySQL, SQLite, PostgreSQL</li>
-        <li><strong>Data Analysis:</strong> Pandas, Matplotlib, Seaborn, Tableau</li>
-        <li><strong>Machine Learning:</strong> Scikit-learn, TensorFlow</li>
-        <li><strong>Other:</strong> Git, AI-assisted coding, prompt engineering, automated email handling in Flask</li>
-      </ul>
-    </div>
+    <!-- ===== LAYOUT ===== -->
+    <div class="grid">
+      <!-- ===== LEFT COLUMN ===== -->
+      <section class="pane reveal">
+        <h2>Experience</h2>
 
-    <div class="section">
-      <h3>Education</h3>
-      <ul>
-        <li>Data Science & Analytics – Codecademy</li>
-        <li>Computer Science – Codecademy</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h3>Work Experience</h3>
-      <ul>
-        <li><strong>Data Analyst & Machine Learning Practitioner, Codecademy (Jan 2024 - Jun 2024)</strong>
-          <ul>
-            <li>Completed Data Analytics & Machine Learning Career Path</li>
-            <li>Developed ML models for classification, regression, clustering</li>
-            <li>Conducted data analysis using Pandas, Matplotlib, Seaborn</li>
-            <li>Utilized SQL for ETL processes and data management</li>
-            <li>Portfolio Projects:
-              <ul>
-                <li>Customer Churn Prediction</li>
-                <li>Sales Dashboard</li>
-                <li>Movie Recommendation System</li>
-              </ul>
-            </li>
+        <article class="xp-item">
+          <div class="xp-head">
+            <div>
+              <div class="xp-role">Frontend & UI Projects (Independent)</div>
+              <div class="xp-org">Self-directed · Remote</div>
+            </div>
+            <div class="muted">2024 — Present</div>
+          </div>
+          <div class="xp-badges">
+            <span class="pill"><i class="fa fa-universal-access"></i> Accessibility</span>
+            <span class="pill"><i class="fa fa-gauge-high"></i> Performance</span>
+            <span class="pill"><i class="fa fa-sitemap"></i> Architecture</span>
+          </div>
+          <ul class="xp-list">
+            <li>Built a hash-routed portfolio SPA with idle prefetch, asset isolation, and focus-safe navigation.</li>
+            <li>Developed a modular authentication gateway concept with device sessions and accessible form kit.</li>
+            <li>Shipped small JS tools for electronics (Ohm’s Law, notes, export) to improve learning workflow.</li>
           </ul>
-        </li>
-        <li><strong>Data Scientist: Analytics – Codecademy (Jan 2024 - Apr 2024)</strong>
-          <ul>
-            <li>Hands-on practice with Python, SQL, Tableau</li>
-            <li>Developed real-world problem-solving skills</li>
-            <li>Interpreted and communicated data insights</li>
+        </article>
+
+        <article class="xp-item">
+          <div class="xp-head">
+            <div>
+              <div class="xp-role">Desktop GUI (PyQt)</div>
+              <div class="xp-org">University/Practice Work</div>
+            </div>
+            <div class="muted">2025</div>
+          </div>
+          <div class="xp-badges">
+            <span class="pill"><i class="fa fa-window-maximize"></i> Qt Designer</span>
+            <span class="pill"><i class="fa fa-calendar-days"></i> Calendar widgets</span>
+          </div>
+          <ul class="xp-list">
+            <li>Produced a 4-page GUI (login + 3 tools) with working buttons, calendar, and clean signals/slots.</li>
+            <li>Kept UI logic separate from business logic to simplify testing and maintenance.</li>
           </ul>
-        </li>
-        <li><strong>Transcriber, Rev (May 2023 - Apr 2024)</strong>
-          <ul>
-            <li>Converted speech to text accurately</li>
-            <li>Maintained a 4.5-star accuracy rating</li>
+        </article>
+
+        <article class="xp-item">
+          <div class="xp-head">
+            <div>
+              <div class="xp-role">Algorithms & Data Structures (C++)</div>
+              <div class="xp-org">Personal Project — Southern Africa Transport Graph</div>
+            </div>
+            <div class="muted">2025</div>
+          </div>
+          <div class="xp-badges">
+            <span class="pill"><i class="fa fa-route"></i> Graphs</span>
+            <span class="pill"><i class="fa fa-diagram-project"></i> Dijkstra/BFS</span>
+          </div>
+          <ul class="xp-list">
+            <li>Modelled cities/roads with weighted edges, rendered adjacency matrix, and implemented BFS/Dijkstra.</li>
+            <li>Used explainable comments to make outputs readable for non-programmers.</li>
           </ul>
-        </li>
-        <li><strong>Teacher's Assistant, Matavhela Technical High School (Jan 2023 - Present)</strong>
-          <ul>
-            <li>Assisted with teaching and supervision</li>
-            <li>Improved student performance in English & Math</li>
-          </ul>
-        </li>
-        <li><strong>Student Tutor, University Of Venda (Feb 2022 - Dec 2022)</strong>
-          <ul>
-            <li>Supported English, accounting, and economics</li>
-            <li>Helped students improve academic performance</li>
-          </ul>
-        </li>
-      </ul>
+        </article>
+      </section>
+
+      <!-- ===== RIGHT COLUMN ===== -->
+      <aside class="pane reveal">
+        <h2>Core Skills</h2>
+        <div class="skills" id="r-skills">
+          <div class="skill"><strong>HTML • CSS</strong><div class="meter"><span style="--pct:95%"></span></div></div>
+          <div class="skill"><strong>JavaScript (ES2023+)</strong><div class="meter"><span style="--pct:90%"></span></div></div>
+          <div class="skill"><strong>Accessibility & Perf</strong><div class="meter"><span style="--pct:88%"></span></div></div>
+          <div class="skill"><strong>Python / PyQt</strong><div class="meter"><span style="--pct:75%"></span></div></div>
+          <div class="skill"><strong>C++ / Algorithms</strong><div class="meter"><span style="--pct:72%"></span></div></div>
+        </div>
+
+        <h2 style="margin-top:12px">Tools</h2>
+        <div class="list">
+          <span class="pill">VS Code</span><span class="pill">Git & GitHub</span><span class="pill">Figma</span>
+          <span class="pill">Jupyter</span><span class="pill">Linux/Bash</span>
+        </div>
+
+        <h2 style="margin-top:12px">Education</h2>
+        <p><strong>University of Venda</strong><br/>Bachelor’s Degree in Human Resource Management</p>
+        <p><strong>Codecademy (Tracks)</strong><br/>Data Science, Machine Learning, Computer Science, Data Analytics</p>
+
+        <h2 style="margin-top:12px">Highlights</h2>
+        <ul style="margin:6px 0 0 18px">
+          <li>Portfolio SPA: asset-safe loader, keyboard navigation, reduced-motion support.</li>
+          <li>UI Kit (in progress): reusable, accessible components for rapid builds.</li>
+          <li>Local-first tools with exportable data (CSV/PNG where applicable).</li>
+        </ul>
+
+        <h2 style="margin-top:12px">Links</h2>
+        <p>
+          <a href="#/projects"><i class="fa fa-briefcase"></i> Projects</a> ·
+          <a href="#/future-projects"><i class="fa fa-lightbulb"></i> Future Projects</a> ·
+          <a href="#/certifications"><i class="fa fa-certificate"></i> Certifications</a>
+        </p>
+      </aside>
     </div>
 
-    <div id="loading" class="loading">
-      <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
-      <p>Generating PDF...</p>
-    </div>
-
-    <a href="#" class="download-btn" id="download-pdf">Download as PDF</a>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
-      document.getElementById("download-pdf").addEventListener("click", async function(event) {
-        event.preventDefault();
-
-        const loadingSpinner = document.getElementById("loading");
-        const downloadButton = document.getElementById("download-pdf");
-
-        loadingSpinner.style.display = 'block';
-        downloadButton.style.display = 'none';
-
-        const doc = new jspdf.jsPDF({ unit: 'mm', format: 'a4' });
-        const resumeContent = document.getElementById("resume-content");
-
-        html2canvas(resumeContent, { scale: 2 }).then(canvas => {
-          const imgData = canvas.toDataURL("image/png");
-          const imgWidth = 190;
-          let imgHeight = (canvas.height * imgWidth) / canvas.width;
-          const pageHeight = doc.internal.pageSize.height;
-          let heightLeft = imgHeight;
-          let position = 10;
-
-          doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-
-          heightLeft -= pageHeight;
-
-          while (heightLeft >= 0) {
-            position = heightLeft - imgHeight;
-            doc.addPage();
-            doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-          }
-
-          doc.save("Mulida_Israel_NegondenI_Resume.pdf");
-          loadingSpinner.style.display = 'none';
-          downloadButton.style.display = 'block';
-        });
-      });
-    </script>
+    <footer class="reveal" style="text-align:center; margin:20px 0 6px" aria-hidden="true">
+      <small class="muted">© <span id="r-year"></span> Mulinda Israel Negondeni — References available on request.</small>
+    </footer>
   </div>
+
+  <script>
+    (function(){
+      if(!document.body.classList.contains('resume')) return;
+
+      // Reveal on scroll
+      const reveals = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }});
+      }, {rootMargin:'0px 0px -10% 0px', threshold:.05});
+      reveals.forEach(el=> io.observe(el));
+
+      // Animate skill meters
+      const meters = document.querySelectorAll('.meter > span');
+      const mo = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            const pct = e.target.style.getPropertyValue('--pct') || '0%';
+            e.target.style.width = pct;
+            mo.unobserve(e.target);
+          }
+        });
+      }, {threshold:.4});
+      meters.forEach(m=> mo.observe(m));
+
+      // Print to PDF
+      document.getElementById('r-print').addEventListener('click', ()=> window.print());
+
+      // Year
+      document.getElementById('r-year').textContent = new Date().getFullYear();
+
+      // Compact toggle
+      const compactBtn = document.getElementById('r-compact');
+      compactBtn.addEventListener('click', ()=>{
+        document.body.classList.toggle('compact');
+        compactBtn.querySelector('i').classList.toggle('fa-compress');
+        compactBtn.querySelector('i').classList.toggle('fa-expand');
+      });
+
+      // Copy contact info on click
+      const statusToast = (msg)=>{
+        const d = document.createElement('div');
+        d.textContent = msg;
+        d.style.position='fixed'; d.style.left='50%'; d.style.bottom='16px';
+        d.style.transform='translateX(-50%)'; d.style.background='rgba(0,0,0,.8)';
+        d.style.color='#fff'; d.style.padding='8px 12px'; d.style.borderRadius='999px';
+        d.style.border='1px solid rgba(124,252,0,.35)'; d.style.zIndex='9999';
+        document.body.appendChild(d);
+        setTimeout(()=> d.remove(), 1400);
+      };
+      const copyText = async (txt, ok='Copied!')=>{
+        try{ await navigator.clipboard.writeText(txt); statusToast(ok); }catch{}
+      };
+      document.getElementById('r-email').addEventListener('click', ()=> copyText('negondenimulindaisrael@gmail.com'));
+      document.getElementById('r-phone').addEventListener('click', ()=> copyText('+27', 'Copied prefix — add your number'));
+
+      // vCard download
+      document.getElementById('r-vcard').addEventListener('click', ()=>{
+        const v = [
+          'BEGIN:VCARD',
+          'VERSION:3.0',
+          'FN:Mulinda Israel Negondeni',
+          'N:Negondeni;Mulinda Israel;;;',
+          'EMAIL;TYPE=INTERNET,PREF:negondenimulindaisrael@gmail.com',
+          'TEL;TYPE=CELL:+27',
+          'ITEM1.URL;TYPE=LinkedIn:https://linkedin.com/in/mulindaisrael',
+          'ITEM2.URL;TYPE=GitHub:https://github.com/Mulinda2019',
+          'ADR;TYPE=HOME:;;South Africa;;;',
+          'END:VCARD'
+        ].join('\\n');
+        const blob = new Blob([v], {type:'text/vcard'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'Mulinda-Israel-Negondeni.vcf';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=> URL.revokeObjectURL(url), 0);
+      });
+
+      // Deep link helpers (e.g., #/resume?compact=1)
+      try{
+        const hash = location.hash || '';
+        const m = hash.match(/resume\??.*?(?:compact=)(1)/i);
+        if(m) document.body.classList.add('compact');
+      }catch{}
+    })();
+  </script>
 </body>
 </html>
