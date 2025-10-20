@@ -26,33 +26,34 @@ body{
   background:
     radial-gradient(1400px 900px at 70% 20%, rgba(0,255,204,.06), transparent 60%),
     radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
-    linear-gradient(180deg,#0b1022 0%,#0b1128 60%,#0a0f1f 100%); /* deeper blue */
+    linear-gradient(180deg,#0b1022 0%,#0b1128 60%,#0a0f1f 100%);
   background-attachment: fixed;
   overflow-x:hidden;
 }
 a{ color: var(--accent); text-decoration: none; transition: color .2s var(--e), text-decoration-color .2s var(--e); }
 a:hover{ color: var(--accent-2); text-decoration: underline; }
 
-/* ===== Full-bleed hero (no container) ===== */
+/* ===== Full-bleed hero (HTML unchanged) ===== */
 .main-container{
-  /* full width, full height hero */
   width:100%;
   max-width:none;
   margin:0;
-  padding: clamp(24px,6vw,56px) clamp(16px,6vw,64px);
-  border:none; background: transparent; box-shadow:none;
-  border-radius:0;
+  /* ~1.5cm vertical padding on large screens; scales down responsively */
+  padding: clamp(14px, 3.5vh, 1.5cm) clamp(16px, 6vw, 64px);
+  border:none; background: transparent; box-shadow:none; border-radius:0;
 
   display:grid;
   grid-template-columns: 1.25fr 1fr;
   align-items:center;
-  gap: clamp(20px,4vw,56px);
+  gap: clamp(12px, 2.5vw, 32px);
   text-align:left;
   position:relative;
   isolation:isolate;
-  min-height: min(860px, calc(100vh - 64px)); /* full screen under fixed topbar */
+  min-height: clamp(420px, 55vh, 640px);
+
   animation: rise .6s var(--e) both;
 }
+@keyframes rise{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
 /* Blue glow wave backdrop (no extra HTML) */
 .main-container::before,
@@ -77,9 +78,7 @@ a:hover{ color: var(--accent-2); text-decoration: underline; }
 </svg>");
 }
 
-@keyframes rise{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
-/* Headline/subhead (left) */
+/* Headline + subhead (left) */
 h1{
   grid-column:1; grid-row:1;
   margin:0 0 8px;
@@ -92,53 +91,57 @@ h1{
   text-shadow:0 0 18px rgba(124,252,0,.12);
 }
 p.lead{
-  grid-column:1;
+  grid-column:1; grid-row:2;
   color:var(--muted);
-  margin: 6px 0 14px;
+  margin: 6px 0 10px;
   max-width: 56ch;
   font-size: clamp(14px, 2.1vw, 20px);
 }
 
-/* Portrait (right) — no border, no container; bluish grade */
+/* Remove "I am a:" line (second paragraph in flow) */
+p:nth-of-type(2){ display:none; }
+
+/* Roles: vertical stack directly under the first lead */
+.roles{
+  grid-column:1; grid-row:3;
+  list-style:none; padding:0; margin: 6px 0 0;
+  display:grid; grid-auto-rows:min-content; gap:6px;
+  justify-content:start; text-align:left;
+}
+.roles li{
+  /* plain text lines — no borders, no pills */
+  background: transparent; border:none; border-radius:0;
+  padding:0; margin:0;
+  font-weight:700;
+  font-size: clamp(14px, 2vw, 18px);
+  line-height: 1.25;
+}
+.roles i{ display:none; } /* remove icons */
+
+/* Portrait (right) — no frame; bluish tone */
 .avatar{
   grid-column:2; grid-row:1 / span 3; justify-self:end; align-self:center;
   width: clamp(200px, 30vw, 420px); height: clamp(200px, 30vw, 420px);
   border-radius: 50%;
   object-fit: cover;
-  border: none; box-shadow: none; /* no frame */
-  margin: 0;
+  border: none; box-shadow: none; margin: 0;
 
-  /* subtle blue tone & polish */
+  /* subtle blue grade + glow */
   filter: saturate(115%) hue-rotate(185deg) contrast(105%) brightness(98%);
-  /* soft outer glow only, to mimic the edited bluish vibe without a container */
-  box-shadow: 0 0 0 transparent, 0 0 42px rgba(24,197,216,.18);
+  box-shadow: 0 0 42px rgba(24,197,216,.18);
   transition: filter .25s var(--e), transform .25s var(--e), box-shadow .25s var(--e);
 }
 .avatar:hover{ transform: translateY(-2px) scale(1.01); box-shadow: 0 0 56px rgba(24,197,216,.22); }
 
-/* Roles block (left) */
-p:nth-of-type(2){ grid-column:1; margin:.6rem 0 .2rem }
-.roles{
-  grid-column:1; list-style:none; padding:0; margin:.4rem 0 0; display:flex; flex-wrap:wrap; gap:10px;
-}
-.roles li{
-  display:flex; align-items:center; gap:10px;
-  padding:8px 12px; border-radius:999px;
-  border:none; /* remove pill borders */
-  background: rgba(0,0,0,.28);
-  font-weight:700; width:max-content;
-}
-.roles i{ color: var(--accent); }
+/* Final lead note (left, below roles) */
+p.lead[style]{ grid-column:1; grid-row:4; margin-top:8px; }
 
-/* Final lead (left) */
-p.lead[style]{ grid-column:1; margin-top:10px; }
-
-/* ===== Contact block (no container), with clear separation ===== */
+/* ===== Contact block (no container) with clear separation ===== */
 .footer-container{
   width:100%;
   max-width:none;
-  margin: clamp(40px,10vh,120px) auto clamp(24px,8vh,60px); /* space between hero and contact */
-  padding: 0 clamp(16px,6vw,64px);
+  margin: clamp(24px, 8vh, 56px) auto clamp(24px, 8vh, 60px);
+  padding: 0 clamp(16px, 6vw, 64px);
   border:none; background: transparent; box-shadow:none; border-radius:0;
   text-align:center;
   animation: rise .6s var(--e) .1s both;
@@ -154,8 +157,7 @@ p.lead[style]{ grid-column:1; margin-top:10px; }
 .footer-container li a{
   display:inline-flex; align-items:center; gap:8px; font-weight:800;
   padding:10px 14px; border-radius:999px;
-  border:none; /* no borders on CTAs */
-  background: rgba(0,0,0,.28);
+  border:none; background: rgba(0,0,0,.28);
 }
 .footer-container li a:hover{
   background: var(--accent); color:#041e0e; text-decoration: none;
@@ -171,17 +173,19 @@ p.lead[style]{ grid-column:1; margin-top:10px; }
     grid-template-columns: 1fr;
     text-align:center;
     min-height: auto;
-    padding-top: clamp(24px,7vh,56px);
+    padding: clamp(12px, 4vh, 20px) clamp(14px, 6vw, 28px);
   }
-  h1, p.lead, p:nth-of-type(2), .roles, p.lead[style]{ grid-column:1; justify-self:center; }
+  h1, p.lead, .roles, p.lead[style]{ grid-column:1; grid-row:auto; justify-self:center; text-align:center; }
+  .roles{ justify-content:center; }
   .avatar{
-    grid-column:1; grid-row:auto; justify-self:center; margin: 12px 0 4px;
+    grid-column:1; grid-row:auto; justify-self:center; margin: 10px 0 4px;
     width: 180px; height:180px;
   }
 }
 @media (prefers-reduced-motion: reduce){
   *{ animation: none !important; transition: none !important; }
 }
+
 
   </style>
 </head>
@@ -230,5 +234,6 @@ p.lead[style]{ grid-column:1; margin-top:10px; }
   </script>
 </body>
 </html>
+
 
 
