@@ -35,7 +35,8 @@ header#topbar{
   border-bottom: 1px solid var(--accent-weak);
 }
 .bar{
-  max-width: 1200px; margin: 0 auto; padding: clamp(8px,1.2vw,12px) clamp(12px,2vw,20px);
+  max-width: 1200px; margin: 0 auto; 
+  padding: clamp(8px,1.2vw,12px) clamp(12px,2vw,20px);
   display:flex; align-items:center; justify-content:space-between; gap:16px;
 }
 .brand{
@@ -43,33 +44,45 @@ header#topbar{
   color:var(--text); text-decoration:none; font-size: clamp(14px, 1.6vw, 18px);
 }
 .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 14px var(--accent)}
+/* Hide brand on smaller screens to keep one-line menu */
+@media (max-width: 900px){ .brand{display:none} }
 
 nav.primary{display:flex; align-items:center; gap:12px; flex:1; justify-content:flex-end}
 
-/* Responsive menu container */
-.menu-wrap{
-  max-width: 100%;
-  overflow-x: auto; overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-}
+/* Menu: always one row, equally spaced */
 .menu{
-  list-style:none; display:flex; gap: clamp(8px,1.4vw,18px); padding:0; margin:0;
-  align-items:center; white-space:nowrap;
+  list-style:none; display:flex; align-items:center;
+  justify-content:space-between; /* equal spacing across full width */
+  gap: clamp(6px, 1vw, 18px); padding:0; margin:0; width:100%;
 }
 .menu li{
-  display:inline-flex; align-items:center; gap:8px;
-  padding: clamp(6px,1.2vw,10px) clamp(8px,1.6vw,12px);
+  flex: 1 1 0;           /* equal widths */
+  min-width: 0;          /* allow shrinking */
+  text-align: center;    /* center label */
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding: clamp(6px,1.2vw,10px) clamp(6px,1.4vw,12px);
   border-radius:10px; cursor:pointer; user-select:none;
   border:1px solid transparent; color:var(--text); text-decoration:none;
   transition: transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
-  font-size: clamp(12px, 1.6vw, 15px);
+  font-size: clamp(11px, 1.4vw, 15px);  /* auto-shrink with viewport */
+  line-height: 1.1;
 }
-.menu li i{font-size: clamp(12px,1.6vw,14px)}
+.menu li i{font-size: clamp(12px,1.4vw,14px)}
 .menu li:hover{ background: rgba(124,252,0,.08); border-color: var(--accent-weak); }
 .menu li.active{
   background: var(--accent); color: var(--ink); border-color: transparent;
   box-shadow: 0 8px 24px rgba(124,252,0,.25);
+}
+
+/* Extra tightening on very small screens to keep one line */
+@media (max-width: 680px){
+  .menu{ gap: 6px; }
+  .menu li{ padding: 6px 8px; font-size: clamp(10px, 2.6vw, 12px); }
+  .menu li i{ font-size: clamp(10px, 2.4vw, 12px); }
+}
+@media (max-width: 520px){
+  .menu li{ padding: 5px 6px; border-radius:8px; }
+  .menu li i{ display:none; }  /* hide icons to save width */
 }
 
 /* Host area */
@@ -90,15 +103,6 @@ nav.primary{display:flex; align-items:center; gap:12px; flex:1; justify-content:
 #right-arrow{ right: 10px; }
 .arrow-nav:hover{ transform: translateY(-50%) scale(1.06); box-shadow: 0 0 18px rgba(124,252,0,.45); }
 
-/* Tighten layout on narrower screens */
-@media (max-width: 900px){
-  .bar{gap:10px}
-}
-@media (max-width: 560px){
-  .brand{font-size: 14px}
-  .brand .dot{width:8px;height:8px}
-  .menu-wrap{mask-image:none} /* maximize tap area on very small screens */
-}
 
   </style>
 </head>
@@ -189,6 +193,7 @@ nav.primary{display:flex; align-items:center; gap:12px; flex:1; justify-content:
   </script>
 </body>
 </html>
+
 
 
 
