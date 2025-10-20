@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mulinda's World</title>
 
-  <!-- Your global CSS -->
+  <!-- Global CSS -->
   <link rel="stylesheet" href="index.css"/>
 
   <!-- Favicon & Icons -->
@@ -13,100 +13,124 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 
   <style>
-    /* —— Shell-only styling (menu, arrows). Pages keep their own styles inside the frame. —— */
-
-    /* Menu Button */
-    #menu-icon{
-      position: fixed; top: 20px; left: 20px; z-index: 1000;
-      background: rgba(0,0,0,.6); color: lawngreen; border: 1px solid rgba(124,252,0,.35);
-      padding: 10px 12px; border-radius: 10px; cursor: pointer; font-size: 1.25rem;
-      transition: transform .2s ease;
+    /* ====== TOP NAV (replaces sidebar) ====== */
+    :root{
+      --bg:#0a1224; --bg2:#0d1b31; --text:#e6ffe6; /* light minty text */
+      --accent:lawngreen; --accent-weak:rgba(124,252,0,.35);
+      --ink:#0b0b0b; --muted:#86a586;
     }
-    #menu-icon:hover{ transform: scale(1.06); }
-
-    /* Sidebar */
-    #menu{
-      position: fixed; top: 0; left: 0; height: 100%; width: 260px;
-      background: rgba(0,0,0,.86); border-right: 1px solid rgba(124,252,0,.35);
-      transform: translateX(-100%); transition: transform .25s ease; z-index: 1100;
-      padding: 16px 12px 12px;
-    }
-    #menu.open{ transform: translateX(0); }
-
-    #close-menu{
-      background: transparent; color: white; border: none; font-size: 2rem; cursor: pointer;
-      width: 44px; height: 44px; line-height: 44px; border-radius: 8px;
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 800px at 70% 30%, var(--bg2) 0%, var(--bg) 60%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
     }
 
-    #menu button[data-section]{
-      width: 100%; text-align: left; background: transparent; color: #fff;
-      border: none; border-left: 4px solid transparent; border-radius: 6px;
-      padding: 10px 10px; margin: 6px 0; font-weight: 700; cursor: pointer;
-      transition: background .15s ease, color .15s ease, border-color .15s ease;
-      white-space: nowrap;
+    /* Fixed top bar */
+    header#topbar{
+      position: sticky; top:0; z-index:1000;
+      background: linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.65));
+      backdrop-filter: saturate(160%) blur(8px);
+      border-bottom: 1px solid var(--accent-weak);
     }
-    #menu button[data-section]:hover{ background: lawngreen; color: #000; }
-    #menu button.active{
-      background: lawngreen; color: #000; border-left-color: #fff;
+    .bar{
+      max-width: 1200px; margin: 0 auto; padding: 12px 20px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:20px;
     }
-    #menu button i{ margin-right: 8px; }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.4px;
+      color:var(--text); text-decoration:none;
+    }
+    .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 14px var(--accent)}
+    nav.primary{display:flex; align-items:center; gap:16px}
+    ul.menu{
+      list-style:none; display:flex; gap:18px; padding:0; margin:0;
+    }
+    ul.menu li{
+      display:inline-flex; align-items:center; gap:8px; padding:10px 12px;
+      border-radius:10px; cursor:pointer; user-select:none;
+      border:1px solid transparent; color:var(--text); text-decoration:none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+      white-space:nowrap;
+    }
+    ul.menu li:hover{ background: rgba(124,252,0,.08); border-color: var(--accent-weak); }
+    ul.menu li.active{
+      background: var(--accent); color: var(--ink); border-color: transparent;
+      box-shadow: 0 8px 24px rgba(124,252,0,.25);
+    }
+    .signin{
+      display:inline-block; padding:10px 14px; border-radius:12px; text-decoration:none;
+      background: var(--accent); color: var(--ink); font-weight:700;
+      border:1px solid transparent; box-shadow:0 8px 24px rgba(124,252,0,.25);
+    }
+    .signin:hover{ transform: translateY(-1px); }
 
-    /* Main host area (iframe lives here) */
-    #main-content{ position: relative; min-height: 100vh; }
+    /* Host area */
+    #main-content{ position: relative; min-height: calc(100vh - 64px); }
     .page-frame{
-      width: 100%; height: 100vh; border: 0; display: block; background: transparent;
+      width:100%; height: calc(100vh - 64px); border:0; display:block; background:transparent;
     }
 
-    /* Left/Right navigation arrows */
+    /* Arrow nav (kept for convenience) */
     .arrow-nav{
       position: fixed; top: 50%; transform: translateY(-50%);
-      font-size: 2.6rem; padding: 10px 14px; line-height: 1;
-      background: rgba(0,0,0,.55); color: lawngreen; border-radius: 50%;
-      border: 1px solid rgba(124,252,0,.35); box-shadow: 0 0 14px rgba(124,252,0,.25);
-      cursor: pointer; z-index: 1050; transition: transform .2s ease, box-shadow .2s ease;
+      font-size: 2.2rem; padding: 8px 12px; line-height: 1;
+      background: rgba(0,0,0,.55); color: var(--accent); border-radius: 50%;
+      border: 1px solid var(--accent-weak); box-shadow: 0 0 14px rgba(124,252,0,.25);
+      cursor: pointer; z-index: 900; transition: transform .2s ease, box-shadow .2s ease;
     }
     #left-arrow{ left: 14px; }
     #right-arrow{ right: 14px; }
     .arrow-nav:hover{ transform: translateY(-50%) scale(1.06); box-shadow: 0 0 18px rgba(124,252,0,.45); }
 
-    @media (max-width: 560px){
-      #menu{ width: 88vw; }
-      #menu button[data-section]{ font-size: .95rem; }
-      #left-arrow, #right-arrow{ font-size: 2.2rem; }
+    /* Mobile */
+    @media (max-width: 720px){
+      ul.menu{ gap:8px; }
+      ul.menu li{ padding:8px 10px; }
+      .signin{ padding:8px 12px; }
+      .arrow-nav{ font-size: 2rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Menu Button -->
-  <div id="menu-icon" aria-label="Open Menu" title="Open Menu"><i class="fa fa-bars"></i></div>
+  <!-- Fixed Top Navbar -->
+  <header id="topbar" role="banner" aria-label="Primary">
+    <div class="bar">
+      <a class="brand" href="#/home">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Mulinda’s World</span>
+      </a>
 
-  <!-- Sidebar Menu -->
-  <nav id="menu" aria-label="Site">
-    <button id="close-menu" aria-label="Close Menu" title="Close Menu">&times;</button>
-    <button data-section="home" class="active"><i class="fa fa-home"></i> Home</button>
-    <button data-section="projects"><i class="fa fa-briefcase"></i> Projects</button>
-    <button data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Projects</button>
-    <button data-section="certifications"><i class="fa fa-certificate"></i> Certifications</button>
-    <button data-section="resume"><i class="fa fa-file-text"></i> Resume</button>
-    <button data-section="private-policy"><i class="fa fa-lock"></i> Private Policy</button>
-  </nav>
+      <nav class="primary" aria-label="Main">
+        <ul class="menu" id="menu">
+          <li data-section="home" class="active"><i class="fa fa-home"></i> Home</li>
+          <li data-section="projects"><i class="fa fa-briefcase"></i> Projects</li>
+          <li data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Projects</li>
+          <li data-section="certifications"><i class="fa fa-certificate"></i> Certifications</li>
+          <li data-section="resume"><i class="fa fa-file-text"></i> Resume</li>
+          <li data-section="private-policy"><i class="fa fa-lock"></i> Private Policy</li>
+        </ul>
+        <a class="signin" href="#/home">Sign In</a>
+      </nav>
+    </div>
+  </header>
 
   <!-- Host where pages render -->
   <main id="main-content" role="main" aria-live="polite"></main>
 
   <!-- Navigation Arrows -->
-  <button id="left-arrow" class="arrow-nav" aria-label="Previous section">&#8592;</button>
-  <button id="right-arrow" class="arrow-nav" aria-label="Next section">&#8594;</button>
+  <button id="left-arrow" class="arrow-nav" aria-label="Previous section" title="Previous">&#8592;</button>
+  <button id="right-arrow" class="arrow-nav" aria-label="Next section" title="Next">&#8594;</button>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const menuIcon = document.getElementById('menu-icon');
       const menu = document.getElementById('menu');
-      const closeMenu = document.getElementById('close-menu');
       const main = document.getElementById('main-content');
       const left = document.getElementById('left-arrow');
       const right = document.getElementById('right-arrow');
-      const buttons = Array.from(menu.querySelectorAll('button[data-section]'));
+      const buttons = Array.from(menu.querySelectorAll('li[data-section]'));
 
       // Order matters for prev/next navigation
       const sections = ['home','projects','future-projects','certifications','resume','private-policy'];
@@ -116,36 +140,25 @@
       function setActive(id){
         buttons.forEach(b => b.classList.toggle('active', b.dataset.section === id));
       }
-      function openMenu(){ menu.classList.add('open'); }
-      function closeMenuFn(){ menu.classList.remove('open'); }
 
       function loadSection(id){
         current = id;
         setActive(id);
-        // update hash (so links like index.html#/projects work)
         const newHash = '#/' + id;
         if(location.hash !== newHash) history.replaceState(null, '', newHash);
 
-        // mount/replace iframe
         main.innerHTML = '';
         const frame = document.createElement('iframe');
         frame.className = 'page-frame';
         frame.title = id;
         frame.src = sectionToFile(id);
         main.appendChild(frame);
-
-        // close menu on selection (mobile)
-        closeMenuFn();
       }
 
-      // Menu wiring
-      menuIcon.addEventListener('click', openMenu);
-      closeMenu.addEventListener('click', closeMenuFn);
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => loadSection(btn.dataset.section));
-      });
+      // Click binding
+      buttons.forEach(btn => btn.addEventListener('click', () => loadSection(btn.dataset.section)));
 
-      // Hash routing (supports index.html#/projects etc.)
+      // Hash routing
       function routeFromHash(){
         const m = location.hash.match(/^#\/([^/?#]+)/);
         const id = m ? m[1] : 'home';
@@ -168,3 +181,4 @@
   </script>
 </body>
 </html>
+
