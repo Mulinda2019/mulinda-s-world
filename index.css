@@ -106,16 +106,19 @@ body.fallback .wave{ display:block; }
 }
 
 /* =========================================
-   Transparent top nav (one row; even spacing)
+   Transparent top nav — FIXED + hide-on-scroll
    ========================================= */
 .site-nav{
-  position:sticky; top:0; left:0; right:0; z-index:10;
+  position:fixed; top:0; left:0; right:0; z-index:10; /* fixed to viewport on ALL sizes */
   background:transparent !important; backdrop-filter:none !important;
   padding: clamp(8px, 1.8vw, 14px) clamp(10px, 2.4vw, 24px);
   transition: transform .28s var(--e);
   will-change: transform;
 }
 .site-nav.nav--hidden{ transform: translateY(-100%); } /* hidden on scroll down */
+
+/* Content padding so it doesn't sit under fixed nav (applies to all sizes) */
+#main-content{ position:relative; min-height:100vh; padding-top: var(--navH); }
 
 /* Always a single row. Each item gets an equal 1fr column. */
 .nav-list{
@@ -171,14 +174,11 @@ body.fallback .wave{ display:block; }
 
 /* =========================================
    Small-screen layout (icon on top, full label below)
+   + increase sizes by EXACT +2px
    ========================================= */
 @media (max-width: 560px){
-  /* Make nav fixed for smooth hide/show; pad content by nav height */
-  .site-nav{ position: fixed; top: 0; left: 0; right: 0; }
-  #main-content{ padding-top: var(--navH); }
-
   :root{
-    --menuScale: 0.25;              /* HALF of previous phone size (0.5 -> 0.25) */
+    --menuScale: 0.25;              /* compact base; stacked layout handles wrap */
     --menuGap: clamp(4px, 2.2vw, 10px);
     --menuPadY: clamp(6px, 1.2vw, 8px);
   }
@@ -190,11 +190,11 @@ body.fallback .wave{ display:block; }
     flex-direction: column;
     gap: 4px;
     white-space: normal;             /* allow wrapping for long names */
-    font-size: calc(clamp(10px, 3.4vw, 14px) * var(--menuScale));
+    font-size: calc(clamp(10px, 3.4vw, 14px) * var(--menuScale) + 2px); /* +2px bump */
     line-height: 1.05;
   }
   .nav-list a i{
-    font-size: 0.85em;               /* icons also smaller on phones */
+    font-size: calc(0.85em + 2px);   /* icons also +2px on phones */
   }
   .nav-list a span{
     display:block;
@@ -212,13 +212,13 @@ body.fallback .wave{ display:block; }
 
 /* Ultra small phones */
 @media (max-width: 380px){
-  :root{ --menuScale: 0.22; }        /* nudge a bit smaller again */
+  :root{ --menuScale: 0.22; }        /* nudge smaller; +2px still applied above */
 }
 
 /* =========================================
    Host shell for subpages (single global scrollbar)
    ========================================= */
-#main-content{ position:relative; min-height:100vh; }
+/* (moved padding-top earlier with #main-content) */
 .page-frame{
   width:100%;
   min-height:100vh;                  /* JS expands to exact content height */
