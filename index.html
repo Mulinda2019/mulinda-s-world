@@ -5,21 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Mulinda's World</title>
 
-  <!-- Global CSS -->
   <link rel="stylesheet" href="index.css"/>
-
-  <!-- Icons -->
   <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 </head>
 <body class="app">
-  <!-- Fallback waves (hidden by default; shown only if a page fails to load) -->
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
 
   <div class="app-frame">
-    <!-- 100% transparent top bar; ONLY menu items -->
     <header class="site-nav" role="banner" aria-label="Primary">
       <nav class="bar" aria-label="Main">
         <ul class="nav-list" id="menu">
@@ -33,17 +28,11 @@
       </nav>
     </header>
 
-    <!-- Host where subpages render (single global scrollbar, no empty scroll) -->
     <main id="main-content" role="main" aria-live="polite"></main>
 
-    <!-- Desktop-only arrows (hidden on touch via CSS) -->
     <div class="nav-arrows" aria-hidden="true">
-      <button class="nav-arrow left" id="left-arrow" aria-label="Previous section" title="Previous">
-        <i class="fa fa-arrow-left"></i>
-      </button>
-      <button class="nav-arrow right" id="right-arrow" aria-label="Next section" title="Next">
-        <i class="fa fa-arrow-right"></i>
-      </button>
+      <button class="nav-arrow left" id="left-arrow" aria-label="Previous section" title="Previous"><i class="fa fa-arrow-left"></i></button>
+      <button class="nav-arrow right" id="right-arrow" aria-label="Next section" title="Next"><i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 
@@ -56,63 +45,72 @@
 
       const sections = ['home','projects','future-projects','certifications','resume','private-policy'];
       let current = 'home';
-      const isTouch = matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
 
+      const isTouch = matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
       const $all = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-      function sectionToFile(id){ return id + '.html'; }
       function setActive(id){
         $all('a[data-section]', menuEl).forEach(a => a.classList.toggle('active', a.dataset.section === id));
       }
+      function sectionToFile(id){ return id + '.html'; }
 
-      // Strict single-scroll: iframe auto-resizes; subpages cannot scroll
+      // Create iframe and wire resize + SWIPE RELAY from inside the iframe
       function createFrame(src){
         const frame = document.createElement('iframe');
         frame.className = 'page-frame';
         frame.src = src;
-        frame.setAttribute('scrolling', 'no');
+        frame.setAttribute('scrolling','no');
         frame.setAttribute('title', src.replace('.html',''));
 
-        let failTimer = setTimeout(() => {
-          // If load is too slow or fails, show fallback waves
-          document.body.classList.add('fallback');
-        }, 1800);
+        let failTimer = setTimeout(() => { document.body.classList.add('fallback'); }, 1800);
 
         frame.addEventListener('load', () => {
           clearTimeout(failTimer);
-          document.body.classList.remove('fallback'); // hide waves when content is available
+          document.body.classList.remove('fallback');
           try{
             const doc = frame.contentDocument;
             if (!doc) return;
 
-            // Kill subpage scrollbars — host controls scrolling
+            // Disable internal scrollbars
             doc.documentElement.style.overflow = 'hidden';
             if (doc.body) doc.body.style.overflow = 'hidden';
 
             const updateHeight = () => {
               const h1 = doc.body ? doc.body.scrollHeight : 0;
               const h2 = doc.documentElement ? doc.documentElement.scrollHeight : 0;
-              const h  = Math.max(h1, h2, window.innerHeight);
-              frame.style.height = h + 'px';
+              frame.style.height = Math.max(h1, h2, window.innerHeight) + 'px';
             };
-
             const ro = new frame.contentWindow.ResizeObserver(updateHeight);
             ro.observe(doc.documentElement);
             if (doc.body) ro.observe(doc.body);
-
             updateHeight();
             let tries = 0;
             const tick = setInterval(() => { updateHeight(); if (++tries > 20) clearInterval(tick); }, 120);
-            window.addEventListener('resize', updateHeight, { passive: true });
+            window.addEventListener('resize', updateHeight, { passive:true });
+
+            // === SWIPE RELAY INSIDE IFRAME ===
+            // If a touch starts on the iframe content, forward a message up to parent.
+            if (isTouch){
+              let sx=0, sy=0, active=false;
+              const THRESH=60, RESTRAIN=48;
+              const w = frame.contentWindow;
+              doc.addEventListener('touchstart', e => { const t=e.touches[0]; sx=t.clientX; sy=t.clientY; active=true; }, {passive:true});
+              doc.addEventListener('touchmove',  e => {
+                if(!active) return;
+                const t=e.touches[0];
+                const dx=t.clientX-sx, dy=Math.abs(t.clientY-sy);
+                if (dy>RESTRAIN) return;
+                if (dx>THRESH){ active=false; w.parent.postMessage({type:'swipe', dir:'left'}, '*'); }
+                else if (dx<-THRESH){ active=false; w.parent.postMessage({type:'swipe', dir:'right'}, '*'); }
+              }, {passive:true});
+              doc.addEventListener('touchend', () => { active=false; }, {passive:true});
+            }
           }catch(e){
             frame.style.height = window.innerHeight + 'px';
           }
         });
 
-        frame.addEventListener('error', () => {
-          document.body.classList.add('fallback'); // show waves on error
-        });
-
+        frame.addEventListener('error', () => { document.body.classList.add('fallback'); });
         return frame;
       }
 
@@ -123,12 +121,11 @@
         if (location.hash !== newHash) history.replaceState(null, '', newHash);
 
         main.innerHTML = '';
-        const frame = createFrame(sectionToFile(id));
-        main.appendChild(frame);
+        main.appendChild(createFrame(sectionToFile(id)));
         window.scrollTo({ top: 0, behavior: 'auto' });
       }
 
-      // Menu
+      // Menu clicks
       menuEl.addEventListener('click', (e) => {
         const a = e.target.closest('a[data-section]');
         if (!a) return;
@@ -144,83 +141,85 @@
       }
       window.addEventListener('hashchange', routeFromHash);
 
-      // Prev/next (desktop arrows + keyboard)
+      // Infinite loop navigation
       const nav = (d) => {
         const i = sections.indexOf(current);
         const next = (i + d + sections.length) % sections.length;
         loadSection(sections[next]);
       };
+
+      // Desktop arrows + keyboard
       if (left && right){
         left.addEventListener('click', () => nav(-1));
         right.addEventListener('click', () => nav(1));
       }
       window.addEventListener('keydown', (e) => {
         if (e.ctrlKey || e.metaKey || e.altKey) return;
-        if (e.key === 'ArrowLeft')  { e.preventDefault(); nav(-1); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); nav(1); }
+        if (e.key === 'ArrowLeft'){ e.preventDefault(); nav(-1); }
+        if (e.key === 'ArrowRight'){ e.preventDefault(); nav(1); }
       });
 
-      // Touch swipe (phones/tablets)
+      // === SWIPE ON HOST (when finger starts outside iframe) ===
       if (isTouch){
         let sx=0, sy=0, active=false;
         const THRESH=60, RESTRAIN=48;
-        main.addEventListener('touchstart', e => { const t=e.touches[0]; sx=t.clientX; sy=t.clientY; active=true; }, {passive:true});
-        main.addEventListener('touchmove',  e => {
+        const onStart = (e) => { const t=e.touches[0]; sx=t.clientX; sy=t.clientY; active=true; };
+        const onMove  = (e) => {
           if(!active) return;
           const t=e.touches[0];
           const dx=t.clientX-sx, dy=Math.abs(t.clientY-sy);
           if (dy>RESTRAIN) return;
           if (dx>THRESH){ active=false; nav(-1); }
           else if (dx<-THRESH){ active=false; nav(1); }
-        }, {passive:true});
-        main.addEventListener('touchend',   () => { active=false; }, {passive:true});
+        };
+        const onEnd   = () => { active=false; };
+
+        // attach to window so it works even if started near edges
+        window.addEventListener('touchstart', onStart, {passive:true});
+        window.addEventListener('touchmove',  onMove,  {passive:true});
+        window.addEventListener('touchend',   onEnd,   {passive:true});
+
+        // Listen to iframe relayed swipes
+        window.addEventListener('message', (ev) => {
+          if (!ev || !ev.data || ev.data.type !== 'swipe') return;
+          if (ev.data.dir === 'left')  nav(-1);
+          if (ev.data.dir === 'right') nav(1);
+        });
       }
 
-      // MENU FITTER — always one line; shrink text if needed; hide icons if still tight
+      // Initial
+      routeFromHash();
+
+      // MENU FITTER (keeps one line, equal spacing; CSS handles most, JS nudges size if needed)
       const ROOT = document.documentElement;
       function fitMenu(){
-        // reset to base to measure
-        ROOT.style.setProperty('--menuScale', '1');
+        ROOT.style.setProperty('--menuScale','1');
         menuEl.classList.remove('hide-icons');
-
-        const container = menuEl.getBoundingClientRect();
+        const rect = menuEl.getBoundingClientRect();
         const items = Array.from(menuEl.children);
-        // total width including gaps
-        const computed = getComputedStyle(menuEl);
-        const gap = parseFloat(computed.columnGap || computed.gap || 0);
-        const totalItemsWidth = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
-        const totalGap = gap * (items.length - 1);
-        const needed = totalItemsWidth + totalGap;
-        const available = container.width;
+        const gap = parseFloat(getComputedStyle(menuEl).columnGap || getComputedStyle(menuEl).gap || 0);
+        const itemsW = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
+        const needed = itemsW + gap * (items.length - 1);
+        const available = rect.width;
 
-        let scale = Math.min(1, Math.max(0.55, available / needed));
-
-        // If still too tight, hide icons and re-measure once
-        if (scale < 0.82){
+        let scale = Math.min(1, Math.max(0.45, available / needed));
+        if (scale < 0.8){
           menuEl.classList.add('hide-icons');
-          // Force reflow at scale 1 without icons
-          ROOT.style.setProperty('--menuScale', '1');
-          const totalItemsWidth2 = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
-          const needed2 = totalItemsWidth2 + totalGap;
-          scale = Math.min(1, Math.max(0.55, available / needed2));
+          ROOT.style.setProperty('--menuScale','1');
+          const itemsW2 = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
+          const needed2 = itemsW2 + gap * (items.length - 1);
+          scale = Math.min(1, Math.max(0.45, available / needed2));
         }
-
         ROOT.style.setProperty('--menuScale', String(scale));
       }
-
       const handleResize = () => requestAnimationFrame(fitMenu);
       window.addEventListener('resize', handleResize);
-      // Fit after fonts/icons are ready
       window.addEventListener('load', handleResize);
-      // Fit whenever menu count changes in future (if you add items)
       const mo = new MutationObserver(handleResize);
-      mo.observe(menuEl, { childList: true, subtree: true });
-
-      // Initial render + menu fit
-      routeFromHash();
+      mo.observe(menuEl, { childList:true, subtree:true });
       fitMenu();
 
-      // Safety: never allow horizontal scroll
+      // Safety: no horizontal scroll
       document.documentElement.style.overflowX = 'hidden';
       document.body.style.overflowX = 'hidden';
     })();
