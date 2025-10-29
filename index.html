@@ -12,36 +12,28 @@
   <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 </head>
-<body>
-  <!-- Far-back waves (decorative) -->
+<body class="app">
+  <!-- Fallback waves (hidden by default; shown only if a page fails to load) -->
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
 
-  <div class="app-frame"><!-- keeps content above decorative layers -->
-
-    <!-- 100% transparent top bar; single-line layout -->
+  <div class="app-frame">
+    <!-- 100% transparent top bar; ONLY menu items -->
     <header class="site-nav" role="banner" aria-label="Primary">
-      <div class="bar">
-        <a class="brand" href="#/home" aria-label="Mulinda’s World">
-          <span class="dot" aria-hidden="true"></span>
-          <span class="brand-text">Mulinda’s World</span>
-        </a>
-
-        <nav class="primary" aria-label="Main">
-          <ul class="nav-list" id="menu">
-            <li><a href="#/home" data-section="home" class="active"><i class="fa fa-home"></i><span>Home</span></a></li>
-            <li><a href="#/projects" data-section="projects"><i class="fa fa-briefcase"></i><span>Projects</span></a></li>
-            <li><a href="#/future-projects" data-section="future-projects"><i class="fa fa-lightbulb"></i><span>Future Projects</span></a></li>
-            <li><a href="#/certifications" data-section="certifications"><i class="fa fa-certificate"></i><span>Certifications</span></a></li>
-            <li><a href="#/resume" data-section="resume"><i class="fa fa-file-text"></i><span>Resume</span></a></li>
-            <li><a href="#/private-policy" data-section="private-policy"><i class="fa fa-lock"></i><span>Private Policy</span></a></li>
-          </ul>
-        </nav>
-      </div>
+      <nav class="bar" aria-label="Main">
+        <ul class="nav-list" id="menu">
+          <li><a href="#/home" data-section="home" class="active"><i class="fa fa-home"></i><span>Home</span></a></li>
+          <li><a href="#/projects" data-section="projects"><i class="fa fa-briefcase"></i><span>Projects</span></a></li>
+          <li><a href="#/future-projects" data-section="future-projects"><i class="fa fa-lightbulb"></i><span>Future Projects</span></a></li>
+          <li><a href="#/certifications" data-section="certifications"><i class="fa fa-certificate"></i><span>Certifications</span></a></li>
+          <li><a href="#/resume" data-section="resume"><i class="fa fa-file-text"></i><span>Resume</span></a></li>
+          <li><a href="#/private-policy" data-section="private-policy"><i class="fa fa-lock"></i><span>Private Policy</span></a></li>
+        </ul>
+      </nav>
     </header>
 
-    <!-- Host where subpages render (single global scrollbar) -->
+    <!-- Host where subpages render (single global scrollbar, no empty scroll) -->
     <main id="main-content" role="main" aria-live="polite"></main>
 
     <!-- Desktop-only arrows (hidden on touch via CSS) -->
@@ -81,12 +73,19 @@
         frame.setAttribute('scrolling', 'no');
         frame.setAttribute('title', src.replace('.html',''));
 
+        let failTimer = setTimeout(() => {
+          // If load is too slow or fails, show fallback waves
+          document.body.classList.add('fallback');
+        }, 1800);
+
         frame.addEventListener('load', () => {
+          clearTimeout(failTimer);
+          document.body.classList.remove('fallback'); // hide waves when content is available
           try{
             const doc = frame.contentDocument;
             if (!doc) return;
 
-            // Kill subpage scrollbars; host controls scrolling
+            // Kill subpage scrollbars — host controls scrolling
             doc.documentElement.style.overflow = 'hidden';
             if (doc.body) doc.body.style.overflow = 'hidden';
 
@@ -97,12 +96,10 @@
               frame.style.height = h + 'px';
             };
 
-            // Accurate fit on content changes
             const ro = new frame.contentWindow.ResizeObserver(updateHeight);
             ro.observe(doc.documentElement);
             if (doc.body) ro.observe(doc.body);
 
-            // Async assets & host resizes
             updateHeight();
             let tries = 0;
             const tick = setInterval(() => { updateHeight(); if (++tries > 20) clearInterval(tick); }, 120);
@@ -110,6 +107,10 @@
           }catch(e){
             frame.style.height = window.innerHeight + 'px';
           }
+        });
+
+        frame.addEventListener('error', () => {
+          document.body.classList.add('fallback'); // show waves on error
         });
 
         return frame;
@@ -143,7 +144,7 @@
       }
       window.addEventListener('hashchange', routeFromHash);
 
-      // Desktop arrows + keyboard
+      // Prev/next (desktop arrows + keyboard)
       const nav = (d) => {
         const i = sections.indexOf(current);
         const next = (i + d + sections.length) % sections.length;
@@ -175,8 +176,49 @@
         main.addEventListener('touchend',   () => { active=false; }, {passive:true});
       }
 
-      // Initial render
+      // MENU FITTER — always one line; shrink text if needed; hide icons if still tight
+      const ROOT = document.documentElement;
+      function fitMenu(){
+        // reset to base to measure
+        ROOT.style.setProperty('--menuScale', '1');
+        menuEl.classList.remove('hide-icons');
+
+        const container = menuEl.getBoundingClientRect();
+        const items = Array.from(menuEl.children);
+        // total width including gaps
+        const computed = getComputedStyle(menuEl);
+        const gap = parseFloat(computed.columnGap || computed.gap || 0);
+        const totalItemsWidth = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
+        const totalGap = gap * (items.length - 1);
+        const needed = totalItemsWidth + totalGap;
+        const available = container.width;
+
+        let scale = Math.min(1, Math.max(0.55, available / needed));
+
+        // If still too tight, hide icons and re-measure once
+        if (scale < 0.82){
+          menuEl.classList.add('hide-icons');
+          // Force reflow at scale 1 without icons
+          ROOT.style.setProperty('--menuScale', '1');
+          const totalItemsWidth2 = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
+          const needed2 = totalItemsWidth2 + totalGap;
+          scale = Math.min(1, Math.max(0.55, available / needed2));
+        }
+
+        ROOT.style.setProperty('--menuScale', String(scale));
+      }
+
+      const handleResize = () => requestAnimationFrame(fitMenu);
+      window.addEventListener('resize', handleResize);
+      // Fit after fonts/icons are ready
+      window.addEventListener('load', handleResize);
+      // Fit whenever menu count changes in future (if you add items)
+      const mo = new MutationObserver(handleResize);
+      mo.observe(menuEl, { childList: true, subtree: true });
+
+      // Initial render + menu fit
       routeFromHash();
+      fitMenu();
 
       // Safety: never allow horizontal scroll
       document.documentElement.style.overflowX = 'hidden';
