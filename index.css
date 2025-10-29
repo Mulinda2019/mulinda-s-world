@@ -190,7 +190,7 @@ body.fallback .wave{ display:block; }
     flex-direction: column;
     gap: 4px;
     white-space: normal;             /* allow wrapping for long names */
-    font-size: calc(clamp(10px, 3.4vw, 14px) * var(--menuScale) + 2px); /* +2px bump */
+    font-size: calc(clamp(10px, 3.4vw, 14px) * var(--menuScale) + 4px); /* +2px bump */
     line-height: 1.05;
   }
   .nav-list a i{
@@ -259,4 +259,5 @@ body.fallback .wave{ display:block; }
 @media (prefers-reduced-motion:reduce){
   .wave{ animation:none !important; opacity:.3; }
 }
+
 
