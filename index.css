@@ -17,6 +17,9 @@
   --menuScale: 1;
   --menuGap: clamp(6px, 3vw, 18px);
   --menuPadY: clamp(8px, 2.2vw, 14px);
+
+  /* Nav height (JS updates this) */
+  --navH: 60px;
 }
 
 /* ---- Reset / base ---- */
@@ -110,6 +113,7 @@ body.fallback .wave{ display:block; }
   background:transparent !important; backdrop-filter:none !important;
   padding: clamp(8px, 1.8vw, 14px) clamp(10px, 2.4vw, 24px);
   transition: transform .28s var(--e);
+  will-change: transform;
 }
 .site-nav.nav--hidden{ transform: translateY(-100%); } /* hidden on scroll down */
 
@@ -169,10 +173,14 @@ body.fallback .wave{ display:block; }
    Small-screen layout (icon on top, full label below)
    ========================================= */
 @media (max-width: 560px){
+  /* Make nav fixed for smooth hide/show; pad content by nav height */
+  .site-nav{ position: fixed; top: 0; left: 0; right: 0; }
+  #main-content{ padding-top: var(--navH); }
+
   :root{
-    --menuScale: 0.5;                /* ~2× smaller than desktop */
+    --menuScale: 0.25;              /* HALF of previous phone size (0.5 -> 0.25) */
     --menuGap: clamp(4px, 2.2vw, 10px);
-    --menuPadY: clamp(6px, 1.4vw, 10px);
+    --menuPadY: clamp(6px, 1.2vw, 8px);
   }
 
   .nav-list{ gap: var(--menuGap); }  /* consistent spacing across items */
@@ -180,13 +188,13 @@ body.fallback .wave{ display:block; }
   /* Stack icon above text; allow label to wrap within the item */
   .nav-list a{
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     white-space: normal;             /* allow wrapping for long names */
-    font-size: calc(clamp(10px, 3.6vw, 15px) * var(--menuScale));
+    font-size: calc(clamp(10px, 3.4vw, 14px) * var(--menuScale));
     line-height: 1.05;
   }
   .nav-list a i{
-    font-size: 1.1em;                /* icon slightly larger than text */
+    font-size: 0.85em;               /* icons also smaller on phones */
   }
   .nav-list a span{
     display:block;
@@ -202,9 +210,9 @@ body.fallback .wave{ display:block; }
   }
 }
 
-/* Even tighter for ultra small phones */
+/* Ultra small phones */
 @media (max-width: 380px){
-  :root{ --menuScale: 0.42; }        /* nudge smaller if necessary */
+  :root{ --menuScale: 0.22; }        /* nudge a bit smaller again */
 }
 
 /* =========================================
