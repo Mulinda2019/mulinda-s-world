@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mulinda's World - Home</title>
 
-  <!-- Icons & Fonts (same stack you used) -->
+  <!-- Icons & Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
 
   <style>
     /* ================================
-       THEME TOKENS / EASING
+       THEME / TOKENS
        ================================ */
     :root{
       --accent: lawngreen;
@@ -19,21 +19,26 @@
       --ink:#eaffea;
       --muted:#b6c2cf;
       --e: cubic-bezier(.22,.61,.36,1);
-      --side-gap: 2.5px; /* << exact gutter requested (L/R) */
+      --side-gap: 2.5px; /* exact left/right gutter */
     }
 
     /* ================================
-       GLOBAL SAFETY / SCROLL CONTROL
+       HARD DISABLE PAGE SCROLLBARS
+       (so only the outer index page scrolls)
        ================================ */
-
-    /* Make box sizing predictable and prevent accidental overflow */
-    *, *::before, *::after{ box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
 
     html, body{
-      height:100%;
-      /* IMPORTANT: remove this page’s own scrolling entirely.
-         The outer index page will control scrolling (single global scrollbar). */
-      overflow: hidden;
+      height: auto;           /* allow natural content height for iframe sizing */
+      max-height: none;
+      overflow: hidden !important;   /* <- kill both x and y scrollbars */
+    }
+
+    /* Extra cross-browser hiding (WebKit/Blink) */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar{
+      width:0 !important;
+      height:0 !important;
     }
 
     body{
@@ -48,7 +53,6 @@
       background-attachment: fixed;
     }
 
-    /* Link styling */
     a{
       color: var(--accent);
       text-decoration: none;
@@ -57,18 +61,18 @@
     a:hover{ color: var(--accent-2); text-decoration: underline; }
 
     /* ================================
-       MAIN HERO / PRIMARY GRID
+       MAIN HERO / GRID
        - exact 2.5px side gutters
-       - no internal horizontal overflow
+       - NO internal scroll
        ================================ */
     .main-container{
       width:100%;
       max-width:none;
       margin:0;
 
-      /* EXACT side gutters as requested */
+      /* 2.5px side padding exactly */
       padding-inline: var(--side-gap);
-      /* Responsive top/bottom breathing room */
+      /* responsive top/bottom breathing room */
       padding-block: clamp(14px, 3.5vh, 1.5cm);
 
       border:none; background: transparent; box-shadow:none; border-radius:0;
@@ -81,19 +85,17 @@
       position:relative;
       isolation:isolate;
 
-      /* Height is intrinsic; the parent iframe will resize to this,
-         so we DO NOT scroll here. */
+      /* natural height; parent iframe will stretch to fit.
+         keep overflow hidden so this page never scrolls. */
       min-height: clamp(420px, 55vh, 640px);
+      overflow: hidden;
 
       animation: rise .6s var(--e) both;
-
-      /* Safety: guard against accidental horizontal overflow inside this section */
-      overflow-x: hidden;
     }
 
     @keyframes rise{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-    /* Decorative blue lines (unchanged) */
+    /* Decorative lines (unchanged) */
     .main-container::before,
     .main-container::after{
       content:"";
@@ -117,9 +119,8 @@
     }
 
     /* ================================
-       TYPOGRAPHY / CONTENT
+       TYPOGRAPHY
        ================================ */
-
     h1{
       grid-column:1; grid-row:1;
       margin:0 0 8px;
@@ -130,9 +131,7 @@
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent; color: transparent;
       text-shadow:0 0 18px rgba(124,252,0,.12);
-
-      /* safety: long text will wrap before pushing outside 2.5px gutter */
-      overflow-wrap:anywhere;
+      overflow-wrap:anywhere;  /* never push outside gutters */
     }
 
     p.lead{
@@ -144,10 +143,9 @@
       overflow-wrap:anywhere;
     }
 
-    /* Hide the literal “I am a:” paragraph (we keep roles list) */
+    /* Hide the literal “I am a:” line (we keep the roles list) */
     p:nth-of-type(2){ display:none; }
 
-    /* Roles list under the first lead */
     .roles{
       grid-column:1; grid-row:3;
       list-style:none; padding:0; margin: 6px 0 0;
@@ -162,16 +160,16 @@
       line-height: 1.25;
       overflow-wrap:anywhere;
     }
-    .roles i{ display:none; } /* icon-less, clean lines */
+    .roles i{ display:none; }
 
     /* ================================
-       PORTRAIT (right column)
-       - respects the 2.5px side gutters
+       PORTRAIT
+       - respects gutters
+       - cannot cause scroll
        ================================ */
     .avatar{
       grid-column:2; grid-row:1 / span 3; justify-self:end; align-self:center;
 
-      /* Scale with viewport but never exceed the inner width minus both gutters */
       width: clamp(200px, 30vw, 420px);
       height: clamp(200px, 30vw, 420px);
       max-width: calc(100% - (var(--side-gap) * 2));
@@ -181,7 +179,6 @@
       object-fit: cover;
       border: none; box-shadow: none; margin: 0;
 
-      /* subtle blue tone + glow */
       filter: saturate(115%) hue-rotate(185deg) contrast(105%) brightness(98%);
       box-shadow: 0 0 42px rgba(24,197,216,.18);
       transition: filter .25s var(--e), transform .25s var(--e), box-shadow .25s var(--e);
@@ -194,22 +191,20 @@
     /* ================================
        FOOTER / CONTACT
        - exact 2.5px side gutters
+       - no internal scroll
        ================================ */
     .footer-container{
       width:100%;
       max-width:none;
       margin: clamp(24px, 8vh, 56px) auto clamp(24px, 8vh, 60px);
 
-      /* EXACT side gutters (same as main) */
       padding-inline: var(--side-gap);
       padding-block: 0;
 
       border:none; background: transparent; box-shadow:none; border-radius:0;
       text-align:center;
+      overflow: hidden;  /* guarantee no scroll inside footer */
       animation: rise .6s var(--e) .1s both;
-
-      /* Never allow horizontal internal overflow */
-      overflow-x:hidden;
     }
     .footer-container h2{
       margin: 10px 0 6px;
@@ -241,20 +236,18 @@
       .main-container{
         grid-template-columns: 1fr;
         text-align:center;
-        min-height: auto;
+        min-height: auto; /* let content define height for iframe sizing */
 
         /* keep EXACT 2.5px sides on phones too */
         padding-inline: var(--side-gap);
         padding-block: clamp(12px, 4vh, 20px);
       }
 
-      /* Center text columns on phones */
       h1, p.lead, .roles, p.lead[style]{
         grid-column:1; grid-row:auto; justify-self:center; text-align:center;
       }
       .roles{ justify-content:center; }
 
-      /* Portrait: strict respect for gutters on narrow screens */
       .avatar{
         grid-column:1; grid-row:auto; justify-self:center; margin: 10px 0 4px;
         width: min(180px, calc(100% - (var(--side-gap) * 2)));
@@ -262,11 +255,11 @@
       }
 
       .footer-container{
-        padding-inline: var(--side-gap);  /* repeat on phones */
+        padding-inline: var(--side-gap);
       }
     }
 
-    /* Accessibility: reduce motion */
+    /* Reduce motion for accessibility */
     @media (prefers-reduced-motion: reduce){
       *{ animation: none !important; transition: none !important; }
     }
@@ -287,7 +280,7 @@
       growth, and new technologies.
     </p>
 
-    <!-- Hidden by CSS (we keep the roles list below) -->
+    <!-- Hidden by CSS (we keep the roles list) -->
     <p>I am a:</p>
 
     <ul class="roles" aria-label="Roles">
@@ -296,6 +289,10 @@
       <li>AI-Assisted Developer</li>
       <li>Data Analyst</li>
     </ul>
+
+    <p class="lead" style="margin-top:10px">
+      Use the menu at the top-left to explore my work and background.
+    </p>
   </div>
 
   <!-- ================================
@@ -322,4 +319,3 @@
   </script>
 </body>
 </html>
-
