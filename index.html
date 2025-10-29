@@ -5,16 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Mulinda's World</title>
 
+  <!-- Global CSS -->
   <link rel="stylesheet" href="index.css"/>
+
+  <!-- Icons -->
   <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 </head>
 <body class="app">
+  <!-- Fallback waves (hidden by default; appear if a page fails to load) -->
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
 
   <div class="app-frame">
+    <!-- 100% transparent top bar -->
     <header class="site-nav" role="banner" aria-label="Primary">
       <nav class="bar" aria-label="Main">
         <ul class="nav-list" id="menu">
@@ -28,11 +33,17 @@
       </nav>
     </header>
 
+    <!-- Host where subpages render (single global scrollbar, no empty scroll) -->
     <main id="main-content" role="main" aria-live="polite"></main>
 
+    <!-- Desktop-only arrows (touch devices hide via CSS) -->
     <div class="nav-arrows" aria-hidden="true">
-      <button class="nav-arrow left" id="left-arrow" aria-label="Previous section" title="Previous"><i class="fa fa-arrow-left"></i></button>
-      <button class="nav-arrow right" id="right-arrow" aria-label="Next section" title="Next"><i class="fa fa-arrow-right"></i></button>
+      <button class="nav-arrow left" id="left-arrow" aria-label="Previous section" title="Previous">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+      <button class="nav-arrow right" id="right-arrow" aria-label="Next section" title="Next">
+        <i class="fa fa-arrow-right"></i>
+      </button>
     </div>
   </div>
 
@@ -42,6 +53,7 @@
       const menuEl = document.getElementById('menu');
       const left   = document.getElementById('left-arrow');
       const right  = document.getElementById('right-arrow');
+      const siteNav= document.querySelector('.site-nav');
 
       const sections = ['home','projects','future-projects','certifications','resume','private-policy'];
       let current = 'home';
@@ -54,7 +66,7 @@
       }
       function sectionToFile(id){ return id + '.html'; }
 
-      // Create iframe and wire resize + SWIPE RELAY from inside the iframe
+      // Create iframe and wire: resize, error fallback, swipe relay (inside iframe)
       function createFrame(src){
         const frame = document.createElement('iframe');
         frame.className = 'page-frame';
@@ -62,6 +74,7 @@
         frame.setAttribute('scrolling','no');
         frame.setAttribute('title', src.replace('.html',''));
 
+        // If loading stalls or fails, show fallback waves
         let failTimer = setTimeout(() => { document.body.classList.add('fallback'); }, 1800);
 
         frame.addEventListener('load', () => {
@@ -71,7 +84,7 @@
             const doc = frame.contentDocument;
             if (!doc) return;
 
-            // Disable internal scrollbars
+            // Single global scrollbar: disable inner scroll
             doc.documentElement.style.overflow = 'hidden';
             if (doc.body) doc.body.style.overflow = 'hidden';
 
@@ -80,16 +93,16 @@
               const h2 = doc.documentElement ? doc.documentElement.scrollHeight : 0;
               frame.style.height = Math.max(h1, h2, window.innerHeight) + 'px';
             };
+
             const ro = new frame.contentWindow.ResizeObserver(updateHeight);
             ro.observe(doc.documentElement);
             if (doc.body) ro.observe(doc.body);
+
             updateHeight();
-            let tries = 0;
-            const tick = setInterval(() => { updateHeight(); if (++tries > 20) clearInterval(tick); }, 120);
+            let tries = 0; const tick = setInterval(() => { updateHeight(); if (++tries > 20) clearInterval(tick); }, 120);
             window.addEventListener('resize', updateHeight, { passive:true });
 
-            // === SWIPE RELAY INSIDE IFRAME ===
-            // If a touch starts on the iframe content, forward a message up to parent.
+            // Swipe relay: if a touch starts inside the iframe, forward message to parent
             if (isTouch){
               let sx=0, sy=0, active=false;
               const THRESH=60, RESTRAIN=48;
@@ -106,6 +119,7 @@
               doc.addEventListener('touchend', () => { active=false; }, {passive:true});
             }
           }catch(e){
+            // Same-origin should be fine; if not, fallback to viewport height
             frame.style.height = window.innerHeight + 'px';
           }
         });
@@ -119,7 +133,6 @@
         setActive(id);
         const newHash = '#/' + id;
         if (location.hash !== newHash) history.replaceState(null, '', newHash);
-
         main.innerHTML = '';
         main.appendChild(createFrame(sectionToFile(id)));
         window.scrollTo({ top: 0, behavior: 'auto' });
@@ -133,7 +146,7 @@
         loadSection(a.dataset.section);
       });
 
-      // Hash routing
+      // Routing
       function routeFromHash(){
         const m = location.hash.match(/^#\/([^/?#]+)/);
         const id = m ? m[1] : 'home';
@@ -159,7 +172,7 @@
         if (e.key === 'ArrowRight'){ e.preventDefault(); nav(1); }
       });
 
-      // === SWIPE ON HOST (when finger starts outside iframe) ===
+      // Swipe on host (outside iframe)
       if (isTouch){
         let sx=0, sy=0, active=false;
         const THRESH=60, RESTRAIN=48;
@@ -168,18 +181,16 @@
           if(!active) return;
           const t=e.touches[0];
           const dx=t.clientX-sx, dy=Math.abs(t.clientY-sy);
-          if (dy>RESTRAIN) return;
+          if (dy>RESTRAIN) return; // ignore vertical scrolls
           if (dx>THRESH){ active=false; nav(-1); }
           else if (dx<-THRESH){ active=false; nav(1); }
         };
         const onEnd   = () => { active=false; };
-
-        // attach to window so it works even if started near edges
         window.addEventListener('touchstart', onStart, {passive:true});
         window.addEventListener('touchmove',  onMove,  {passive:true});
         window.addEventListener('touchend',   onEnd,   {passive:true});
 
-        // Listen to iframe relayed swipes
+        // Listen to iframe-relayed swipes
         window.addEventListener('message', (ev) => {
           if (!ev || !ev.data || ev.data.type !== 'swipe') return;
           if (ev.data.dir === 'left')  nav(-1);
@@ -187,27 +198,44 @@
         });
       }
 
-      // Initial
-      routeFromHash();
+      // Hide nav on scroll down, show on scroll up
+      let lastY = window.scrollY, ticking = false;
+      const HIDE_AFTER = 16; // px threshold to avoid jitter
+      function onScroll(){
+        const y = window.scrollY;
+        const down = y > lastY;
+        if (Math.abs(y - lastY) > HIDE_AFTER){
+          if (down) siteNav.classList.add('nav--hidden');
+          else siteNav.classList.remove('nav--hidden');
+          lastY = y;
+        }
+        ticking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking){ requestAnimationFrame(onScroll); ticking = true; }
+      }, { passive:true });
 
-      // MENU FITTER (keeps one line, equal spacing; CSS handles most, JS nudges size if needed)
+      // Menu fitter (keeps one-row layout neat with consistent spacing)
       const ROOT = document.documentElement;
       function fitMenu(){
         ROOT.style.setProperty('--menuScale','1');
         menuEl.classList.remove('hide-icons');
+
         const rect = menuEl.getBoundingClientRect();
         const items = Array.from(menuEl.children);
-        const gap = parseFloat(getComputedStyle(menuEl).columnGap || getComputedStyle(menuEl).gap || 0);
-        const itemsW = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
-        const needed = itemsW + gap * (items.length - 1);
+        const cs = getComputedStyle(menuEl);
+        const gap = parseFloat(cs.columnGap || cs.gap || 0);
+
+        const totalItemsWidth = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
+        const needed = totalItemsWidth + gap * (items.length - 1);
         const available = rect.width;
 
         let scale = Math.min(1, Math.max(0.45, available / needed));
         if (scale < 0.8){
-          menuEl.classList.add('hide-icons');
+          menuEl.classList.add('hide-icons');   // hide icons if too tight
           ROOT.style.setProperty('--menuScale','1');
-          const itemsW2 = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
-          const needed2 = itemsW2 + gap * (items.length - 1);
+          const totalItemsWidth2 = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
+          const needed2 = totalItemsWidth2 + gap * (items.length - 1);
           scale = Math.min(1, Math.max(0.45, available / needed2));
         }
         ROOT.style.setProperty('--menuScale', String(scale));
@@ -217,9 +245,12 @@
       window.addEventListener('load', handleResize);
       const mo = new MutationObserver(handleResize);
       mo.observe(menuEl, { childList:true, subtree:true });
+
+      // Initial boot
+      routeFromHash();
       fitMenu();
 
-      // Safety: no horizontal scroll
+      // Safety: never allow horizontal scroll
       document.documentElement.style.overflowX = 'hidden';
       document.body.style.overflowX = 'hidden';
     })();
