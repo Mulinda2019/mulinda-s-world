@@ -1,13 +1,12 @@
 /* ===========================
    Mulinda's World — index.css
-   Works with the SPA index.html
    =========================== */
 
-/* ---- Theme tokens (kept in sync with index.html inline styles) ---- */
+/* ---- Theme tokens (original colors preserved) ---- */
 :root{
   --bg: rgba(0,0,0,0.9);
   --card: rgba(255,255,255,0.06);
-  --accent: lawngreen;
+  --accent: lawngreen;            /* lawn-green kept */
   --accent-2:#a78bfa;
   --text:#ffffff;
   --muted:#cbd5e1;
@@ -23,13 +22,10 @@
 *::after { box-sizing: border-box; }
 
 html, body { height: 100%; }
-
 html{
-  /* Better, smoother global scroll */
   scroll-behavior: smooth;
-  overflow-y: overlay; /* nice overlay scrollbars on supported browsers */
+  overflow-x: hidden;                       /* never allow sideways scroll */
 }
-
 body{
   margin: 0;
   color: var(--text);
@@ -41,80 +37,60 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: contain;
-  perspective: 1200px;            /* enables faux depth for the wave layers */
+  perspective: 1200px;                      /* faux depth for waves */
   transform-style: preserve-3d;
+  overflow-x: hidden;
 }
 
 /* Keep app content above decorative layers */
 .app-frame { position: relative; z-index: 1; }
 
-/* =========================================
-   Ambient “far-back” animated wave field
-   ========================================= */
-/* A subtle distant look: bigger, blurrier, slower; parallax using translateZ */
+/* ---- Ambient far-back waves (thick, visible, distant) ---- */
 .wave{
   position: fixed;
+  inset: 0 auto auto 0;
   pointer-events: none;
-  inset: auto auto auto auto;
-  width: 120vmax;                 /* thicker & large to feel distant */
-  height: 120vmax;
-  filter: blur(72px);             /* heavier blur pushes it back */
-  opacity: .55;                   /* a bit fainter since it’s far away */
+  width: 120vmax; height: 120vmax;
+  filter: blur(72px);
+  opacity: .65;                              /* visible but distant */
   mix-blend-mode: screen;
   z-index: 0;
-  transform: translateZ(-600px) scale(1.8); /* faux distance */
-  animation: waveDriftA 36s var(--e) infinite alternate;
-  /* Layered bands give a wave-like mass instead of soft blobs */
+  transform: translateZ(-800px) scale(2.2);  /* push far away */
+  animation: waveA 36s var(--e) infinite alternate;
   background:
-    radial-gradient(closest-side at 60% 40%, rgba(124,252,0,.18), transparent 72%),
-    radial-gradient(closest-side at 45% 60%, rgba(0,255,204,.14), transparent 74%),
+    radial-gradient(closest-side at 60% 40%, rgba(124,252,0,.20), transparent 72%),
+    radial-gradient(closest-side at 45% 60%, rgba(0,255,204,.16), transparent 74%),
     conic-gradient(from 0deg at 50% 50%, rgba(167,139,250,.12), transparent 45%, rgba(167,139,250,.12) 55%, transparent 100%);
-  /* gentle organic edge shimmer */
-  mask-image: radial-gradient(70% 70% at 50% 50%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000 45%, transparent 100%);
 }
-
-.wave:nth-of-type(1){
-  top:-18vmax; left:-14vmax;
-  transform: translateZ(-700px) scale(2);
-  animation-name: waveDriftA;
-}
+.wave:nth-of-type(1){ top:-20vmax; left:-16vmax; animation-name: waveA; }
 .wave:nth-of-type(2){
-  top: 24vmax; right:-20vmax;
-  filter: blur(78px);
-  opacity: .5;
-  transform: translateZ(-800px) scale(2.2);
-  background:
-    radial-gradient(closest-side at 70% 35%, rgba(124,252,0,.14), transparent 74%),
-    radial-gradient(closest-side at 35% 70%, rgba(0,255,204,.12), transparent 76%),
-    conic-gradient(from 90deg at 50% 50%, rgba(124,252,0,.10), transparent 45%, rgba(124,252,0,.10) 55%, transparent 100%);
-  animation: waveDriftB 42s var(--e) infinite alternate;
+  top: 24vmax; right:-22vmax;
+  transform: translateZ(-900px) scale(2.4);
+  filter: blur(78px); opacity:.6;
+  animation: waveB 42s var(--e) infinite alternate;
 }
 .wave:nth-of-type(3){
-  bottom:-22vmax; left: 8vmax;
-  filter: blur(82px);
-  opacity: .48;
-  transform: translateZ(-900px) scale(2.4);
-  background:
-    radial-gradient(closest-side at 55% 45%, rgba(167,139,250,.14), transparent 74%),
-    radial-gradient(closest-side at 30% 70%, rgba(124,252,0,.12), transparent 76%),
-    conic-gradient(from 210deg at 50% 50%, rgba(0,255,204,.10), transparent 45%, rgba(0,255,204,.10) 55%, transparent 100%);
-  animation: waveDriftC 48s var(--e) infinite alternate;
+  bottom:-24vmax; left: 8vmax;
+  transform: translateZ(-1000px) scale(2.6);
+  filter: blur(82px); opacity:.58;
+  animation: waveC 48s var(--e) infinite alternate;
 }
 
-@keyframes waveDriftA{
-  0%   { transform: translate3d(0,0,0) translateZ(-700px) scale(2) rotate(-4deg); }
-  100% { transform: translate3d(5vmax,3vmax,0) translateZ(-700px) scale(2.05) rotate(3deg); }
+@keyframes waveA{
+  0%   { transform: translate3d(0,0,0) translateZ(-800px)  scale(2.2) rotate(-3deg); }
+  100% { transform: translate3d(5vmax,3vmax,0) translateZ(-800px) scale(2.25) rotate(2deg); }
 }
-@keyframes waveDriftB{
-  0%   { transform: translate3d(0,0,0) translateZ(-800px) scale(2.2) rotate(0deg); }
-  100% { transform: translate3d(-4vmax,2vmax,0) translateZ(-800px) scale(2.25) rotate(5deg); }
+@keyframes waveB{
+  0%   { transform: translate3d(0,0,0) translateZ(-900px)  scale(2.4) rotate(0deg); }
+  100% { transform: translate3d(-4vmax,2vmax,0) translateZ(-900px) scale(2.45) rotate(4deg); }
 }
-@keyframes waveDriftC{
-  0%   { transform: translate3d(0,0,0) translateZ(-900px) scale(2.4) rotate(2deg); }
-  100% { transform: translate3d(4vmax,-3vmax,0) translateZ(-900px) scale(2.45) rotate(-3deg); }
+@keyframes waveC{
+  0%   { transform: translate3d(0,0,0) translateZ(-1000px) scale(2.6) rotate(2deg); }
+  100% { transform: translate3d(4vmax,-3vmax,0) translateZ(-1000px) scale(2.65) rotate(-3deg); }
 }
 
-/* ---- Subtle grain overlay (pure CSS, very light) ---- */
+/* ---- Subtle grain overlay ---- */
 body::after{
   content:"";
   position: fixed; inset:0;
@@ -127,24 +103,18 @@ body::after{
   z-index:0;
 }
 
-/* ---- Focus outlines (accessible, consistent) ---- */
+/* ---- Accessibility ---- */
 :where(a, button, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible{
   outline: 3px solid var(--accent);
   outline-offset: 2px;
   border-radius: 10px;
 }
 
-/* ---- Selection color ---- */
-::selection{
-  background: rgba(124,252,0,.35);
-  color: #051b0a;
-}
+/* ---- Selection ---- */
+::selection{ background: rgba(124,252,0,.35); color: #051b0a; }
 
-/* ---- Scrollbar styling (global host only) ---- */
-:root{
-  scrollbar-color: rgba(124,252,0,.45) #0a0f16;
-  scrollbar-width: thin;
-}
+/* ---- Global scrollbar (host only) ---- */
+:root{ scrollbar-color: rgba(124,252,0,.45) #0a0f16; scrollbar-width: thin; }
 ::-webkit-scrollbar{ width: 10px; height: 10px; }
 ::-webkit-scrollbar-track{ background: #0a0f16; }
 ::-webkit-scrollbar-thumb{
@@ -156,71 +126,110 @@ body::after{
   background: linear-gradient(180deg, rgba(124,252,0,.85), rgba(0,255,204,.8));
 }
 
-/* ---- Links (global) ---- */
-a{
-  color: var(--accent);
-  text-decoration: none;
-  transition: color var(--fast) var(--e), opacity var(--fast) var(--e);
-}
+/* ---- Links ---- */
+a{ color: var(--accent); text-decoration: none; transition: color var(--fast) var(--e), opacity var(--fast) var(--e); }
 a:hover{ color: #00ffcc; }
 a:active{ opacity:.9; }
 
-/* ---- Utility helpers ---- */
+/* ---- Utilities ---- */
 .hidden{ display:none !important; }
 .vishidden{ position:absolute !important; clip:rect(0 0 0 0); clip-path: inset(50%); width:1px; height:1px; overflow:hidden; white-space:nowrap; }
 
-/* ---- Motion-reduction friendly ---- */
+/* ---- Motion reduction ---- */
 @media (prefers-reduced-motion: reduce){
   html { scroll-behavior: auto; }
-  .wave,
-  body::after{
-    animation: none !important;
-    transition: none !important;
-  }
+  .wave, body::after{ animation: none !important; transition: none !important; }
   .wave{ opacity:.3; }
 }
 
 /* =========================================
-   Transparent, full-width responsive top nav
-   (HTML will use .site-nav and .nav-list)
+   Transparent, full-width top nav (single line)
    ========================================= */
 .site-nav{
   position: sticky; top: 0; left: 0; right: 0;
   z-index: 10;
-  background: transparent;                 /* fully transparent bar */
-  backdrop-filter: saturate(140%) blur(0px); /* no tint, just sleek */
-  padding: clamp(10px, 1.5vw, 18px) clamp(12px, 2vw, 28px);
+  background: transparent;           /* completely transparent as requested */
+  backdrop-filter: none;             /* no blur, no tint */
+  padding: clamp(8px, 1.2vw, 14px) clamp(12px, 2vw, 24px);
 }
+.bar{
+  display: grid;
+  grid-template-columns: auto 1fr;   /* brand | menu spans remaining width */
+  align-items: center;
+  gap: clamp(8px, 1vw, 16px);
+}
+
+/* Brand */
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-weight:800; letter-spacing:.4px;
+  color:var(--text); text-decoration:none;
+  white-space: nowrap;
+  font-size: clamp(14px, 1.2vw + .5rem, 20px);
+}
+.brand .dot{ width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 14px var(--accent); }
+.brand-text{ line-height: 1; }
+
+/* Menu: one straight line across any screen */
+.primary{ width: 100%; }
 .nav-list{
   list-style: none;
+  margin: 0; padding: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);   /* spreads edge-to-edge */
+  grid-template-columns: repeat(6, 1fr);    /* 6 items, equal width */
   gap: clamp(6px, 1vw, 14px);
-  margin: 0;
-  padding: 0;
 }
 .nav-list a{
-  display: block;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width: 100%;
   text-align: center;
-  font-weight: 800;                        /* bold */
+  font-weight: 800;
   letter-spacing: .02em;
-  text-transform: none;
   line-height: 1;
   padding: clamp(10px, 1.2vw, 16px) 0;
   border-radius: 10px;
   color: var(--text);
-  opacity: .95;
-  font-size: clamp(14px, 1.2vw + .6rem, 22px);  /* scales on big screens */
-  transition: transform var(--fast) var(--e), background var(--fast) var(--e), color var(--fast) var(--e);
+  opacity: .96;
+  white-space: nowrap;                     /* force single line */
+  font-size: clamp(12px, 1.05vw + .55rem, 20px); /* scales to fit */
+  border: 1px solid transparent;
+  transition: transform var(--fast) var(--e), background var(--fast) var(--e), color var(--fast) var(--e), border-color var(--fast) var(--e);
 }
+.nav-list a i{ font-size: 1em; }
 .nav-list a:hover{
   color: #00ffcc;
   transform: translateY(-1px);
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.0));
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+  border-color: rgba(255,255,255,.14);
+}
+.nav-list a.active{
+  background: var(--accent);
+  color: #0a0a0a;
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(124,252,0,.25);
+}
+
+/* On narrow screens, hide icons so everything STILL fits one line */
+@media (max-width: 560px){
+  .nav-list a i{ display:none; }
+  .nav-list{ gap: 6px; }
 }
 
 /* =========================================
-   Section arrows (desktop only), touch = swipe
+   Shell host for subpages (prevents inner scrollbars)
+   ========================================= */
+#main-content { position: relative; min-height: 100vh; }
+.page-frame {
+  width: 100%;
+  min-height: 100vh;   /* JS will expand this to exact content height */
+  border: 0;
+  display: block;
+  background: transparent;
+  overflow: hidden;    /* no inner scrollbars */
+}
+
+/* =========================================
+   Desktop arrows (hidden on touch)
    ========================================= */
 .nav-arrows{
   position: fixed;
@@ -232,7 +241,7 @@ a:active{ opacity:.9; }
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 42px; height: 42px;              /* smaller, elegant */
+  width: 42px; height: 42px;              /* small + elegant */
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(255,255,255,.06);
@@ -240,46 +249,26 @@ a:active{ opacity:.9; }
   display: grid; place-items: center;
   pointer-events: auto;
   cursor: pointer;
+  color: var(--accent);
   transition: transform var(--fast) var(--e), background var(--fast) var(--e), border-color var(--fast) var(--e), opacity var(--fast) var(--e);
 }
+.nav-arrow.left{ left: clamp(8px, 2vw, 22px); }
+.nav-arrow.right{ right: clamp(8px, 2vw, 22px); }
 .nav-arrow:hover{
   transform: translateY(-50%) scale(1.06);
   background: rgba(0,0,0,.28);
   border-color: rgba(0,255,204,.55);
 }
-.nav-arrow:active{ transform: translateY(-50%) scale(0.98); }
-.nav-arrow.left{ left: clamp(8px, 2vw, 22px); }
-.nav-arrow.right{ right: clamp(8px, 2vw, 22px); }
 
-/* Hide arrows on touch devices — swipe will be enabled via JS in index.html */
+/* Hide arrows on touch devices — swipe is enabled in JS */
 @media (pointer: coarse){
   .nav-arrows{ display: none !important; }
 }
 
-/* =========================================
-   Shell host for subpages (prevents CSS/JS collisions)
-   ========================================= */
-#main-content { position: relative; min-height: 100vh; }
-.page-frame {
-  width: 100%;
-  min-height: 100vh;   /* base height; JS will auto-resize to content later */
-  border: 0;
-  display: block;
-  background: transparent;
-  overflow: hidden;    /* prevents inner scrollbars if content fits height */
-  /* note: true “single scrollbar” will be finalized with auto-resize JS */
-}
-
-/* ---- Small devices tweaks ---- */
+/* ---- Small devices tweaks (optional micro-contrast) ---- */
 @media (max-width: 720px){
-  /* Slight contrast behind content on small screens */
-  main#main{
+  main#main-content .content{
     background: rgba(0,0,0,.5);
     border-color: rgba(124,252,0,.3);
-  }
-  /* Make nav a bit chunkier for thumb targets */
-  .nav-list a{
-    font-size: clamp(15px, 4.2vw, 18px);
-    padding: 12px 0;
   }
 }
