@@ -2,6 +2,7 @@
    Mulinda's World — index.css
    =========================== */
 
+/* ---- Theme tokens ---- */
 :root{
   --accent: lawngreen;
   --accent-2:#a78bfa;
@@ -11,93 +12,133 @@
   --radius: 14px;
   --fast: .18s;
   --e: cubic-bezier(.22,.61,.36,1);
+
+  /* Menu autosize (JS may tweak this) */
   --menuScale: 1;
   --menuGap: clamp(6px, 3vw, 18px);
   --menuPadY: clamp(8px, 2.2vw, 14px);
 }
 
+/* ---- Reset / base ---- */
 *,
 *::before,
 *::after { box-sizing: border-box; }
 
 html, body { height: 100%; }
-html{ scroll-behavior:smooth; overflow-x:hidden; }
+html{
+  scroll-behavior:smooth;
+  overflow-x:hidden;                 /* never allow sideways scroll */
+}
 body{
-  margin:0; color:var(--text); background:transparent;
-  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-  overscroll-behavior:contain; perspective:1200px; transform-style:preserve-3d;
+  margin:0;
+  color:var(--text);
+  background:transparent;            /* host has NO background; subpages bring theirs */
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overscroll-behavior:contain;
+  perspective:1200px;
+  transform-style:preserve-3d;
   overflow-x:hidden;
 }
 
+/* Keep app content above decorative layers */
 .app-frame{ position:relative; z-index:1; }
 
-/* Fallback waves (hidden unless body.fallback) */
-.wave{ position:fixed; inset:0 auto auto 0; pointer-events:none; width:120vmax; height:120vmax;
+/* ---- Fallback waves (hidden unless body.fallback) ---- */
+.wave{
+  position:fixed; inset:0 auto auto 0; pointer-events:none;
+  width:120vmax; height:120vmax;
   filter:blur(72px); opacity:.65; mix-blend-mode:screen; z-index:0;
-  transform:translateZ(-800px) scale(2.2); animation:waveA 36s var(--e) infinite alternate;
+  transform:translateZ(-800px) scale(2.2);
+  animation:waveA 36s var(--e) infinite alternate;
   background:
     radial-gradient(closest-side at 60% 40%, rgba(124,252,0,.20), transparent 72%),
     radial-gradient(closest-side at 45% 60%, rgba(0,255,204,.16), transparent 74%),
     conic-gradient(from 0deg at 50% 50%, rgba(167,139,250,.12), transparent 45%, rgba(167,139,250,.12) 55%, transparent 100%);
   mask-image: radial-gradient(70% 70% at 50% 50%, #000 45%, transparent 100%);
-  display:none;
+  display:none; /* hidden by default */
 }
-.wave:nth-of-type(2){ right:-22vmax; top:24vmax; transform:translateZ(-900px) scale(2.4); filter:blur(78px); opacity:.6; animation:waveB 42s var(--e) infinite alternate; }
-.wave:nth-of-type(3){ left:8vmax; bottom:-24vmax; transform:translateZ(-1000px) scale(2.6); filter:blur(82px); opacity:.58; animation:waveC 48s var(--e) infinite alternate; }
+.wave:nth-of-type(2){
+  right:-22vmax; top:24vmax;
+  transform:translateZ(-900px) scale(2.4);
+  filter:blur(78px); opacity:.6;
+  animation:waveB 42s var(--e) infinite alternate;
+}
+.wave:nth-of-type(3){
+  left:8vmax; bottom:-24vmax;
+  transform:translateZ(-1000px) scale(2.6);
+  filter:blur(82px); opacity:.58;
+  animation:waveC 48s var(--e) infinite alternate;
+}
 body.fallback .wave{ display:block; }
 
-@keyframes waveA{ 0%{transform:translate3d(0,0,0) translateZ(-800px) scale(2.2) rotate(-3deg);}
-100%{transform:translate3d(5vmax,3vmax,0) translateZ(-800px) scale(2.25) rotate(2deg);} }
-@keyframes waveB{ 0%{transform:translate3d(0,0,0) translateZ(-900px) scale(2.4) rotate(0deg);}
-100%{transform:translate3d(-4vmax,2vmax,0) translateZ(-900px) scale(2.45) rotate(4deg);} }
-@keyframes waveC{ 0%{transform:translate3d(0,0,0) translateZ(-1000px) scale(2.6) rotate(2deg);}
-100%{transform:translate3d(4vmax,-3vmax,0) translateZ(-1000px) scale(2.65) rotate(-3deg);} }
+@keyframes waveA{
+  0%{transform:translate3d(0,0,0) translateZ(-800px)  scale(2.2) rotate(-3deg);}
+  100%{transform:translate3d(5vmax,3vmax,0) translateZ(-800px) scale(2.25) rotate(2deg);}
+}
+@keyframes waveB{
+  0%{transform:translate3d(0,0,0) translateZ(-900px)  scale(2.4) rotate(0deg);}
+  100%{transform:translate3d(-4vmax,2vmax,0) translateZ(-900px) scale(2.45) rotate(4deg);}
+}
+@keyframes waveC{
+  0%{transform:translate3d(0,0,0) translateZ(-1000px) scale(2.6) rotate(2deg);}
+  100%{transform:translate3d(4vmax,-3vmax,0) translateZ(-1000px) scale(2.65) rotate(-3deg);}
+}
 
-/* Accessibility + scrollbar */
+/* ---- Accessibility + scrollbar ---- */
 :where(a,button,[role="button"],[tabindex]:not([tabindex="-1"])):focus-visible{
-  outline:3px solid var(--accent); outline-offset:2px; border-radius:10px;
+  outline:3px solid var(--accent);
+  outline-offset:2px;
+  border-radius:10px;
 }
 :root{ scrollbar-color:rgba(124,252,0,.45) #0a0f16; scrollbar-width:thin; }
 ::-webkit-scrollbar{ width:10px; height:10px; }
 ::-webkit-scrollbar-track{ background:#0a0f16; }
-::-webkit-scrollbar-thumb{ background:linear-gradient(180deg, rgba(124,252,0,.7), rgba(0,255,204,.6)); border-radius:999px; border:2px solid #0a0f16; }
-::-webkit-scrollbar-thumb:hover{ background:linear-gradient(180deg, rgba(124,252,0,.85), rgba(0,255,204,.8)); }
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg, rgba(124,252,0,.7), rgba(0,255,204,.6));
+  border-radius:999px; border:2px solid #0a0f16;
+}
+::-webkit-scrollbar-thumb:hover{
+  background:linear-gradient(180deg, rgba(124,252,0,.85), rgba(0,255,204,.8));
+}
 
-/* =========================
-   TRANSPARENT ONE-LINE MENU
-   ========================= */
+/* =========================================
+   Transparent top nav (one row; even spacing)
+   ========================================= */
 .site-nav{
   position:sticky; top:0; left:0; right:0; z-index:10;
   background:transparent !important; backdrop-filter:none !important;
   padding: clamp(8px, 1.8vw, 14px) clamp(10px, 2.4vw, 24px);
+  transition: transform .28s var(--e);
 }
+.site-nav.nav--hidden{ transform: translateY(-100%); } /* hidden on scroll down */
 
-/* Always one single row; equal spacing via 1fr columns */
+/* Always a single row. Each item gets an equal 1fr column. */
 .nav-list{
   list-style:none; margin:0; padding:0;
   display:grid; grid-auto-flow:column; grid-auto-columns:1fr;
   gap: var(--menuGap);
   align-items:center;
-  white-space:nowrap;           /* never wrap */
-  overflow:hidden;              /* never spill */
+  white-space:nowrap;  /* never wrap to second line */
+  overflow:hidden;     /* never spill horizontally */
 }
-.nav-list li{ min-width:0; }    /* let content shrink */
+.nav-list li{ min-width:0; } /* enable shrink inside column */
 
+/* Base menu item style (desktop/tablet) */
 .nav-list a{
   position:relative;
   display:flex; align-items:center; justify-content:center; gap:10px;
   width:100%;
   text-align:center;
-  font-weight:800; letter-spacing:.02em; line-height:1;
+  font-weight:800; letter-spacing:.02em; line-height:1.05;
   padding: var(--menuPadY) 0;
   border-radius:10px;
   color:var(--text); opacity:.96;
-  white-space:nowrap;
-  font-size: calc(clamp(11px, 2.6vw, 18px) * var(--menuScale));
   border:1px solid transparent;
   transition: transform var(--fast) var(--e), background var(--fast) var(--e), color var(--fast) var(--e), border-color var(--fast) var(--e);
-  /* Make hover/active fill the entire hit area cleanly */
   overflow:hidden;
+  white-space:nowrap; /* desktop keeps single-line labels */
+  font-size: calc(clamp(12px, 1.8vw, 18px) * var(--menuScale));
 }
 .nav-list a::before{
   content:""; position:absolute; inset:0; border-radius:inherit; opacity:0;
@@ -105,57 +146,108 @@ body.fallback .wave{ display:block; }
   transition: opacity var(--fast) var(--e);
 }
 .nav-list a:hover::before,
-.nav-list a:active::before{ opacity:1; }  /* full-cell hover on small screens too */
+.nav-list a:active::before{ opacity:1; }
 
 .nav-list a i{ font-size:1em; flex:0 0 auto; }
-.nav-list a:hover{ color:#00ffcc; transform:translateY(-1px); }
+.nav-list a span{ display:inline; }
+
+.nav-list a:hover{
+  color:#00ffcc;
+  transform:translateY(-1px);
+}
 .nav-list a.active{
-  background: var(--accent); color:#0a0a0a; border-color:transparent;
+  background: var(--accent);
+  color:#0a0a0a;
+  border-color:transparent;
   box-shadow:0 8px 24px rgba(124,252,0,.25);
 }
 
-/* If JS decides icons must hide to preserve single line */
+/* If JS decides icons must hide to preserve one line */
 .nav-list.hide-icons a i{ display:none; }
 
-/* =========================
-   SMALL-DEVICE TIGHT MODE
-   ========================= */
-/* 2× smaller on small phones + precise equal spacing */
+/* =========================================
+   Small-screen layout (icon on top, full label below)
+   ========================================= */
 @media (max-width: 560px){
   :root{
-    --menuScale: 0.6;              /* 40% shrink (≈2× smaller overall) */
+    --menuScale: 0.5;                /* ~2× smaller than desktop */
     --menuGap: clamp(4px, 2.2vw, 10px);
-    --menuPadY: clamp(6px, 1.6vw, 10px);
+    --menuPadY: clamp(6px, 1.4vw, 10px);
   }
-  .nav-list a{ gap:8px; }
-}
-/* Ultra-small (old/mini devices) */
-@media (max-width: 380px){
-  :root{ --menuScale: 0.5; }       /* even smaller if needed */
+
+  .nav-list{ gap: var(--menuGap); }  /* consistent spacing across items */
+
+  /* Stack icon above text; allow label to wrap within the item */
+  .nav-list a{
+    flex-direction: column;
+    gap: 6px;
+    white-space: normal;             /* allow wrapping for long names */
+    font-size: calc(clamp(10px, 3.6vw, 15px) * var(--menuScale));
+    line-height: 1.05;
+  }
+  .nav-list a i{
+    font-size: 1.1em;                /* icon slightly larger than text */
+  }
+  .nav-list a span{
+    display:block;
+    max-width:100%;
+    text-wrap: balance;
+    word-break: break-word;          /* long words break nicely */
+    text-align:center;
+  }
+
+  /* Full-cell hover/press is more pronounced on touch */
+  .nav-list a::before{
+    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0));
+  }
 }
 
-/* =========================
-   HOST & ARROWS
-   ========================= */
+/* Even tighter for ultra small phones */
+@media (max-width: 380px){
+  :root{ --menuScale: 0.42; }        /* nudge smaller if necessary */
+}
+
+/* =========================================
+   Host shell for subpages (single global scrollbar)
+   ========================================= */
 #main-content{ position:relative; min-height:100vh; }
 .page-frame{
-  width:100%; min-height:100vh; border:0; display:block; background:transparent; overflow:hidden;
+  width:100%;
+  min-height:100vh;                  /* JS expands to exact content height */
+  border:0; display:block; background:transparent;
+  overflow:hidden;                   /* no inner scrollbars */
 }
 
-.nav-arrows{ position:fixed; inset:0; pointer-events:none; z-index:9; }
+/* =========================================
+   Desktop arrows (hidden on touch; phones use swipe)
+   ========================================= */
+.nav-arrows{
+  position:fixed; inset:0; pointer-events:none; z-index:9;
+}
 .nav-arrow{
   position:absolute; top:50%; transform:translateY(-50%);
-  width:42px; height:42px; border-radius:999px; border:1px solid rgba(255,255,255,.16);
-  background:rgba(255,255,255,.06); box-shadow:0 4px 20px rgba(0,0,0,.25);
-  display:grid; place-items:center; pointer-events:auto; cursor:pointer; color:var(--accent);
+  width:42px; height:42px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
+  display:grid; place-items:center;
+  pointer-events:auto; cursor:pointer; color:var(--accent);
   transition:transform var(--fast) var(--e), background var(--fast) var(--e), border-color var(--fast) var(--e), opacity var(--fast) var(--e);
 }
 .nav-arrow.left{ left: clamp(8px, 2vw, 22px); }
 .nav-arrow.right{ right: clamp(8px, 2vw, 22px); }
-.nav-arrow:hover{ transform:translateY(-50%) scale(1.06); background:rgba(0,0,0,.28); border-color:rgba(0,255,204,.55); }
+.nav-arrow:hover{
+  transform:translateY(-50%) scale(1.06);
+  background:rgba(0,0,0,.28);
+  border-color:rgba(0,255,204,.55);
+}
 
 /* Hide arrows on touch devices — swipe takes over */
-@media (pointer:coarse){ .nav-arrows{ display:none !important; } }
+@media (pointer:coarse){
+  .nav-arrows{ display:none !important; }
+}
 
-/* Motion reduce */
-@media (prefers-reduced-motion:reduce){ .wave{ animation:none !important; opacity:.3; } }
+/* ---- Motion reduction ---- */
+@media (prefers-reduced-motion:reduce){
+  .wave{ animation:none !important; opacity:.3; }
+}
