@@ -198,59 +198,38 @@
         });
       }
 
-      // Hide nav on scroll down, show on scroll up
-      let lastY = window.scrollY, ticking = false;
-      const HIDE_AFTER = 16; // px threshold to avoid jitter
-      function onScroll(){
+      // ===== Robust hide-on-scroll (works on phones) =====
+      // On small screens, use fixed nav + padding top for content
+      function applyNavHeightPadding(){
+        const h = siteNav.offsetHeight || 56;
+        document.documentElement.style.setProperty('--navH', h + 'px');
+      }
+      applyNavHeightPadding();
+      window.addEventListener('resize', applyNavHeightPadding);
+
+      let lastY = window.scrollY, lastDir = 0; // 1 down, -1 up
+      const TH = 8; // small threshold to feel responsive on phones
+      function handleScroll(){
         const y = window.scrollY;
-        const down = y > lastY;
-        if (Math.abs(y - lastY) > HIDE_AFTER){
-          if (down) siteNav.classList.add('nav--hidden');
-          else siteNav.classList.remove('nav--hidden');
+        const delta = y - lastY;
+        if (Math.abs(delta) > TH){
+          const dir = delta > 0 ? 1 : -1;
+          if (dir !== lastDir){
+            if (dir > 0 && y > 10){ siteNav.classList.add('nav--hidden'); }
+            else { siteNav.classList.remove('nav--hidden'); }
+            lastDir = dir;
+          }
           lastY = y;
         }
-        ticking = false;
       }
-      window.addEventListener('scroll', () => {
-        if (!ticking){ requestAnimationFrame(onScroll); ticking = true; }
-      }, { passive:true });
-
-      // Menu fitter (keeps one-row layout neat with consistent spacing)
-      const ROOT = document.documentElement;
-      function fitMenu(){
-        ROOT.style.setProperty('--menuScale','1');
-        menuEl.classList.remove('hide-icons');
-
-        const rect = menuEl.getBoundingClientRect();
-        const items = Array.from(menuEl.children);
-        const cs = getComputedStyle(menuEl);
-        const gap = parseFloat(cs.columnGap || cs.gap || 0);
-
-        const totalItemsWidth = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
-        const needed = totalItemsWidth + gap * (items.length - 1);
-        const available = rect.width;
-
-        let scale = Math.min(1, Math.max(0.45, available / needed));
-        if (scale < 0.8){
-          menuEl.classList.add('hide-icons');   // hide icons if too tight
-          ROOT.style.setProperty('--menuScale','1');
-          const totalItemsWidth2 = items.reduce((w, li) => w + li.getBoundingClientRect().width, 0);
-          const needed2 = totalItemsWidth2 + gap * (items.length - 1);
-          scale = Math.min(1, Math.max(0.45, available / needed2));
-        }
-        ROOT.style.setProperty('--menuScale', String(scale));
-      }
-      const handleResize = () => requestAnimationFrame(fitMenu);
-      window.addEventListener('resize', handleResize);
-      window.addEventListener('load', handleResize);
-      const mo = new MutationObserver(handleResize);
-      mo.observe(menuEl, { childList:true, subtree:true });
+      // Listen to multiple sources for reliability on mobile
+      window.addEventListener('scroll', handleScroll, { passive:true });
+      document.addEventListener('touchmove', handleScroll, { passive:true });
+      document.addEventListener('wheel', handleScroll, { passive:true });
 
       // Initial boot
       routeFromHash();
-      fitMenu();
-
-      // Safety: never allow horizontal scroll
+      // Safety: no horizontal scroll
       document.documentElement.style.overflowX = 'hidden';
       document.body.style.overflowX = 'hidden';
     })();
