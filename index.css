@@ -2,7 +2,7 @@
    Mulinda's World — index.css
    =========================== */
 
-/* ---- Theme tokens (original accent colors) ---- */
+/* ---- Theme tokens ---- */
 :root{
   --accent: lawngreen;
   --accent-2:#a78bfa;
@@ -13,9 +13,12 @@
   --fast: .18s;
   --e: cubic-bezier(.22,.61,.36,1);
 
-  /* Menu scaling (JS updates --menuScale to keep one line) */
-  --menuBase: 16px;
+  /* Menu autosize controls (JS updates --menuScale) */
   --menuScale: 1;
+  /* Gap relates to viewport width for consistent spacing feel */
+  --menuGap: clamp(6px, 3vw, 18px);
+  /* Base paddings also scale a touch with width */
+  --menuPadY: clamp(8px, 2.2vw, 14px);
 }
 
 /* ---- Reset / base ---- */
@@ -26,12 +29,12 @@
 html, body { height: 100%; }
 html{
   scroll-behavior: smooth;
-  overflow-x: hidden;                       /* never allow sideways scroll */
+  overflow-x: hidden;                 /* never allow sideways scroll */
 }
 body{
   margin: 0;
   color: var(--text);
-  background: transparent;                  /* host has NO background */
+  background: transparent;            /* host has NO background */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: contain;
@@ -60,7 +63,7 @@ body{
     radial-gradient(closest-side at 45% 60%, rgba(0,255,204,.16), transparent 74%),
     conic-gradient(from 0deg at 50% 50%, rgba(167,139,250,.12), transparent 45%, rgba(167,139,250,.12) 55%, transparent 100%);
   mask-image: radial-gradient(70% 70% at 50% 50%, #000 45%, transparent 100%);
-  display: none;                             /* hidden unless fallback */
+  display: none;                       /* hidden unless fallback */
 }
 .wave:nth-of-type(2){
   right:-22vmax; top:24vmax;
@@ -74,7 +77,6 @@ body{
   filter: blur(82px); opacity:.58;
   animation: waveC 48s var(--e) infinite alternate;
 }
-/* Show waves only when body.fallback is present */
 body.fallback .wave{ display: block; }
 
 @keyframes waveA{
@@ -90,21 +92,18 @@ body.fallback .wave{ display: block; }
   100% { transform: translate3d(4vmax,-3vmax,0) translateZ(-1000px) scale(2.65) rotate(-3deg); }
 }
 
-/* ---- Accessibility ---- */
+/* ---- Accessibility / scrollbars ---- */
 :where(a, button, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible{
   outline: 3px solid var(--accent);
   outline-offset: 2px;
   border-radius: 10px;
 }
-
-/* ---- Global scrollbar (host only) ---- */
 :root{ scrollbar-color: rgba(124,252,0,.45) #0a0f16; scrollbar-width: thin; }
 ::-webkit-scrollbar{ width: 10px; height: 10px; }
 ::-webkit-scrollbar-track{ background: #0a0f16; }
 ::-webkit-scrollbar-thumb{
   background: linear-gradient(180deg, rgba(124,252,0,.7), rgba(0,255,204,.6));
-  border-radius: 999px;
-  border: 2px solid #0a0f16;
+  border-radius: 999px; border: 2px solid #0a0f16;
 }
 ::-webkit-scrollbar-thumb:hover{
   background: linear-gradient(180deg, rgba(124,252,0,.85), rgba(0,255,204,.8));
@@ -118,38 +117,37 @@ body.fallback .wave{ display: block; }
   z-index: 10;
   background: transparent !important;   /* fully transparent */
   backdrop-filter: none !important;
-  padding: clamp(8px, 1.2vw, 14px) clamp(12px, 2vw, 24px);
+  padding: clamp(8px, 1.8vw, 14px) clamp(10px, 2.4vw, 24px);
 }
 
-.bar{ width: 100%; }
-
+/* ONE ROW ALWAYS: grid flows horizontally; each item is 1fr */
 .nav-list{
   list-style: none;
   margin: 0; padding: 0;
   display: grid;
   grid-auto-flow: column;               /* single row only */
-  grid-auto-columns: 1fr;               /* every item shares width */
-  gap: clamp(6px, 1vw, 14px);
+  grid-auto-columns: 1fr;               /* equal column for each item */
+  gap: var(--menuGap);                  /* spacing scales with width */
   align-items: center;
-  white-space: nowrap;                  /* NEVER wrap to second line */
-  overflow: hidden;                     /* guard against any overflow */
+  white-space: nowrap;                  /* never wrap to a second line */
+  overflow: hidden;                     /* no spill to the right */
 }
 .nav-list li{ min-width: 0; }           /* allow shrink inside column */
 
 .nav-list a{
-  display:flex; align-items:center; justify-content:center; gap:10px;
+  display:flex; align-items:center; justify-content:center; gap: 10px;
   width: 100%;
   text-align: center;
   font-weight: 800;
   letter-spacing: .02em;
   line-height: 1;
-  padding: clamp(10px, 1.2vw, 16px) 0;
+  padding: var(--menuPadY) 0;
   border-radius: 10px;
   color: var(--text);
   opacity: .96;
   white-space: nowrap;
-  /* Auto-shrinking font size driven by JS variable --menuScale */
-  font-size: calc(var(--menuBase) * var(--menuScale) + .55rem);
+  /* Fluid type tied to width and scaled by JS if more items are added */
+  font-size: calc(clamp(11px, 2.6vw, 18px) * var(--menuScale));
   border: 1px solid transparent;
   transition: transform var(--fast) var(--e), background var(--fast) var(--e), color var(--fast) var(--e), border-color var(--fast) var(--e);
 }
@@ -167,8 +165,17 @@ body.fallback .wave{ display: block; }
   box-shadow: 0 8px 24px rgba(124,252,0,.25);
 }
 
-/* When JS decides icons must hide to preserve one row */
+/* If JS decides icons must hide to preserve single line */
 .nav-list.hide-icons a i{ display: none; }
+
+/* Tighten things specifically for very small phones */
+@media (max-width: 420px){
+  :root{
+    --menuGap: clamp(4px, 2.6vw, 10px);
+    --menuPadY: clamp(6px, 1.8vw, 10px);
+  }
+  .nav-list a{ gap: 8px; }
+}
 
 /* =========================================
    Shell host for subpages (no inner scrollbars)
@@ -176,7 +183,7 @@ body.fallback .wave{ display: block; }
 #main-content { position: relative; min-height: 100vh; }
 .page-frame {
   width: 100%;
-  min-height: 100vh;     /* JS will expand to exact content height */
+  min-height: 100vh;     /* JS expands to exact content height */
   border: 0;
   display: block;
   background: transparent;
