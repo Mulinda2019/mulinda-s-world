@@ -110,7 +110,7 @@ body.fallback .wave{ display:block; }
    ========================================= */
 .site-nav{
   position:fixed; top:0; left:0; right:0; z-index:10; /* fixed to viewport on ALL sizes */
-  background:transparent !important; backdrop-filter:none !important;
+  background:#0a1f44 !important; backdrop-filter:none !important;
   padding: clamp(8px, 1.8vw, 14px) clamp(10px, 2.4vw, 24px);
   transition: transform .28s var(--e);
   will-change: transform;
@@ -259,3 +259,4 @@ body.fallback .wave{ display:block; }
 @media (prefers-reduced-motion:reduce){
   .wave{ animation:none !important; opacity:.3; }
 }
+
