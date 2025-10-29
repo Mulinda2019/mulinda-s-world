@@ -2,124 +2,113 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Mulinda's World</title>
 
   <!-- Global CSS -->
   <link rel="stylesheet" href="index.css"/>
 
-  <!-- Favicon & Icons -->
+  <!-- Icons -->
   <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 </head>
 <body>
-  <!-- Far-back parallax waves (decorative) -->
+  <!-- Far-back waves (decorative) -->
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
   <div class="wave" aria-hidden="true"></div>
 
-  <!-- Transparent Full-Width Top Navbar -->
-  <header class="site-nav" role="banner" aria-label="Primary">
-    <nav class="bar" aria-label="Main">
-      <a class="brand" href="#/home" style="display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px;text-decoration:none;color:var(--text);">
-        <span class="dot" aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)"></span>
-        <span>Mulinda’s World</span>
-      </a>
+  <div class="app-frame"><!-- keeps content above decorative layers -->
 
-      <ul class="nav-list" id="menu">
-        <li><a href="#/home" data-section="home" class="active"><i class="fa fa-home"></i> Home</a></li>
-        <li><a href="#/projects" data-section="projects"><i class="fa fa-briefcase"></i> Projects</a></li>
-        <li><a href="#/future-projects" data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Projects</a></li>
-        <li><a href="#/certifications" data-section="certifications"><i class="fa fa-certificate"></i> Certifications</a></li>
-        <li><a href="#/resume" data-section="resume"><i class="fa fa-file-text"></i> Resume</a></li>
-        <li><a href="#/private-policy" data-section="private-policy"><i class="fa fa-lock"></i> Private Policy</a></li>
-      </ul>
-    </nav>
-  </header>
+    <!-- 100% transparent top bar; single-line layout -->
+    <header class="site-nav" role="banner" aria-label="Primary">
+      <div class="bar">
+        <a class="brand" href="#/home" aria-label="Mulinda’s World">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="brand-text">Mulinda’s World</span>
+        </a>
 
-  <!-- Host where subpages render (single global scrollbar) -->
-  <main id="main-content" role="main" aria-live="polite"></main>
+        <nav class="primary" aria-label="Main">
+          <ul class="nav-list" id="menu">
+            <li><a href="#/home" data-section="home" class="active"><i class="fa fa-home"></i><span>Home</span></a></li>
+            <li><a href="#/projects" data-section="projects"><i class="fa fa-briefcase"></i><span>Projects</span></a></li>
+            <li><a href="#/future-projects" data-section="future-projects"><i class="fa fa-lightbulb"></i><span>Future Projects</span></a></li>
+            <li><a href="#/certifications" data-section="certifications"><i class="fa fa-certificate"></i><span>Certifications</span></a></li>
+            <li><a href="#/resume" data-section="resume"><i class="fa fa-file-text"></i><span>Resume</span></a></li>
+            <li><a href="#/private-policy" data-section="private-policy"><i class="fa fa-lock"></i><span>Private Policy</span></a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-  <!-- Desktop-only arrows (hidden on touch via CSS in index.css) -->
-  <div class="nav-arrows" aria-hidden="true">
-    <button class="nav-arrow left" id="left-arrow" aria-label="Previous section" title="Previous">
-      <i class="fa fa-arrow-left"></i>
-    </button>
-    <button class="nav-arrow right" id="right-arrow" aria-label="Next section" title="Next">
-      <i class="fa fa-arrow-right"></i>
-    </button>
+    <!-- Host where subpages render (single global scrollbar) -->
+    <main id="main-content" role="main" aria-live="polite"></main>
+
+    <!-- Desktop-only arrows (hidden on touch via CSS) -->
+    <div class="nav-arrows" aria-hidden="true">
+      <button class="nav-arrow left" id="left-arrow" aria-label="Previous section" title="Previous">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+      <button class="nav-arrow right" id="right-arrow" aria-label="Next section" title="Next">
+        <i class="fa fa-arrow-right"></i>
+      </button>
+    </div>
   </div>
 
   <script>
     (function(){
-      const menuEl = document.getElementById('menu');
       const main   = document.getElementById('main-content');
+      const menuEl = document.getElementById('menu');
       const left   = document.getElementById('left-arrow');
       const right  = document.getElementById('right-arrow');
 
-      // Page order for prev/next navigation
       const sections = ['home','projects','future-projects','certifications','resume','private-policy'];
       let current = 'home';
-
       const isTouch = matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
 
-      // Utilities
       const $all = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-      const byId = id => document.getElementById(id);
 
       function sectionToFile(id){ return id + '.html'; }
       function setActive(id){
         $all('a[data-section]', menuEl).forEach(a => a.classList.toggle('active', a.dataset.section === id));
       }
 
-      // Create iframe and enable auto-resize to eliminate inner scrollbars
+      // Strict single-scroll: iframe auto-resizes; subpages cannot scroll
       function createFrame(src){
         const frame = document.createElement('iframe');
         frame.className = 'page-frame';
         frame.src = src;
-        frame.setAttribute('scrolling','no'); // hide inner scrollbars
+        frame.setAttribute('scrolling', 'no');
         frame.setAttribute('title', src.replace('.html',''));
-        frame.style.width = '100%';
-        frame.style.border = '0';
-        frame.style.display = 'block';
-        frame.style.background = 'transparent';
-        frame.style.minHeight = '100vh';
 
         frame.addEventListener('load', () => {
           try{
             const doc = frame.contentDocument;
             if (!doc) return;
 
-            // Force subpage to not scroll; use the host page only
+            // Kill subpage scrollbars; host controls scrolling
             doc.documentElement.style.overflow = 'hidden';
-            doc.body && (doc.body.style.overflow = 'hidden');
+            if (doc.body) doc.body.style.overflow = 'hidden';
 
-            // Resize logic using ResizeObserver (fallback to polling)
             const updateHeight = () => {
               const h1 = doc.body ? doc.body.scrollHeight : 0;
               const h2 = doc.documentElement ? doc.documentElement.scrollHeight : 0;
-              const h = Math.max(h1, h2, window.innerHeight);
+              const h  = Math.max(h1, h2, window.innerHeight);
               frame.style.height = h + 'px';
             };
 
-            // Images/fonts async sizing
-            updateHeight();
+            // Accurate fit on content changes
             const ro = new frame.contentWindow.ResizeObserver(updateHeight);
             ro.observe(doc.documentElement);
             if (doc.body) ro.observe(doc.body);
 
-            // Recalculate when host resizes
-            window.addEventListener('resize', updateHeight, { passive: true });
-
-            // Safety fallback
+            // Async assets & host resizes
+            updateHeight();
             let tries = 0;
-            const tick = setInterval(() => {
-              updateHeight();
-              if (++tries > 20) clearInterval(tick);
-            }, 150);
+            const tick = setInterval(() => { updateHeight(); if (++tries > 20) clearInterval(tick); }, 120);
+            window.addEventListener('resize', updateHeight, { passive: true });
           }catch(e){
-            // Cross-origin safety (shouldn't happen here). Keep full viewport height.
-            frame.style.height = '100vh';
+            frame.style.height = window.innerHeight + 'px';
           }
         });
 
@@ -129,18 +118,16 @@
       function loadSection(id){
         current = id;
         setActive(id);
-
-        // Update hash without jumping
         const newHash = '#/' + id;
         if (location.hash !== newHash) history.replaceState(null, '', newHash);
 
-        // Inject frame
         main.innerHTML = '';
         const frame = createFrame(sectionToFile(id));
         main.appendChild(frame);
+        window.scrollTo({ top: 0, behavior: 'auto' });
       }
 
-      // Menu clicks (delegate)
+      // Menu
       menuEl.addEventListener('click', (e) => {
         const a = e.target.closest('a[data-section]');
         if (!a) return;
@@ -148,7 +135,7 @@
         loadSection(a.dataset.section);
       });
 
-      // Hash routing (supports deep links)
+      // Hash routing
       function routeFromHash(){
         const m = location.hash.match(/^#\/([^/?#]+)/);
         const id = m ? m[1] : 'home';
@@ -156,57 +143,44 @@
       }
       window.addEventListener('hashchange', routeFromHash);
 
-      // Prev/next navigation
-      function nav(delta){
+      // Desktop arrows + keyboard
+      const nav = (d) => {
         const i = sections.indexOf(current);
-        const next = (i + delta + sections.length) % sections.length;
+        const next = (i + d + sections.length) % sections.length;
         loadSection(sections[next]);
-      }
-
-      // Desktop arrows
+      };
       if (left && right){
         left.addEventListener('click', () => nav(-1));
         right.addEventListener('click', () => nav(1));
       }
-
-      // Keyboard (desktop)
       window.addEventListener('keydown', (e) => {
-        if (e.altKey || e.metaKey || e.ctrlKey) return;
-        if (['ArrowLeft','ArrowRight'].includes(e.key)){
-          e.preventDefault();
-          nav(e.key === 'ArrowLeft' ? -1 : 1);
-        }
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); nav(-1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); nav(1); }
       });
 
       // Touch swipe (phones/tablets)
       if (isTouch){
-        let startX = 0, startY = 0, active = false;
-        const THRESHOLD = 60;   // px
-        const RESTRAIN  = 48;   // ignore if mostly vertical
-
-        const onStart = (e) => {
-          const t = e.touches ? e.touches[0] : e;
-          startX = t.clientX; startY = t.clientY; active = true;
-        };
-        const onMove = (e) => {
-          if (!active) return;
-          const t = e.touches ? e.touches[0] : e;
-          const dx = t.clientX - startX;
-          const dy = Math.abs(t.clientY - startY);
-          if (dy > RESTRAIN) return;     // vertical scroll – ignore
-          if (dx > THRESHOLD){ active = false; nav(-1); }
-          else if (dx < -THRESHOLD){ active = false; nav(1); }
-        };
-        const onEnd = () => { active = false; };
-
-        // Attach to the main host (not the iframe) so it works everywhere
-        main.addEventListener('touchstart', onStart, { passive: true });
-        main.addEventListener('touchmove',  onMove,  { passive: true });
-        main.addEventListener('touchend',   onEnd,   { passive: true });
+        let sx=0, sy=0, active=false;
+        const THRESH=60, RESTRAIN=48;
+        main.addEventListener('touchstart', e => { const t=e.touches[0]; sx=t.clientX; sy=t.clientY; active=true; }, {passive:true});
+        main.addEventListener('touchmove',  e => {
+          if(!active) return;
+          const t=e.touches[0];
+          const dx=t.clientX-sx, dy=Math.abs(t.clientY-sy);
+          if (dy>RESTRAIN) return;
+          if (dx>THRESH){ active=false; nav(-1); }
+          else if (dx<-THRESH){ active=false; nav(1); }
+        }, {passive:true});
+        main.addEventListener('touchend',   () => { active=false; }, {passive:true});
       }
 
       // Initial render
       routeFromHash();
+
+      // Safety: never allow horizontal scroll
+      document.documentElement.style.overflowX = 'hidden';
+      document.body.style.overflowX = 'hidden';
     })();
   </script>
 </body>
