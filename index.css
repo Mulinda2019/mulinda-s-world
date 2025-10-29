@@ -2,11 +2,9 @@
    Mulinda's World — index.css
    =========================== */
 
-/* ---- Theme tokens (original colors preserved) ---- */
+/* ---- Theme tokens (original accent colors) ---- */
 :root{
-  --bg: rgba(0,0,0,0.9);
-  --card: rgba(255,255,255,0.06);
-  --accent: lawngreen;            /* lawn-green kept */
+  --accent: lawngreen;
   --accent-2:#a78bfa;
   --text:#ffffff;
   --muted:#cbd5e1;
@@ -14,6 +12,10 @@
   --radius: 14px;
   --fast: .18s;
   --e: cubic-bezier(.22,.61,.36,1);
+
+  /* Menu scaling (JS updates --menuScale to keep one line) */
+  --menuBase: 16px;
+  --menuScale: 1;
 }
 
 /* ---- Reset / base ---- */
@@ -29,15 +31,11 @@ html{
 body{
   margin: 0;
   color: var(--text);
-  background:
-    radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
-    radial-gradient(1000px 700px at 110% 10%, rgba(167,139,250,.07), transparent 60%),
-    linear-gradient(180deg, #0b0f19 0%, #0a0e17 60%, #0a0a0a 100%);
-  background-attachment: fixed;
+  background: transparent;                  /* host has NO background */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: contain;
-  perspective: 1200px;                      /* faux depth for waves */
+  perspective: 1200px;
   transform-style: preserve-3d;
   overflow-x: hidden;
 }
@@ -45,37 +43,39 @@ body{
 /* Keep app content above decorative layers */
 .app-frame { position: relative; z-index: 1; }
 
-/* ---- Ambient far-back waves (thick, visible, distant) ---- */
+/* ---- Fallback waves (hidden by default) ---- */
 .wave{
   position: fixed;
   inset: 0 auto auto 0;
   pointer-events: none;
   width: 120vmax; height: 120vmax;
   filter: blur(72px);
-  opacity: .65;                              /* visible but distant */
+  opacity: .65;
   mix-blend-mode: screen;
   z-index: 0;
-  transform: translateZ(-800px) scale(2.2);  /* push far away */
+  transform: translateZ(-800px) scale(2.2);
   animation: waveA 36s var(--e) infinite alternate;
   background:
     radial-gradient(closest-side at 60% 40%, rgba(124,252,0,.20), transparent 72%),
     radial-gradient(closest-side at 45% 60%, rgba(0,255,204,.16), transparent 74%),
     conic-gradient(from 0deg at 50% 50%, rgba(167,139,250,.12), transparent 45%, rgba(167,139,250,.12) 55%, transparent 100%);
   mask-image: radial-gradient(70% 70% at 50% 50%, #000 45%, transparent 100%);
+  display: none;                             /* hidden unless fallback */
 }
-.wave:nth-of-type(1){ top:-20vmax; left:-16vmax; animation-name: waveA; }
 .wave:nth-of-type(2){
-  top: 24vmax; right:-22vmax;
+  right:-22vmax; top:24vmax;
   transform: translateZ(-900px) scale(2.4);
   filter: blur(78px); opacity:.6;
   animation: waveB 42s var(--e) infinite alternate;
 }
 .wave:nth-of-type(3){
-  bottom:-24vmax; left: 8vmax;
+  left:8vmax; bottom:-24vmax;
   transform: translateZ(-1000px) scale(2.6);
   filter: blur(82px); opacity:.58;
   animation: waveC 48s var(--e) infinite alternate;
 }
+/* Show waves only when body.fallback is present */
+body.fallback .wave{ display: block; }
 
 @keyframes waveA{
   0%   { transform: translate3d(0,0,0) translateZ(-800px)  scale(2.2) rotate(-3deg); }
@@ -90,28 +90,12 @@ body{
   100% { transform: translate3d(4vmax,-3vmax,0) translateZ(-1000px) scale(2.65) rotate(-3deg); }
 }
 
-/* ---- Subtle grain overlay ---- */
-body::after{
-  content:"";
-  position: fixed; inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(1200px 800px at 50% -20%, rgba(255,255,255,.02), transparent 60%),
-    repeating-conic-gradient(from 0deg, rgba(255,255,255,.008) 0deg 2deg, rgba(0,0,0,0) 2deg 4deg);
-  mix-blend-mode: soft-light;
-  opacity:.6;
-  z-index:0;
-}
-
 /* ---- Accessibility ---- */
 :where(a, button, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible{
   outline: 3px solid var(--accent);
   outline-offset: 2px;
   border-radius: 10px;
 }
-
-/* ---- Selection ---- */
-::selection{ background: rgba(124,252,0,.35); color: #051b0a; }
 
 /* ---- Global scrollbar (host only) ---- */
 :root{ scrollbar-color: rgba(124,252,0,.45) #0a0f16; scrollbar-width: thin; }
@@ -126,59 +110,32 @@ body::after{
   background: linear-gradient(180deg, rgba(124,252,0,.85), rgba(0,255,204,.8));
 }
 
-/* ---- Links ---- */
-a{ color: var(--accent); text-decoration: none; transition: color var(--fast) var(--e), opacity var(--fast) var(--e); }
-a:hover{ color: #00ffcc; }
-a:active{ opacity:.9; }
-
-/* ---- Utilities ---- */
-.hidden{ display:none !important; }
-.vishidden{ position:absolute !important; clip:rect(0 0 0 0); clip-path: inset(50%); width:1px; height:1px; overflow:hidden; white-space:nowrap; }
-
-/* ---- Motion reduction ---- */
-@media (prefers-reduced-motion: reduce){
-  html { scroll-behavior: auto; }
-  .wave, body::after{ animation: none !important; transition: none !important; }
-  .wave{ opacity:.3; }
-}
-
 /* =========================================
-   Transparent, full-width top nav (single line)
+   Transparent, single-line menu (auto-fit)
    ========================================= */
 .site-nav{
   position: sticky; top: 0; left: 0; right: 0;
   z-index: 10;
-  background: transparent;           /* completely transparent as requested */
-  backdrop-filter: none;             /* no blur, no tint */
+  background: transparent !important;   /* fully transparent */
+  backdrop-filter: none !important;
   padding: clamp(8px, 1.2vw, 14px) clamp(12px, 2vw, 24px);
 }
-.bar{
-  display: grid;
-  grid-template-columns: auto 1fr;   /* brand | menu spans remaining width */
-  align-items: center;
-  gap: clamp(8px, 1vw, 16px);
-}
 
-/* Brand */
-.brand{
-  display:flex; align-items:center; gap:10px;
-  font-weight:800; letter-spacing:.4px;
-  color:var(--text); text-decoration:none;
-  white-space: nowrap;
-  font-size: clamp(14px, 1.2vw + .5rem, 20px);
-}
-.brand .dot{ width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 14px var(--accent); }
-.brand-text{ line-height: 1; }
+.bar{ width: 100%; }
 
-/* Menu: one straight line across any screen */
-.primary{ width: 100%; }
 .nav-list{
   list-style: none;
   margin: 0; padding: 0;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);    /* 6 items, equal width */
+  grid-auto-flow: column;               /* single row only */
+  grid-auto-columns: 1fr;               /* every item shares width */
   gap: clamp(6px, 1vw, 14px);
+  align-items: center;
+  white-space: nowrap;                  /* NEVER wrap to second line */
+  overflow: hidden;                     /* guard against any overflow */
 }
+.nav-list li{ min-width: 0; }           /* allow shrink inside column */
+
 .nav-list a{
   display:flex; align-items:center; justify-content:center; gap:10px;
   width: 100%;
@@ -190,8 +147,9 @@ a:active{ opacity:.9; }
   border-radius: 10px;
   color: var(--text);
   opacity: .96;
-  white-space: nowrap;                     /* force single line */
-  font-size: clamp(12px, 1.05vw + .55rem, 20px); /* scales to fit */
+  white-space: nowrap;
+  /* Auto-shrinking font size driven by JS variable --menuScale */
+  font-size: calc(var(--menuBase) * var(--menuScale) + .55rem);
   border: 1px solid transparent;
   transition: transform var(--fast) var(--e), background var(--fast) var(--e), color var(--fast) var(--e), border-color var(--fast) var(--e);
 }
@@ -209,23 +167,20 @@ a:active{ opacity:.9; }
   box-shadow: 0 8px 24px rgba(124,252,0,.25);
 }
 
-/* On narrow screens, hide icons so everything STILL fits one line */
-@media (max-width: 560px){
-  .nav-list a i{ display:none; }
-  .nav-list{ gap: 6px; }
-}
+/* When JS decides icons must hide to preserve one row */
+.nav-list.hide-icons a i{ display: none; }
 
 /* =========================================
-   Shell host for subpages (prevents inner scrollbars)
+   Shell host for subpages (no inner scrollbars)
    ========================================= */
 #main-content { position: relative; min-height: 100vh; }
 .page-frame {
   width: 100%;
-  min-height: 100vh;   /* JS will expand this to exact content height */
+  min-height: 100vh;     /* JS will expand to exact content height */
   border: 0;
   display: block;
   background: transparent;
-  overflow: hidden;    /* no inner scrollbars */
+  overflow: hidden;      /* prevents internal scrollbars */
 }
 
 /* =========================================
@@ -241,7 +196,7 @@ a:active{ opacity:.9; }
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 42px; height: 42px;              /* small + elegant */
+  width: 42px; height: 42px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(255,255,255,.06);
@@ -265,10 +220,7 @@ a:active{ opacity:.9; }
   .nav-arrows{ display: none !important; }
 }
 
-/* ---- Small devices tweaks (optional micro-contrast) ---- */
-@media (max-width: 720px){
-  main#main-content .content{
-    background: rgba(0,0,0,.5);
-    border-color: rgba(124,252,0,.3);
-  }
+/* ---- Motion reduction ---- */
+@media (prefers-reduced-motion: reduce){
+  .wave{ animation: none !important; opacity:.3; }
 }
