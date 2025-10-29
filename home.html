@@ -39,7 +39,9 @@ a:hover{ color: var(--accent-2); text-decoration: underline; }
   max-width:none;
   margin:0;
   /* ~1.5cm vertical padding on large screens; scales down responsively */
-  padding: clamp(14px, 3.5vh, 1.5cm) clamp(16px, 6vw, 64px);
+  /* top/bottom  |  left/right  */
+  padding-block: clamp(14px, 3.5vh, 1.5cm);
+  padding-inline: clamp(16px, 4.5vw, 56px);  /* was 6vw, now ~25% tighter + symmetric */
   border:none; background: transparent; box-shadow:none; border-radius:0;
 
   display:grid;
@@ -173,7 +175,9 @@ p.lead[style]{ grid-column:1; grid-row:4; margin-top:8px; }
     grid-template-columns: 1fr;
     text-align:center;
     min-height: auto;
-    padding: clamp(12px, 4vh, 20px) clamp(14px, 6vw, 28px);
+    padding-block: clamp(12px, 4vh, 20px);
+    padding-inline: clamp(14px, 5vw, 28px);    /* a touch less left, equal right */
+
   }
   h1, p.lead, .roles, p.lead[style]{ grid-column:1; grid-row:auto; justify-self:center; text-align:center; }
   .roles{ justify-content:center; }
@@ -234,6 +238,7 @@ p.lead[style]{ grid-column:1; grid-row:4; margin-top:8px; }
   </script>
 </body>
 </html>
+
 
 
 
