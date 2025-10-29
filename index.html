@@ -11,166 +11,144 @@
   <!-- Favicon & Icons -->
   <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-
-  <style>
-    /* ====== TOP NAV (replaces sidebar) ====== */
-    :root{
-  --bg:#0a1224; --bg2:#0d1b31; --text:#e6ffe6;
-  --accent:lawngreen; --accent-weak:rgba(124,252,0,.35);
-  --ink:#0b0b0b; --muted:#86a586;
-}
-html,body{height:100%}
-body{
-  margin:0;
-  background: radial-gradient(1200px 800px at 70% 30%, var(--bg2) 0%, var(--bg) 60%);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
-}
-
-/* Fixed top bar */
-header#topbar{
-  position: sticky; top:0; z-index:1000;
-  background: linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.65));
-  backdrop-filter: saturate(160%) blur(8px);
-  border-bottom: 1px solid var(--accent-weak);
-}
-.bar{
-  max-width: 1200px; margin: 0 auto; 
-  padding: clamp(8px,1.2vw,12px) clamp(12px,2vw,20px);
-  display:flex; align-items:center; justify-content:space-between; gap:16px;
-}
-.brand{
-  display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.4px;
-  color:var(--text); text-decoration:none; font-size: clamp(14px, 1.6vw, 18px);
-}
-.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent); box-shadow:0 0 14px var(--accent)}
-/* Hide brand on smaller screens to keep one-line menu */
-@media (max-width: 900px){ .brand{display:none} }
-
-nav.primary{display:flex; align-items:center; gap:12px; flex:1; justify-content:flex-end}
-
-/* Menu: always one row, equally spaced */
-.menu{
-  list-style:none; display:flex; align-items:center;
-  justify-content:space-between; /* equal spacing across full width */
-  gap: clamp(6px, 1vw, 18px); padding:0; margin:0; width:100%;
-}
-.menu li{
-  flex: 1 1 0;           /* equal widths */
-  min-width: 0;          /* allow shrinking */
-  text-align: center;    /* center label */
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding: clamp(6px,1.2vw,10px) clamp(6px,1.4vw,12px);
-  border-radius:10px; cursor:pointer; user-select:none;
-  border:1px solid transparent; color:var(--text); text-decoration:none;
-  transition: transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
-  font-size: clamp(11px, 1.4vw, 15px);  /* auto-shrink with viewport */
-  line-height: 1.1;
-}
-.menu li i{font-size: clamp(12px,1.4vw,14px)}
-.menu li:hover{ background: rgba(124,252,0,.08); border-color: var(--accent-weak); }
-.menu li.active{
-  background: var(--accent); color: var(--ink); border-color: transparent;
-  box-shadow: 0 8px 24px rgba(124,252,0,.25);
-}
-
-/* Extra tightening on very small screens to keep one line */
-@media (max-width: 680px){
-  .menu{ gap: 6px; }
-  .menu li{ padding: 6px 8px; font-size: clamp(10px, 2.6vw, 12px); }
-  .menu li i{ font-size: clamp(10px, 2.4vw, 12px); }
-}
-@media (max-width: 520px){
-  .menu li{ padding: 5px 6px; border-radius:8px; }
-  .menu li i{ display:none; }  /* hide icons to save width */
-}
-
-/* Host area */
-#main-content{ position: relative; min-height: calc(100vh - 60px); }
-.page-frame{
-  width:100%; height: calc(100vh - 60px); border:0; display:block; background:transparent;
-}
-
-/* Arrow nav */
-.arrow-nav{
-  position: fixed; top: 50%; transform: translateY(-50%);
-  font-size: clamp(1.6rem,3.5vw,2.2rem); padding: 8px 12px; line-height: 1;
-  background: rgba(0,0,0,.55); color: var(--accent); border-radius: 50%;
-  border: 1px solid var(--accent-weak); box-shadow: 0 0 14px rgba(124,252,0,.25);
-  cursor: pointer; z-index: 900; transition: transform .2s ease, box-shadow .2s ease;
-}
-#left-arrow{ left: 10px; }
-#right-arrow{ right: 10px; }
-.arrow-nav:hover{ transform: translateY(-50%) scale(1.06); box-shadow: 0 0 18px rgba(124,252,0,.45); }
-
-
-  </style>
 </head>
 <body>
-  <!-- Fixed Top Navbar -->
-  <header id="topbar" role="banner" aria-label="Primary">
-    <div class="bar">
-      <a class="brand" href="#/home">
-        <span class="dot" aria-hidden="true"></span>
+  <!-- Far-back parallax waves (decorative) -->
+  <div class="wave" aria-hidden="true"></div>
+  <div class="wave" aria-hidden="true"></div>
+  <div class="wave" aria-hidden="true"></div>
+
+  <!-- Transparent Full-Width Top Navbar -->
+  <header class="site-nav" role="banner" aria-label="Primary">
+    <nav class="bar" aria-label="Main">
+      <a class="brand" href="#/home" style="display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px;text-decoration:none;color:var(--text);">
+        <span class="dot" aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)"></span>
         <span>Mulinda’s World</span>
       </a>
 
-      <nav class="primary" aria-label="Main">
-        <ul class="menu" id="menu">
-          <li data-section="home" class="active"><i class="fa fa-home"></i> Home</li>
-          <li data-section="projects"><i class="fa fa-briefcase"></i> Projects</li>
-          <li data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Projects</li>
-          <li data-section="certifications"><i class="fa fa-certificate"></i> Certifications</li>
-          <li data-section="resume"><i class="fa fa-file-text"></i> Resume</li>
-          <li data-section="private-policy"><i class="fa fa-lock"></i> Private Policy</li>
-        </ul>
-        
-      </nav>
-    </div>
+      <ul class="nav-list" id="menu">
+        <li><a href="#/home" data-section="home" class="active"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="#/projects" data-section="projects"><i class="fa fa-briefcase"></i> Projects</a></li>
+        <li><a href="#/future-projects" data-section="future-projects"><i class="fa fa-lightbulb"></i> Future Projects</a></li>
+        <li><a href="#/certifications" data-section="certifications"><i class="fa fa-certificate"></i> Certifications</a></li>
+        <li><a href="#/resume" data-section="resume"><i class="fa fa-file-text"></i> Resume</a></li>
+        <li><a href="#/private-policy" data-section="private-policy"><i class="fa fa-lock"></i> Private Policy</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- Host where pages render -->
+  <!-- Host where subpages render (single global scrollbar) -->
   <main id="main-content" role="main" aria-live="polite"></main>
 
-  <!-- Navigation Arrows -->
-  <button id="left-arrow" class="arrow-nav" aria-label="Previous section" title="Previous">&#8592;</button>
-  <button id="right-arrow" class="arrow-nav" aria-label="Next section" title="Next">&#8594;</button>
+  <!-- Desktop-only arrows (hidden on touch via CSS in index.css) -->
+  <div class="nav-arrows" aria-hidden="true">
+    <button class="nav-arrow left" id="left-arrow" aria-label="Previous section" title="Previous">
+      <i class="fa fa-arrow-left"></i>
+    </button>
+    <button class="nav-arrow right" id="right-arrow" aria-label="Next section" title="Next">
+      <i class="fa fa-arrow-right"></i>
+    </button>
+  </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const menu = document.getElementById('menu');
-      const main = document.getElementById('main-content');
-      const left = document.getElementById('left-arrow');
-      const right = document.getElementById('right-arrow');
-      const buttons = Array.from(menu.querySelectorAll('li[data-section]'));
+    (function(){
+      const menuEl = document.getElementById('menu');
+      const main   = document.getElementById('main-content');
+      const left   = document.getElementById('left-arrow');
+      const right  = document.getElementById('right-arrow');
 
-      // Order matters for prev/next navigation
+      // Page order for prev/next navigation
       const sections = ['home','projects','future-projects','certifications','resume','private-policy'];
       let current = 'home';
 
+      const isTouch = matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+
+      // Utilities
+      const $all = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+      const byId = id => document.getElementById(id);
+
       function sectionToFile(id){ return id + '.html'; }
       function setActive(id){
-        buttons.forEach(b => b.classList.toggle('active', b.dataset.section === id));
+        $all('a[data-section]', menuEl).forEach(a => a.classList.toggle('active', a.dataset.section === id));
+      }
+
+      // Create iframe and enable auto-resize to eliminate inner scrollbars
+      function createFrame(src){
+        const frame = document.createElement('iframe');
+        frame.className = 'page-frame';
+        frame.src = src;
+        frame.setAttribute('scrolling','no'); // hide inner scrollbars
+        frame.setAttribute('title', src.replace('.html',''));
+        frame.style.width = '100%';
+        frame.style.border = '0';
+        frame.style.display = 'block';
+        frame.style.background = 'transparent';
+        frame.style.minHeight = '100vh';
+
+        frame.addEventListener('load', () => {
+          try{
+            const doc = frame.contentDocument;
+            if (!doc) return;
+
+            // Force subpage to not scroll; use the host page only
+            doc.documentElement.style.overflow = 'hidden';
+            doc.body && (doc.body.style.overflow = 'hidden');
+
+            // Resize logic using ResizeObserver (fallback to polling)
+            const updateHeight = () => {
+              const h1 = doc.body ? doc.body.scrollHeight : 0;
+              const h2 = doc.documentElement ? doc.documentElement.scrollHeight : 0;
+              const h = Math.max(h1, h2, window.innerHeight);
+              frame.style.height = h + 'px';
+            };
+
+            // Images/fonts async sizing
+            updateHeight();
+            const ro = new frame.contentWindow.ResizeObserver(updateHeight);
+            ro.observe(doc.documentElement);
+            if (doc.body) ro.observe(doc.body);
+
+            // Recalculate when host resizes
+            window.addEventListener('resize', updateHeight, { passive: true });
+
+            // Safety fallback
+            let tries = 0;
+            const tick = setInterval(() => {
+              updateHeight();
+              if (++tries > 20) clearInterval(tick);
+            }, 150);
+          }catch(e){
+            // Cross-origin safety (shouldn't happen here). Keep full viewport height.
+            frame.style.height = '100vh';
+          }
+        });
+
+        return frame;
       }
 
       function loadSection(id){
         current = id;
         setActive(id);
-        const newHash = '#/' + id;
-        if(location.hash !== newHash) history.replaceState(null, '', newHash);
 
+        // Update hash without jumping
+        const newHash = '#/' + id;
+        if (location.hash !== newHash) history.replaceState(null, '', newHash);
+
+        // Inject frame
         main.innerHTML = '';
-        const frame = document.createElement('iframe');
-        frame.className = 'page-frame';
-        frame.title = id;
-        frame.src = sectionToFile(id);
+        const frame = createFrame(sectionToFile(id));
         main.appendChild(frame);
       }
 
-      // Click binding
-      buttons.forEach(btn => btn.addEventListener('click', () => loadSection(btn.dataset.section)));
+      // Menu clicks (delegate)
+      menuEl.addEventListener('click', (e) => {
+        const a = e.target.closest('a[data-section]');
+        if (!a) return;
+        e.preventDefault();
+        loadSection(a.dataset.section);
+      });
 
-      // Hash routing
+      // Hash routing (supports deep links)
       function routeFromHash(){
         const m = location.hash.match(/^#\/([^/?#]+)/);
         const id = m ? m[1] : 'home';
@@ -178,22 +156,58 @@ nav.primary{display:flex; align-items:center; gap:12px; flex:1; justify-content:
       }
       window.addEventListener('hashchange', routeFromHash);
 
-      // Arrow navigation
+      // Prev/next navigation
       function nav(delta){
         const i = sections.indexOf(current);
         const next = (i + delta + sections.length) % sections.length;
         loadSection(sections[next]);
       }
-      left.addEventListener('click', () => nav(-1));
-      right.addEventListener('click', () => nav(1));
 
-      // Initial load
+      // Desktop arrows
+      if (left && right){
+        left.addEventListener('click', () => nav(-1));
+        right.addEventListener('click', () => nav(1));
+      }
+
+      // Keyboard (desktop)
+      window.addEventListener('keydown', (e) => {
+        if (e.altKey || e.metaKey || e.ctrlKey) return;
+        if (['ArrowLeft','ArrowRight'].includes(e.key)){
+          e.preventDefault();
+          nav(e.key === 'ArrowLeft' ? -1 : 1);
+        }
+      });
+
+      // Touch swipe (phones/tablets)
+      if (isTouch){
+        let startX = 0, startY = 0, active = false;
+        const THRESHOLD = 60;   // px
+        const RESTRAIN  = 48;   // ignore if mostly vertical
+
+        const onStart = (e) => {
+          const t = e.touches ? e.touches[0] : e;
+          startX = t.clientX; startY = t.clientY; active = true;
+        };
+        const onMove = (e) => {
+          if (!active) return;
+          const t = e.touches ? e.touches[0] : e;
+          const dx = t.clientX - startX;
+          const dy = Math.abs(t.clientY - startY);
+          if (dy > RESTRAIN) return;     // vertical scroll – ignore
+          if (dx > THRESHOLD){ active = false; nav(-1); }
+          else if (dx < -THRESHOLD){ active = false; nav(1); }
+        };
+        const onEnd = () => { active = false; };
+
+        // Attach to the main host (not the iframe) so it works everywhere
+        main.addEventListener('touchstart', onStart, { passive: true });
+        main.addEventListener('touchmove',  onMove,  { passive: true });
+        main.addEventListener('touchend',   onEnd,   { passive: true });
+      }
+
+      // Initial render
       routeFromHash();
-    });
+    })();
   </script>
 </body>
 </html>
-
-
-
-
