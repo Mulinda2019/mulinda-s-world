@@ -8,408 +8,218 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
 
-  <style>
-    :root{
-      --accent: lawngreen;
-      --accent-2:#00ffcc;
-      --accent-soft:#4f46e5;
-      --text-main:#eaffea;
-      --text-muted:#b6c2cf;
-      --dark-purple:#2a0038;
-      --dark-blue:#020826;
-      --steel-black:#101118;
-      --e: cubic-bezier(.22,.61,.36,1);
+  <!-- Home page stylesheet (your universe styles) -->
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <!-- Real-universe background: sun + planets + orbits -->
+  <div class="universe-layer" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="planet p1"></div>
+    <div class="planet p2"></div>
+    <div class="planet p3"></div>
+    <div class="planet p4"></div>
+    <div class="orbit-arc orbit-1"></div>
+    <div class="orbit-arc orbit-2"></div>
+    <div class="orbit-arc orbit-3"></div>
+  </div>
+
+  <!-- Starfield canvas -->
+  anvas class="starfield" id="starfield"></canvas>
+
+  <!-- No main nav here: index.html already provides the site nav -->
+
+  <main id="home">
+    <div class="shell">
+      <!-- Left: universe-style avatar card -->
+      <aside class="avatar-panel" aria-label="Mulinda avatar in a cosmic frame">
+        <div class="orbit-ring"></div>
+        <div class="avatar-circle">
+          <div class="avatar-face"></div>
+          <div class="avatar-body"></div>
+        </div>
+        <div class="avatar-title">Mulinda</div>
+        <div class="avatar-subtitle">Observer in a very real universe.</div>
+
+        <div class="space-metrics">
+          <div class="metric">
+            <div class="metric-label">Universe age</div>
+            <div class="metric-value">13.8 billion years</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Local star</div>
+            <div class="metric-value">Sun · G‑type</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Home planet</div>
+            <div class="metric-value">Earth · 3rd orbit</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Gravity</div>
+            <div class="metric-value">9.81 m/s²</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right: your content + universe logic blended -->
+      <section class="content">
+        <div class="kicker">Welcome transmission</div>
+        <h1>Welcome to Mulinda's World, the world that is real.</h1>
+
+        <p class="subtitle">
+          I’m <strong>Mulinda Israel Negondeni</strong>, a creative professional passionate about innovation,
+          growth, and new technologies. This world is rooted in the same universe you wake up in:
+          real physics, real time, and choices that actually change your trajectory.
+        </p>
+
+        <ul class="roles" aria-label="Roles">
+          <li>Conceptualizer</li>
+          <li>Full Stack Developer</li>
+          <li>AI-Assisted Developer</li>
+          <li>Data Analyst</li>
+        </ul>
+
+        <p class="subtitle-note">
+          Use the menu at the top to explore my work, experiments, and the paths my orbit has taken so far.
+        </p>
+
+        <div class="universe-row">
+          <span class="chip">Real physics · Real time</span>
+          <span class="chip">Stars, not shortcuts</span>
+          <span class="chip">One life · One orbit</span>
+        </div>
+
+        <div class="panel" id="orbits">
+          <div class="panel-title">Universe logic</div>
+          <p class="panel-text">
+            In Mulinda's world, the same rules that shape galaxies shape projects:
+            change costs energy, growth takes time, and momentum matters. Every click,
+            commit, and idea behaves like a small force nudging a real orbit, not just
+            pixels glowing on a screen.
+          </p>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn-primary" id="traceOrbitBtn">
+            Trace my orbit
+          </button>
+          <span class="cta-note">
+            Watch a small simulation of how tiny choices curve through space-time.
+          </span>
+        </div>
+
+        <div class="contact-block" id="contact">
+          <p>
+            Leave a comment for me here:
+            <a href="https://forms.gle/26VeYKxNL98HJSBf7" target="_blank" rel="noopener">Comment Form</a>
+          </p>
+
+          <h2 class="contact-heading">Or contact me directly:</h2>
+          <ul class="contact-links">
+            <li><a href="https://github.com/Mulinda2019" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
+            <li><a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+            <li><a href="mailto:negondenimulindaisrael@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> Email</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> Mulinda's World · Built in the real universe.</div>
+      <div class="footer-stars">⋆ ⋆ ⋆</div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Starfield
+    const canvas = document.getElementById("starfield");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      createStars();
     }
 
-    *{ box-sizing:border-box; margin:0; padding:0; }
-
-    html, body{ height:100%; }
-
-    body{
-      margin:0;
-      color:var(--text-main);
-      font-family:'Roboto', system-ui, -apple-system, Segoe UI, sans-serif;
-      background:
-        radial-gradient(1400px 900px at 70% 20%, rgba(0,255,204,.06), transparent 60%),
-        radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
-        radial-gradient(circle at 10% 0%, #351057 0%, #020826 40%, #050309 100%),
-        linear-gradient(180deg,#0b1022 0%,#0b1128 60%,#0a0f1f 100%);
-      background-attachment:fixed;
-      display:flex;
-      flex-direction:column;
-      overflow:hidden;
-      -webkit-font-smoothing:antialiased;
+    function createStars() {
+      const count = Math.floor((canvas.width * canvas.height) / 6000);
+      stars = [];
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          z: Math.random() * 1.2 + 0.3,
+          speed: Math.random() * 0.25 + 0.05,
+        });
+      }
     }
 
-    a{
-      color:var(--accent);
-      text-decoration:none;
-      transition:color .2s var(--e), text-decoration-color .2s var(--e);
-    }
-    a:hover{ color:var(--accent-2); text-decoration:underline; }
-
-    /* Universe backdrop */
-    .universe-layer{
-      position:fixed;
-      inset:0;
-      z-index:-2;
-      pointer-events:none;
-      overflow:hidden;
-    }
-
-    .sun{
-      position:absolute;
-      right:-140px;
-      top:-80px;
-      width:260px;
-      height:260px;
-      border-radius:50%;
-      background:radial-gradient(circle at 30% 30%, #fff7d6 0%, #ffd36f 35%, #ff9f3c 65%, #f24c1a 100%);
-      box-shadow:
-        0 0 40px rgba(255,184,108,.85),
-        0 0 120px rgba(255,184,108,.7);
-      filter:blur(.3px);
-      opacity:.95;
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        const alpha = 0.3 + 0.5 * s.z;
+        ctx.fillStyle = "rgba(210, 230, 255," + alpha + ")";
+        const size = s.z * 1.1;
+        ctx.fillRect(s.x, s.y, size, size);
+        s.y += s.speed * s.z * 1.2;
+        if (s.y > canvas.height) {
+          s.y = 0;
+          s.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(drawStars);
     }
 
-    .planet{
-      position:absolute;
-      border-radius:50%;
-      opacity:.9;
-      filter:drop-shadow(0 0 12px rgba(0,0,0,.9));
-      animation:floatPlanet 28s ease-in-out infinite alternate;
+    window.addEventListener("resize", resize);
+    resize();
+    drawStars();
+
+    // Orbit tracer
+    const traceBtn = document.getElementById("traceOrbitBtn");
+    traceBtn.addEventListener("click", () => {
+      if (traceBtn.disabled) return;
+      traceBtn.disabled = true;
+      traceBtn.textContent = "Orbit in progress...";
+      traceOrbit().then(() => {
+        traceBtn.disabled = false;
+        traceBtn.textContent = "Trace my orbit";
+      });
+    });
+
+    function traceOrbit() {
+      return new Promise((resolve) => {
+        const steps = 240;
+        let t = 0;
+        const radius = 70;
+        const centerX = window.innerWidth - 140;
+        const centerY = 120;
+
+        const particle = { x: centerX + radius, y: centerY };
+
+        function step() {
+          t += (Math.PI * 2.4) / steps;
+          particle.x = centerX + radius * Math.cos(t);
+          particle.y = centerY + radius * Math.sin(t) * 0.7;
+
+          ctx.fillStyle = "rgba(120, 200, 255, 0.9)";
+          ctx.fillRect(particle.x, particle.y, 2, 2);
+
+          if (t < Math.PI * 2.4) {
+            requestAnimationFrame(step);
+          } else {
+            resolve();
+          }
+        }
+
+        step();
+      });
     }
-
-    .planet.p1{
-      width:70px; height:70px;
-      left:12%; top:18%;
-      background:radial-gradient(circle at 25% 20%, #d0f6ff 0%, #6fd2ff 35%, #0b4d91 70%, #020826 100%);
-      animation-duration:38s;
-    }
-
-    .planet.p2{
-      width:46px; height:46px;
-      left:55%; top:68%;
-      background:radial-gradient(circle at 25% 20%, #fbe0ff 0%, #e070ff 40%, #50026d 75%, #150019 100%);
-      animation-duration:30s;
-    }
-
-    .planet.p3{
-      width:110px; height:110px;
-      left:-40px; bottom:-35px;
-      background:radial-gradient(circle at 25% 20%, #f7f2d0 0%, #d0c87b 30%, #786319 75%, #2d250a 100%);
-      animation-duration:55s;
-    }
-
-    .planet.p4{
-      width:42px; height:42px;
-      right:18%; bottom:18%;
-      background:radial-gradient(circle at 25% 20%, #d0f7d0 0%, #6fe37a 35%, #1b7f3a 75%, #02150d 100%);
-      animation-duration:32s;
-    }
-
-    .orbit-arc{
-      position:absolute;
-      border-radius:50%;
-      border:1px dashed rgba(151,216,242,.25);
-      filter:blur(.5px);
-    }
-
-    .orbit-1{
-      width:420px; height:420px;
-      left:10%; top:5%;
-    }
-
-    .orbit-2{
-      width:540px; height:540px;
-      left:50%; top:-10%;
-      transform:translateX(-50%);
-    }
-
-    .orbit-3{
-      width:360px; height:360px;
-      right:-80px; bottom:-60px;
-    }
-
-    @keyframes floatPlanet{
-      from{ transform:translate3d(0,0,0); }
-      to  { transform:translate3d(30px,-25px,0); }
-    }
-
-    .starfield{
-      pointer-events:none;
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      background:transparent;
-    }
-
-    main{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:2.5rem 1.5rem 3rem;
-    }
-
-    .shell{
-      max-width:1100px;
-      width:100%;
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:minmax(220px,280px) minmax(0,1fr);
-      gap:2.5rem;
-      align-items:center;
-    }
-
-    .avatar-panel{
-      background:radial-gradient(circle at 20% 0%, #4b1a6d 0%, #151228 40%, #050309 100%);
-      border-radius:1.25rem;
-      padding:1.8rem 1.4rem;
-      border:1px solid rgba(127,90,240,.55);
-      box-shadow:0 0 40px rgba(127,90,240,.32);
-      position:relative;
-      overflow:hidden;
-      transition:transform .2s var(--e), box-shadow .2s var(--e), border-color .2s var(--e);
-    }
-
-    .avatar-panel::after{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background:radial-gradient(circle at 0 0, rgba(127,90,240,.25), transparent 55%);
-      opacity:0;
-      transition:opacity .24s var(--e);
-    }
-
-    .avatar-panel:hover{
-      transform:translateY(-3px);
-      box-shadow:
-        0 0 40px rgba(127,90,240,.65),
-        0 0 80px rgba(38,198,218,.25);
-      border-color:rgba(151,216,242,.7);
-    }
-
-    .avatar-panel:hover::after{ opacity:1; }
-
-    .orbit-ring{
-      position:absolute;
-      inset:14%;
-      border-radius:50%;
-      border:1px dashed rgba(151,216,242,.35);
-      filter:blur(.4px);
-      animation:spinOrbit 38s linear infinite;
-      pointer-events:none;
-    }
-
-    @keyframes spinOrbit{
-      from{ transform:rotate(0deg); }
-      to  { transform:rotate(360deg); }
-    }
-
-    .avatar-circle{
-      width:160px; height:160px;
-      border-radius:50%;
-      margin:0 auto;
-      position:relative;
-      background:radial-gradient(circle at 30% 20%, #fdfdfd 0%, #e0e4ff 35%, #7f8cff 55%, #353879 100%);
-      border:4px solid rgba(10,6,40,.9);
-      box-shadow:0 0 30px rgba(127,90,240,.6);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      transition:transform .22s var(--e), box-shadow .22s var(--e);
-    }
-
-    .avatar-panel:hover .avatar-circle{
-      transform:translateY(-4px) scale(1.03);
-      box-shadow:0 0 40px rgba(151,216,242,.9);
-    }
-
-    .avatar-image{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      border-radius:50%;
-    }
-
-    .avatar-title{
-      text-align:center;
-      margin-top:1.4rem;
-      font-size:1.05rem;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-    }
-
-    .avatar-subtitle{
-      text-align:center;
-      font-size:.78rem;
-      margin-top:.4rem;
-      color:var(--text-main);
-      opacity:.9;
-    }
-
-    .space-metrics{
-      margin-top:1.6rem;
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:.75rem;
-      font-size:.75rem;
-      color:var(--text-muted);
-    }
-
-    .metric{
-      padding:.6rem .7rem;
-      border-radius:.6rem;
-      background:linear-gradient(145deg, rgba(10,12,28,.95), rgba(33,30,72,.95));
-      border:1px solid rgba(90,112,255,.35);
-      transition:
-        transform .18s var(--e),
-        box-shadow .18s var(--e),
-        border-color .18s var(--e),
-        background .18s var(--e);
-    }
-
-    .metric:hover{
-      transform:translateY(-2px);
-      border-color:rgba(151,216,242,.85);
-      box-shadow:
-        0 0 18px rgba(151,216,242,.7),
-        0 0 26px rgba(127,90,240,.4);
-      background:radial-gradient(circle at 0 0, rgba(151,216,242,.25), rgba(10,12,28,.97));
-    }
-
-    .metric-label{
-      font-size:.7rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--text-muted);
-      margin-bottom:.2rem;
-    }
-
-    .metric-value{
-      font-weight:600;
-      color:var(--text-main);
-    }
-
-    .content{
-      color:var(--text-main);
-      position:relative;
-      z-index:1;
-    }
-
-    h1{
-      font-family:Orbitron, system-ui, sans-serif;
-      font-size:clamp(2rem, 2.6vw + 1.4rem, 2.8rem);
-      line-height:1.1;
-      margin-bottom:.9rem;
-      letter-spacing:.5px;
-      background:linear-gradient(90deg,#ffffff,var(--accent));
-      -webkit-background-clip:text;
-      background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
-
-    .subtitle{
-      font-size:.98rem;
-      color:var(--text-muted);
-      max-width:32rem;
-      line-height:1.6;
-      margin-bottom:1rem;
-    }
-
-    .subtitle-note{
-      font-size:.9rem;
-      color:var(--text-muted);
-      margin-bottom:1.4rem;
-    }
-
-    .chip{
-      font-size:.78rem;
-      padding:.4rem .8rem;
-      border-radius:999px;
-      border:1px solid rgba(151,216,210,.4);
-      background:radial-gradient(circle at 0 0, rgba(151,216,210,.22), transparent 65%);
-      color:var(--text-main);
-      white-space:nowrap;
-      transition:
-        transform .18s var(--e),
-        box-shadow .18s var(--e),
-        background .18s var(--e),
-        border-color .18s var(--e);
-    }
-
-    .chip:hover{
-      transform:translateY(-1px) scale(1.03);
-      box-shadow:0 0 16px rgba(151,216,210,.85);
-      background:radial-gradient(circle at 0 0, rgba(151,216,210,.35), rgba(6,17,20,.95));
-      border-color:rgba(151,216,210,.9);
-    }
-
-    .contact-block{
-      margin-top:1.4rem;
-      font-size:.9rem;
-    }
-
-    .contact-heading{
-      margin:10px 0 4px;
-      font-family:Orbitron, system-ui, sans-serif;
-      font-size:1rem;
-    }
-
-    .contact-links{
-      list-style:none;
-      padding:0;
-      margin:.6rem 0 0;
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-    }
-
-    .contact-links li a{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-weight:800;
-      padding:10px 14px;
-      border-radius:999px;
-      border:none;
-      background:rgba(0,0,0,.28);
-      text-decoration:none;
-    }
-
-    .contact-links li a:hover{
-      background:var(--accent);
-      color:#041e0e;
-      text-decoration:none;
-    }
-
-    footer{
-      border-top:1px solid rgba(40,46,80,.9);
-      background:radial-gradient(circle at 100% 120%, #190c3f 0%, #05030a 55%);
-      color:var(--text-muted);
-      padding:.9rem 1.5rem;
-    }
-
-    .footer-inner{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:.8rem;
-    }
-
-    .footer-stars{
-      letter-spacing:.2em;
-      font-size:.7rem;
-      color:#7174c7;
-    }
-
-    @media (max-width:780px){
-      main{ padding-top:1.5rem; }
-      .shell{ grid-template-columns:minmax(0,1fr); }
-      .avatar-panel{ order:1; }
-      .content{ order:2;
+  </script>
+</body>
+</html>
