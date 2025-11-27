@@ -227,25 +227,20 @@
       box-shadow:0 0 40px rgba(151,216,242,.9);
     }
 
+    /* Replace drawn face with actual image */
     .avatar-face{
-      width:64px; height:64px;
+      width:100%;
+      height:100%;
       border-radius:50%;
-      background:radial-gradient(circle at 30% 20%, #f8e0c5 0%, #deb38a 40%, #c88d61 75%);
-      position:relative;
+      overflow:hidden;
     }
 
-    .avatar-face::before,
-    .avatar-face::after{
-      content:"";
-      position:absolute;
-      top:40%;
-      width:8px; height:4px;
-      border-radius:999px;
-      background:#3b2b2a;
+    .avatar-face img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
-
-    .avatar-face::before{ left:18px; }
-    .avatar-face::after { right:18px; }
 
     .avatar-body{
       position:absolute;
@@ -324,13 +319,7 @@
       z-index:1;
     }
 
-    .kicker{
-      font-size:.85rem;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      margin-bottom:.6rem;
-    }
+    /* Removed .kicker since we no longer show the text, but keep in case you reuse it later */
 
     h1{
       font-family:Orbitron, system-ui, sans-serif;
@@ -357,12 +346,7 @@
       list-style:none;
       padding:0;
       margin:.4rem 0 .8rem;
-      display:grid;
-      grid-auto-rows:min-content;
-      gap:6px;
-      justify-content:start;
-      font-weight:700;
-      font-size:clamp(14px, 2vw, 18px);
+      display:none; /* hidden because roles moved to metrics */
     }
 
     .subtitle-note{
@@ -448,50 +432,7 @@
 
     .cta-row{
       margin-top:.6rem;
-      display:flex;
-      flex-wrap:wrap;
-      gap:.9rem;
-      align-items:center;
-    }
-
-    .btn-primary{
-      border:none;
-      border-radius:999px;
-      padding:.7rem 1.4rem;
-      font-size:.9rem;
-      font-weight:600;
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      cursor:pointer;
-      color:var(--text-main);
-      background:linear-gradient(135deg, #7f5af0, var(--accent-soft));
-      box-shadow:
-        0 0 22px rgba(127,90,240,.7),
-        0 0 32px rgba(0,0,0,1);
-      transition:
-        transform .15s var(--e),
-        box-shadow .15s var(--e),
-        filter .15s var(--e),
-        letter-spacing .15s var(--e);
-    }
-
-    .btn-primary:hover:not(:disabled){
-      transform:translateY(-2px) scale(1.02);
-      box-shadow:
-        0 0 34px rgba(127,90,240,.95),
-        0 0 52px rgba(76,201,240,.85);
-      filter:brightness(1.05);
-      letter-spacing:.08em;
-    }
-
-    .btn-primary:disabled{
-      opacity:.7;
-      cursor:wait;
-    }
-
-    .cta-note{
-      font-size:.8rem;
-      color:var(--text-muted);
+      display:none; /* orbit button removed */
     }
 
     .contact-block{
@@ -587,7 +528,7 @@
   </div>
 
   <!-- Starfield canvas -->
-  anvas class="starfield" id="starfield"></canvas>
+  <canvas class="starfield" id="starfield"></canvas>
 
   <main id="home">
     <div class="shell">
@@ -595,7 +536,9 @@
       <aside class="avatar-panel" aria-label="Mulinda avatar in a cosmic frame">
         <div class="orbit-ring"></div>
         <div class="avatar-circle">
-          <div class="avatar-face"></div>
+          <div class="avatar-face">
+            <img src="profilepic.jpg" alt="Photo of Mulinda" />
+          </div>
           <div class="avatar-body"></div>
         </div>
         <div class="avatar-title">Mulinda</div>
@@ -603,28 +546,27 @@
 
         <div class="space-metrics">
           <div class="metric">
-            <div class="metric-label">Universe age</div>
-            <div class="metric-value">13.8 billion years</div>
+            <div class="metric-label">Role</div>
+            <div class="metric-value">Conceptualizer</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Local star</div>
-            <div class="metric-value">Sun · G‑type</div>
+            <div class="metric-label">Role</div>
+            <div class="metric-value">Full Stack Developer</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Home planet</div>
-            <div class="metric-value">Earth · 3rd orbit</div>
+            <div class="metric-label">Role</div>
+            <div class="metric-value">AI-Assisted Developer</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Gravity</div>
-            <div class="metric-value">9.81 m/s²</div>
+            <div class="metric-label">Role</div>
+            <div class="metric-value">Data Analyst</div>
           </div>
         </div>
       </aside>
 
-      <!-- Right: your content + universe logic blended -->
+      <!-- Right: your content -->
       <section class="content">
-        <div class="kicker">Welcome transmission</div>
-        <h1>Welcome to Mulinda's World, the world that is real.</h1>
+        <h1>Welcome to Mulinda's World</h1>
 
         <p class="subtitle">
           I’m <strong>Mulinda Israel Negondeni</strong>, a creative professional passionate about innovation,
@@ -649,24 +591,7 @@
           <span class="chip">One life · One orbit</span>
         </div>
 
-        <div class="panel" id="orbits">
-          <div class="panel-title">Universe logic</div>
-          <p class="panel-text">
-            In Mulinda's world, the same rules that shape galaxies shape projects:
-            change costs energy, growth takes time, and momentum matters. Every click,
-            commit, and idea behaves like a small force nudging a real orbit, not just
-            pixels glowing on a screen.
-          </p>
-        </div>
-
-        <div class="cta-row">
-          <button class="btn-primary" id="traceOrbitBtn">
-            Trace my orbit
-          </button>
-          <span class="cta-note">
-            Watch a small simulation of how tiny choices curve through space-time.
-          </span>
-        </div>
+        <!-- Universe logic panel and Trace my orbit removed as requested -->
 
         <div class="contact-block" id="contact">
           <p>
@@ -739,47 +664,6 @@
     window.addEventListener("resize", resize);
     resize();
     drawStars();
-
-    // Orbit tracer
-    const traceBtn = document.getElementById("traceOrbitBtn");
-    traceBtn.addEventListener("click", () => {
-      if (traceBtn.disabled) return;
-      traceBtn.disabled = true;
-      traceBtn.textContent = "Orbit in progress...";
-      traceOrbit().then(() => {
-        traceBtn.disabled = false;
-        traceBtn.textContent = "Trace my orbit";
-      });
-    });
-
-    function traceOrbit() {
-      return new Promise((resolve) => {
-        const steps = 240;
-        let t = 0;
-        const radius = 70;
-        const centerX = window.innerWidth - 140;
-        const centerY = 120;
-
-        const particle = { x: centerX + radius, y: centerY };
-
-        function step() {
-          t += (Math.PI * 2.4) / steps;
-          particle.x = centerX + radius * Math.cos(t);
-          particle.y = centerY + radius * Math.sin(t) * 0.7;
-
-          ctx.fillStyle = "rgba(120, 200, 255, 0.9)";
-          ctx.fillRect(particle.x, particle.y, 2, 2);
-
-          if (t < Math.PI * 2.4) {
-            requestAnimationFrame(step);
-          } else {
-            resolve();
-          }
-        }
-
-        step();
-      });
-    }
   </script>
 </body>
 </html>
