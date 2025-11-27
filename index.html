@@ -3,14 +3,29 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Mulinda's World</title>
+
+  <title>Mulinda Israel Negondeni | Mulinda's World</title>
+
+  <!-- Basic SEO -->
+  <meta name="description"
+        content="Mulinda Israel Negondeni — full‑stack and AI‑assisted developer. Explore projects, future ideas, certifications, and resume in Mulinda's World."/>
+  <meta name="keywords"
+        content="Mulinda Israel Negondeni, Mulinda, software developer, full stack developer, AI-assisted developer, portfolio, projects"/>
+  <meta name="robots" content="index, follow"/>
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:title" content="Mulinda Israel Negondeni | Mulinda's World"/>
+  <meta property="og:description"
+        content="Personal portfolio of Mulinda Israel Negondeni: projects, future projects, certifications, and resume."/>
+  <meta property="og:type" content="website"/>
 
   <!-- Global CSS -->
   <link rel="stylesheet" href="index.css"/>
 
   <!-- Icons -->
   <link rel="icon" href="favicon.ico" sizes="16x16" type="image/x-icon"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 </head>
 <body class="app">
   <!-- Fallback waves (hidden by default; appear if a page fails to load) -->
@@ -19,7 +34,7 @@
   <div class="wave" aria-hidden="true"></div>
 
   <div class="app-frame">
-    <!-- 100% transparent top bar -->
+    <!-- Transparent top bar -->
     <header class="site-nav" role="banner" aria-label="Primary">
       <nav class="bar" aria-label="Main">
         <ul class="nav-list" id="menu">
@@ -199,7 +214,6 @@
       }
 
       // ===== Robust hide-on-scroll (works on phones) =====
-      // On small screens, use fixed nav + padding top for content
       function applyNavHeightPadding(){
         const h = siteNav.offsetHeight || 56;
         document.documentElement.style.setProperty('--navH', h + 'px');
@@ -222,7 +236,6 @@
           lastY = y;
         }
       }
-      // Listen to multiple sources for reliability on mobile
       window.addEventListener('scroll', handleScroll, { passive:true });
       document.addEventListener('touchmove', handleScroll, { passive:true });
       document.addEventListener('wheel', handleScroll, { passive:true });
@@ -236,3 +249,4 @@
   </script>
 </body>
 </html>
+
