@@ -212,6 +212,7 @@
       border-radius:50%;
       margin:0 auto;
       position:relative;
+      background:radial-gradient(circle at 30% 20%, #fdfdfd 0%, #e0e4ff 35%, #7f8cff 55%, #353879 100%);
       border:4px solid rgba(10,6,40,.9);
       box-shadow:0 0 30px rgba(127,90,240,.6);
       display:flex;
@@ -226,11 +227,35 @@
       box-shadow:0 0 40px rgba(151,216,242,.9);
     }
 
-    .avatar-image{
-      width:100%;
-      height:100%;
-      object-fit:cover;
+    .avatar-face{
+      width:64px; height:64px;
       border-radius:50%;
+      background:radial-gradient(circle at 30% 20%, #f8e0c5 0%, #deb38a 40%, #c88d61 75%);
+      position:relative;
+    }
+
+    .avatar-face::before,
+    .avatar-face::after{
+      content:"";
+      position:absolute;
+      top:40%;
+      width:8px; height:4px;
+      border-radius:999px;
+      background:#3b2b2a;
+    }
+
+    .avatar-face::before{ left:18px; }
+    .avatar-face::after { right:18px; }
+
+    .avatar-body{
+      position:absolute;
+      bottom:-28px;
+      left:50%;
+      transform:translateX(-50%);
+      width:120px; height:80px;
+      border-radius:50% 50% 16px 16px;
+      background:linear-gradient(145deg, #22233a, #181927);
+      border-top:2px solid rgba(164,195,255,.4);
     }
 
     .avatar-title{
@@ -299,6 +324,14 @@
       z-index:1;
     }
 
+    .kicker{
+      font-size:.85rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+      margin-bottom:.6rem;
+    }
+
     h1{
       font-family:Orbitron, system-ui, sans-serif;
       font-size:clamp(2rem, 2.6vw + 1.4rem, 2.8rem);
@@ -320,10 +353,145 @@
       margin-bottom:1rem;
     }
 
+    .roles{
+      list-style:none;
+      padding:0;
+      margin:.4rem 0 .8rem;
+      display:grid;
+      grid-auto-rows:min-content;
+      gap:6px;
+      justify-content:start;
+      font-weight:700;
+      font-size:clamp(14px, 2vw, 18px);
+    }
+
     .subtitle-note{
       font-size:.9rem;
       color:var(--text-muted);
       margin-bottom:1.4rem;
+    }
+
+    .universe-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1.2rem;
+      margin-bottom:1.4rem;
+    }
+
+    .chip{
+      font-size:.78rem;
+      padding:.4rem .8rem;
+      border-radius:999px;
+      border:1px solid rgba(151,216,210,.4);
+      background:radial-gradient(circle at 0 0, rgba(151,216,210,.22), transparent 65%);
+      color:var(--text-main);
+      white-space:nowrap;
+      transition:
+        transform .18s var(--e),
+        box-shadow .18s var(--e),
+        background .18s var(--e),
+        border-color .18s var(--e);
+    }
+
+    .chip:hover{
+      transform:translateY(-1px) scale(1.03);
+      box-shadow:0 0 16px rgba(151,216,210,.85);
+      background:radial-gradient(circle at 0 0, rgba(151,216,210,.35), rgba(6,17,20,.95));
+      border-color:rgba(151,216,210,.9);
+    }
+
+    .panel{
+      border-radius:1rem;
+      background:linear-gradient(135deg, rgba(5,7,15,.95), rgba(18,22,45,.95));
+      border:1px solid rgba(80,98,210,.55);
+      padding:1rem 1rem 1.1rem;
+      box-shadow:0 0 32px rgba(0,0,0,.7);
+      position:relative;
+      overflow:hidden;
+      transition:
+        transform .22s var(--e),
+        box-shadow .22s var(--e),
+        border-color .22s var(--e);
+      margin-bottom:1.4rem;
+    }
+
+    .panel::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at 120% 0, rgba(151,216,242,.25), transparent 65%);
+      opacity:0;
+      transition:opacity .25s var(--e);
+    }
+
+    .panel:hover{
+      transform:translateY(-2px);
+      box-shadow:
+        0 0 28px rgba(80,98,210,.7),
+        0 0 46px rgba(0,0,0,.95);
+      border-color:rgba(151,216,242,.8);
+    }
+
+    .panel:hover::after{ opacity:1; }
+
+    .panel-title{
+      font-size:.88rem;
+      font-weight:600;
+      margin-bottom:.5rem;
+    }
+
+    .panel-text{
+      font-size:.86rem;
+      color:var(--text-muted);
+      line-height:1.6;
+    }
+
+    .cta-row{
+      margin-top:.6rem;
+      display:flex;
+      flex-wrap:wrap;
+      gap:.9rem;
+      align-items:center;
+    }
+
+    .btn-primary{
+      border:none;
+      border-radius:999px;
+      padding:.7rem 1.4rem;
+      font-size:.9rem;
+      font-weight:600;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      cursor:pointer;
+      color:var(--text-main);
+      background:linear-gradient(135deg, #7f5af0, var(--accent-soft));
+      box-shadow:
+        0 0 22px rgba(127,90,240,.7),
+        0 0 32px rgba(0,0,0,1);
+      transition:
+        transform .15s var(--e),
+        box-shadow .15s var(--e),
+        filter .15s var(--e),
+        letter-spacing .15s var(--e);
+    }
+
+    .btn-primary:hover:not(:disabled){
+      transform:translateY(-2px) scale(1.02);
+      box-shadow:
+        0 0 34px rgba(127,90,240,.95),
+        0 0 52px rgba(76,201,240,.85);
+      filter:brightness(1.05);
+      letter-spacing:.08em;
+    }
+
+    .btn-primary:disabled{
+      opacity:.7;
+      cursor:wait;
+    }
+
+    .cta-note{
+      font-size:.8rem;
+      color:var(--text-muted);
     }
 
     .contact-block{
@@ -419,11 +587,199 @@
   </div>
 
   <!-- Starfield canvas -->
-  canvas class="starfield" id="starfield"></canvas>
+  anvas class="starfield" id="starfield"></canvas>
 
   <main id="home">
     <div class="shell">
-      <!-- Left: avatar card with real photo -->
+      <!-- Left: universe-style avatar card -->
       <aside class="avatar-panel" aria-label="Mulinda avatar in a cosmic frame">
         <div class="orbit-ring"></div>
-        <div class="
+        <div class="avatar-circle">
+          <div class="avatar-face"></div>
+          <div class="avatar-body"></div>
+        </div>
+        <div class="avatar-title">Mulinda</div>
+        <div class="avatar-subtitle">Observer in a very real universe.</div>
+
+        <div class="space-metrics">
+          <div class="metric">
+            <div class="metric-label">Universe age</div>
+            <div class="metric-value">13.8 billion years</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Local star</div>
+            <div class="metric-value">Sun · G‑type</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Home planet</div>
+            <div class="metric-value">Earth · 3rd orbit</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Gravity</div>
+            <div class="metric-value">9.81 m/s²</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right: your content + universe logic blended -->
+      <section class="content">
+        <div class="kicker">Welcome transmission</div>
+        <h1>Welcome to Mulinda's World, the world that is real.</h1>
+
+        <p class="subtitle">
+          I’m <strong>Mulinda Israel Negondeni</strong>, a creative professional passionate about innovation,
+          growth, and new technologies. This world is rooted in the same universe you wake up in:
+          real physics, real time, and choices that actually change your trajectory.
+        </p>
+
+        <ul class="roles" aria-label="Roles">
+          <li>Conceptualizer</li>
+          <li>Full Stack Developer</li>
+          <li>AI-Assisted Developer</li>
+          <li>Data Analyst</li>
+        </ul>
+
+        <p class="subtitle-note">
+          Use the menu at the top to explore my work, experiments, and the paths my orbit has taken so far.
+        </p>
+
+        <div class="universe-row">
+          <span class="chip">Real physics · Real time</span>
+          <span class="chip">Stars, not shortcuts</span>
+          <span class="chip">One life · One orbit</span>
+        </div>
+
+        <div class="panel" id="orbits">
+          <div class="panel-title">Universe logic</div>
+          <p class="panel-text">
+            In Mulinda's world, the same rules that shape galaxies shape projects:
+            change costs energy, growth takes time, and momentum matters. Every click,
+            commit, and idea behaves like a small force nudging a real orbit, not just
+            pixels glowing on a screen.
+          </p>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn-primary" id="traceOrbitBtn">
+            Trace my orbit
+          </button>
+          <span class="cta-note">
+            Watch a small simulation of how tiny choices curve through space-time.
+          </span>
+        </div>
+
+        <div class="contact-block" id="contact">
+          <p>
+            Leave a comment for me here:
+            <a href="https://forms.gle/26VeYKxNL98HJSBf7" target="_blank" rel="noopener">Comment Form</a>
+          </p>
+
+          <h2 class="contact-heading">Or contact me directly:</h2>
+          <ul class="contact-links">
+            <li><a href="https://github.com/Mulinda2019" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
+            <li><a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+            <li><a href="mailto:negondenimulindaisrael@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> Email</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> Mulinda's World · Built in the real universe.</div>
+      <div class="footer-stars">⋆ ⋆ ⋆</div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Starfield
+    const canvas = document.getElementById("starfield");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      createStars();
+    }
+
+    function createStars() {
+      const count = Math.floor((canvas.width * canvas.height) / 6000);
+      stars = [];
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          z: Math.random() * 1.2 + 0.3,
+          speed: Math.random() * 0.25 + 0.05,
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        const alpha = 0.3 + 0.5 * s.z;
+        ctx.fillStyle = "rgba(210, 230, 255," + alpha + ")";
+        const size = s.z * 1.1;
+        ctx.fillRect(s.x, s.y, size, size);
+        s.y += s.speed * s.z * 1.2;
+        if (s.y > canvas.height) {
+          s.y = 0;
+          s.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+    drawStars();
+
+    // Orbit tracer
+    const traceBtn = document.getElementById("traceOrbitBtn");
+    traceBtn.addEventListener("click", () => {
+      if (traceBtn.disabled) return;
+      traceBtn.disabled = true;
+      traceBtn.textContent = "Orbit in progress...";
+      traceOrbit().then(() => {
+        traceBtn.disabled = false;
+        traceBtn.textContent = "Trace my orbit";
+      });
+    });
+
+    function traceOrbit() {
+      return new Promise((resolve) => {
+        const steps = 240;
+        let t = 0;
+        const radius = 70;
+        const centerX = window.innerWidth - 140;
+        const centerY = 120;
+
+        const particle = { x: centerX + radius, y: centerY };
+
+        function step() {
+          t += (Math.PI * 2.4) / steps;
+          particle.x = centerX + radius * Math.cos(t);
+          particle.y = centerY + radius * Math.sin(t) * 0.7;
+
+          ctx.fillStyle = "rgba(120, 200, 255, 0.9)";
+          ctx.fillRect(particle.x, particle.y, 2, 2);
+
+          if (t < Math.PI * 2.4) {
+            requestAnimationFrame(step);
+          } else {
+            resolve();
+          }
+        }
+
+        step();
+      });
+    }
+  </script>
+</body>
+</html>
