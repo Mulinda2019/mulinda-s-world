@@ -1,322 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mulinda's World - Home</title>
+  <meta charset="UTF-8" />
+  <title>Mulinda's World</title>
 
   <!-- Icons & Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
 
-  <style>
-    /* ================================
-       THEME / TOKENS
-       ================================ */
-    :root{
-      --accent: lawngreen;
-      --accent-2:#00ffcc;
-      --ink:#eaffea;
-      --muted:#b6c2cf;
-      --e: cubic-bezier(.22,.61,.36,1);
-      --side-gap: 2.5px; /* exact left/right gutter */
-    }
-
-    /* ================================
-       HARD DISABLE PAGE SCROLLBARS
-       (so only the outer index page scrolls)
-       ================================ */
-    *, *::before, *::after { box-sizing: border-box; }
-
-    html, body{
-      height: auto;           /* allow natural content height for iframe sizing */
-      max-height: none;
-      overflow: hidden !important;   /* <- kill both x and y scrollbars */
-    }
-
-    /* Extra cross-browser hiding (WebKit/Blink) */
-    html::-webkit-scrollbar,
-    body::-webkit-scrollbar{
-      width:0 !important;
-      height:0 !important;
-    }
-
-    body{
-      margin:0; padding:0; color:#fff;
-      font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-
-      /* Background kept as-is */
-      background:
-        radial-gradient(1400px 900px at 70% 20%, rgba(0,255,204,.06), transparent 60%),
-        radial-gradient(1200px 800px at 10% -10%, rgba(124,252,0,.06), transparent 60%),
-        linear-gradient(180deg,#0b1022 0%,#0b1128 60%,#0a0f1f 100%);
-      background-attachment: fixed;
-    }
-
-    a{
-      color: var(--accent);
-      text-decoration: none;
-      transition: color .2s var(--e), text-decoration-color .2s var(--e);
-    }
-    a:hover{ color: var(--accent-2); text-decoration: underline; }
-
-    /* ================================
-       MAIN HERO / GRID
-       - exact 2.5px side gutters
-       - NO internal scroll
-       ================================ */
-    .main-container{
-      width:100%;
-      max-width:none;
-      margin:0;
-
-      /* 2.5px side padding exactly */
-      padding-inline: var(--side-gap);
-      /* responsive top/bottom breathing room */
-      padding-block: clamp(14px, 3.5vh, 1.5cm);
-
-      border:none; background: transparent; box-shadow:none; border-radius:0;
-
-      display:grid;
-      grid-template-columns: 1.25fr 1fr;  /* text | portrait */
-      align-items:center;
-      gap: clamp(12px, 2.5vw, 32px);
-      text-align:left;
-      position:relative;
-      isolation:isolate;
-
-      /* natural height; parent iframe will stretch to fit.
-         keep overflow hidden so this page never scrolls. */
-      min-height: clamp(420px, 55vh, 640px);
-      overflow: hidden;
-
-      animation: rise .6s var(--e) both;
-    }
-
-    @keyframes rise{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
-    /* Decorative lines (unchanged) */
-    .main-container::before,
-    .main-container::after{
-      content:"";
-      position:absolute; inset:auto 0 -24px 0; height:140px; z-index:-1; pointer-events:none;
-      background-repeat:no-repeat; background-position:center bottom; background-size:contain;
-      filter: drop-shadow(0 0 16px rgba(24,197,216,.35));
-    }
-    .main-container::before{
-      background-image:
-        url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 200' preserveAspectRatio='none'>\
-<path d='M0,130 C200,90 400,170 600,130 800,90 1000,170 1200,130' fill='none' stroke='%231f8fb7' stroke-width='3' opacity='.68'/>\
-</svg>");
-    }
-    .main-container::after{
-      background-image:
-        url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 200' preserveAspectRatio='none'>\
-<path d='M0,170 C200,130 400,210 600,170 800,130 1000,210 1200,170' fill='none' stroke='%231f8fb7' stroke-width='3' opacity='.38'/>\
-</svg>");
-    }
-
-    /* ================================
-       TYPOGRAPHY
-       ================================ */
-    h1{
-      grid-column:1; grid-row:1;
-      margin:0 0 8px;
-      font-family: Orbitron, sans-serif;
-      font-size: clamp(28px, 5.8vw, 64px);
-      letter-spacing:.5px;
-      background: linear-gradient(90deg,#fff,var(--accent));
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent; color: transparent;
-      text-shadow:0 0 18px rgba(124,252,0,.12);
-      overflow-wrap:anywhere;  /* never push outside gutters */
-    }
-
-    p.lead{
-      grid-column:1; grid-row:2;
-      color:var(--muted);
-      margin: 6px 0 10px;
-      max-width: 56ch;
-      font-size: clamp(14px, 2.1vw, 20px);
-      overflow-wrap:anywhere;
-    }
-
-    /* Hide the literal “I am a:” line (we keep the roles list) */
-    p:nth-of-type(2){ display:none; }
-
-    .roles{
-      grid-column:1; grid-row:3;
-      list-style:none; padding:0; margin: 6px 0 0;
-      display:grid; grid-auto-rows:min-content; gap:6px;
-      justify-content:start; text-align:left;
-    }
-    .roles li{
-      background: transparent; border:none; border-radius:0;
-      padding:0; margin:0;
-      font-weight:700;
-      font-size: clamp(14px, 2vw, 18px);
-      line-height: 1.25;
-      overflow-wrap:anywhere;
-    }
-    .roles i{ display:none; }
-
-    /* ================================
-       PORTRAIT
-       - respects gutters
-       - cannot cause scroll
-       ================================ */
-    .avatar{
-      grid-column:2; grid-row:1 / span 3; justify-self:end; align-self:center;
-
-      width: clamp(200px, 30vw, 420px);
-      height: clamp(200px, 30vw, 420px);
-      max-width: calc(100% - (var(--side-gap) * 2));
-      max-height: 80vh;
-
-      border-radius: 50%;
-      object-fit: cover;
-      border: none; box-shadow: none; margin: 0;
-
-      filter: saturate(115%) hue-rotate(185deg) contrast(105%) brightness(98%);
-      box-shadow: 0 0 42px rgba(24,197,216,.18);
-      transition: filter .25s var(--e), transform .25s var(--e), box-shadow .25s var(--e);
-    }
-    .avatar:hover{ transform: translateY(-2px) scale(1.01); box-shadow: 0 0 56px rgba(24,197,216,.22); }
-
-    /* The final note under roles */
-    p.lead[style]{ grid-column:1; grid-row:4; margin-top:8px; overflow-wrap:anywhere; }
-
-    /* ================================
-       FOOTER / CONTACT
-       - exact 2.5px side gutters
-       - no internal scroll
-       ================================ */
-    .footer-container{
-      width:100%;
-      max-width:none;
-      margin: clamp(24px, 8vh, 56px) auto clamp(24px, 8vh, 60px);
-
-      padding-inline: var(--side-gap);
-      padding-block: 0;
-
-      border:none; background: transparent; box-shadow:none; border-radius:0;
-      text-align:center;
-      overflow: hidden;  /* guarantee no scroll inside footer */
-      animation: rise .6s var(--e) .1s both;
-    }
-    .footer-container h2{
-      margin: 10px 0 6px;
-      font-family: Orbitron, sans-serif; letter-spacing:.4px; font-size: clamp(18px,3.2vw,24px);
-      overflow-wrap:anywhere;
-    }
-    .footer-container ul{
-      list-style:none; padding:0; margin:12px 0 8px;
-      display:flex; flex-wrap:wrap; gap:12px; justify-content:center;
-    }
-    .footer-container li a{
-      display:inline-flex; align-items:center; gap:8px; font-weight:800;
-      padding:10px 14px; border-radius:999px;
-      border:none; background: rgba(0,0,0,.28);
-    }
-    .footer-container li a:hover{
-      background: var(--accent); color:#041e0e; text-decoration: none;
-    }
-    .footer-container small{ color:var(--muted); }
-
-    /* ================================
-       RESPONSIVE TWEAKS
-       ================================ */
-    @media (max-width: 980px){
-      .main-container{ grid-template-columns: 1.1fr .9fr; }
-    }
-
-    @media (max-width: 760px){
-      .main-container{
-        grid-template-columns: 1fr;
-        text-align:center;
-        min-height: auto; /* let content define height for iframe sizing */
-
-        /* keep EXACT 2.5px sides on phones too */
-        padding-inline: var(--side-gap);
-        padding-block: clamp(12px, 4vh, 20px);
-      }
-
-      h1, p.lead, .roles, p.lead[style]{
-        grid-column:1; grid-row:auto; justify-self:center; text-align:center;
-      }
-      .roles{ justify-content:center; }
-
-      .avatar{
-        grid-column:1; grid-row:auto; justify-self:center; margin: 10px 0 4px;
-        width: min(180px, calc(100% - (var(--side-gap) * 2)));
-        height: min(180px, calc(100vw - (var(--side-gap) * 2)));
-      }
-
-      .footer-container{
-        padding-inline: var(--side-gap);
-      }
-    }
-
-    /* Reduce motion for accessibility */
-    @media (prefers-reduced-motion: reduce){
-      *{ animation: none !important; transition: none !important; }
-    }
-  </style>
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- ================================
-       MAIN HERO
-       ================================ -->
-  <div class="main-container">
-    <h1>Welcome to Mulinda's World!</h1>
-
-    <!-- Your real profile image in the same directory -->
-    <img class="avatar" src="profilepic.jpg" alt="Mulinda Israel Negondeni profile picture"/>
-
-    <p class="lead">
-      I’m <strong>Mulinda Israel Negondeni</strong>, a creative professional passionate about innovation,
-      growth, and new technologies.
-    </p>
-
-    <!-- Hidden by CSS (we keep the roles list) -->
-    <p>I am a:</p>
-
-    <ul class="roles" aria-label="Roles">
-      <li>Conceptualizer</li>
-      <li>Full Stack Developer</li>
-      <li>AI-Assisted Developer</li>
-      <li>Data Analyst</li>
-    </ul>
-
-    <p class="lead" style="margin-top:10px">
-      Use the menu at the top to explore my work and background.
-    </p>
+  <!-- Real-universe background: sun + planets + orbits -->
+  <div class="universe-layer" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="planet p1"></div>
+    <div class="planet p2"></div>
+    <div class="planet p3"></div>
+    <div class="planet p4"></div>
+    <div class="orbit-arc orbit-1"></div>
+    <div class="orbit-arc orbit-2"></div>
+    <div class="orbit-arc orbit-3"></div>
   </div>
 
-  <!-- ================================
-       FOOTER / CONTACT
-       ================================ -->
-  <div class="footer-container">
-    <p>Leave a comment for me here:
-      <a href="https://forms.gle/26VeYKxNL98HJSBf7" target="_blank" rel="noopener">Comment Form</a>
-    </p>
+  <!-- Starfield canvas -->
+  anvas class="starfield" id="starfield"></canvas>
 
-    <h2>Or contact me directly:</h2>
-    <ul>
-      <li><a href="https://github.com/Mulinda2019" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
-      <li><a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
-      <li><a href="mailto:negondenimulindaisrael@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> Email</a></li>
-    </ul>
+  <header>
+    <div class="nav-inner">
+      <div class="logo">Mulinda · Real Universe</div>
+      <nav>
+        <ul>
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#orbits">Orbits</a></li>
+          <li><a href="#timeline">Timeline</a></li>
+          <li><a href="#contact">Signals</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <small>&copy; <span id="year"></span> Mulinda Israel Negondeni. All rights reserved.</small>
-  </div>
+  <main id="home">
+    <div class="shell">
+      <!-- Left: universe-style avatar card -->
+      <aside class="avatar-panel" aria-label="Mulinda avatar in a cosmic frame">
+        <div class="orbit-ring"></div>
+        <div class="avatar-circle">
+          <div class="avatar-face"></div>
+          <div class="avatar-body"></div>
+        </div>
+        <div class="avatar-title">Mulinda</div>
+        <div class="avatar-subtitle">Observer in a very real universe.</div>
+
+        <div class="space-metrics">
+          <div class="metric">
+            <div class="metric-label">Universe age</div>
+            <div class="metric-value">13.8 billion years</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Local star</div>
+            <div class="metric-value">Sun · G‑type</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Home planet</div>
+            <div class="metric-value">Earth · 3rd orbit</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Gravity</div>
+            <div class="metric-value">9.81 m/s²</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right: your content + universe logic blended -->
+      <section class="content">
+        <div class="kicker">Welcome transmission</div>
+        <h1>Welcome to Mulinda's World, the world that is real.</h1>
+
+        <p class="subtitle">
+          I’m <strong>Mulinda Israel Negondeni</strong>, a creative professional passionate about innovation,
+          growth, and new technologies. This world is rooted in the same universe you wake up in:
+          real physics, real time, and choices that actually change your trajectory.
+        </p>
+
+        <ul class="roles" aria-label="Roles">
+          <li>Conceptualizer</li>
+          <li>Full Stack Developer</li>
+          <li>AI-Assisted Developer</li>
+          <li>Data Analyst</li>
+        </ul>
+
+        <p class="subtitle-note">
+          Use the menu at the top to explore my work, experiments, and the paths my orbit has taken so far.
+        </p>
+
+        <div class="universe-row">
+          <span class="chip">Real physics · Real time</span>
+          <span class="chip">Stars, not shortcuts</span>
+          <span class="chip">One life · One orbit</span>
+        </div>
+
+        <div class="panel" id="orbits">
+          <div class="panel-title">Universe logic</div>
+          <p class="panel-text">
+            In Mulinda's world, the same rules that shape galaxies shape projects:
+            change costs energy, growth takes time, and momentum matters. Every click,
+            commit, and idea behaves like a small force nudging a real orbit, not just
+            pixels glowing on a screen.
+          </p>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn-primary" id="traceOrbitBtn">
+            Trace my orbit
+          </button>
+          <span class="cta-note">
+            Watch a small simulation of how tiny choices curve through space-time.
+          </span>
+        </div>
+
+        <div class="contact-block" id="contact">
+          <p>
+            Leave a comment for me here:
+            <a href="https://forms.gle/26VeYKxNL98HJSBf7" target="_blank" rel="noopener">Comment Form</a>
+          </p>
+
+          <h2 class="contact-heading">Or contact me directly:</h2>
+          <ul class="contact-links">
+            <li><a href="https://github.com/Mulinda2019" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
+            <li><a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+            <li><a href="mailto:negondenimulindaisrael@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> Email</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> Mulinda's World · Built in the real universe.</div>
+      <div class="footer-stars">⋆ ⋆ ⋆</div>
+    </div>
+  </footer>
 
   <script>
-    /* Keep the year current */
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Starfield
+    const canvas = document.getElementById("starfield");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      createStars();
+    }
+
+    function createStars() {
+      const count = Math.floor((canvas.width * canvas.height) / 6000);
+      stars = [];
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          z: Math.random() * 1.2 + 0.3,
+          speed: Math.random() * 0.25 + 0.05,
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        const alpha = 0.3 + 0.5 * s.z;
+        ctx.fillStyle = "rgba(210, 230, 255," + alpha + ")";
+        const size = s.z * 1.1;
+        ctx.fillRect(s.x, s.y, size, size);
+        s.y += s.speed * s.z * 1.2;
+        if (s.y > canvas.height) {
+          s.y = 0;
+          s.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+    drawStars();
+
+    // Orbit tracer
+    const traceBtn = document.getElementById("traceOrbitBtn");
+    traceBtn.addEventListener("click", () => {
+      if (traceBtn.disabled) return;
+      traceBtn.disabled = true;
+      traceBtn.textContent = "Orbit in progress...";
+      traceOrbit().then(() => {
+        traceBtn.disabled = false;
+        traceBtn.textContent = "Trace my orbit";
+      });
+    });
+
+    function traceOrbit() {
+      return new Promise((resolve) => {
+        const steps = 240;
+        let t = 0;
+        const radius = 70;
+        const centerX = window.innerWidth - 140;
+        const centerY = 120;
+
+        const particle = { x: centerX + radius, y: centerY };
+
+        function step() {
+          t += (Math.PI * 2.4) / steps;
+          particle.x = centerX + radius * Math.cos(t);
+          particle.y = centerY + radius * Math.sin(t) * 0.7;
+
+          ctx.fillStyle = "rgba(120, 200, 255, 0.9)";
+          ctx.fillRect(particle.x, particle.y, 2, 2);
+
+          if (t < Math.PI * 2.4) {
+            requestAnimationFrame(step);
+          } else {
+            resolve();
+          }
+        }
+
+        step();
+      });
+    }
   </script>
 </body>
 </html>
+
 
