@@ -69,22 +69,11 @@
       gap:1.5rem;
     }
 
-    .site-logo{
-      font-family:Orbitron, system-ui, sans-serif;
-      font-size:1rem;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-
-    .site-nav a{
-      margin-left:1rem;
-      font-size:.9rem;
-      font-weight:600;
     }
 
     /* Universe backdrop */
     .universe-layer{
-      position:absolute;
+      position:fixed;
       inset:0;
       z-index:-2;
       pointer-events:none;
@@ -92,7 +81,7 @@
     }
 
     .sun{
-      position:absolute;
+      position:fixed;
       right:-140px;
       top:-80px;
       width:260px;
@@ -107,8 +96,8 @@
     }
 
     .planet{
-      position:absolute;
-      border-radius:50%;
+      position:fixed;
+      border-radius:40%;
       opacity:.9;
       filter:drop-shadow(0 0 12px rgba(0,0,0,.9));
       animation:floatPlanet 28s ease-in-out infinite alternate;
@@ -144,7 +133,7 @@
 
     .orbit-arc{
       position:absolute;
-      border-radius:50%;
+      border-radius:30%;
       border:1px dashed rgba(151,216,242,.25);
       filter:blur(.5px);
     }
@@ -399,6 +388,7 @@
       background:radial-gradient(circle at 100% 120%, #190c3f 0%, #05030a 55%);
       color:var(--text-muted);
       padding:1.1rem 1.5rem;
+       align-items:center;
     }
 
     .footer-inner{
@@ -408,6 +398,7 @@
       flex-direction:column;
       gap:.6rem;
       font-size:.85rem;
+       align-items:center;
     }
 
     .footer-links{
@@ -597,3 +588,4 @@
   </script>
 </body>
 </html>
+
