@@ -37,7 +37,8 @@
       background-attachment:fixed;
       display:flex;
       flex-direction:column;
-      overflow-x:hidden;
+      overflow:hidden;
+      -webkit-font-smoothing:antialiased;
     }
 
     a{
@@ -46,30 +47,6 @@
       transition:color .2s var(--e), text-decoration-color .2s var(--e);
     }
     a:hover{ color:var(--accent-2); text-decoration:underline; }
-
-    /* Fixed top menu */
-    .site-header{
-      position:fixed;
-      top:0;
-      left:0;
-      right:0;
-      z-index:10;
-      backdrop-filter:blur(10px);
-      background:linear-gradient(90deg, rgba(5,7,15,.9), rgba(18,22,45,.9));
-      border-bottom:1px solid rgba(80,98,210,.6);
-    }
-
-    .site-header-inner{
-      max-width:1100px;
-      margin:0 auto;
-      padding:.7rem 1.5rem;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:1.5rem;
-    }
-
-    }
 
     /* Universe backdrop */
     .universe-layer{
@@ -81,7 +58,7 @@
     }
 
     .sun{
-      position:fixed;
+      position:absolute;
       right:-140px;
       top:-80px;
       width:260px;
@@ -96,8 +73,8 @@
     }
 
     .planet{
-      position:fixed;
-      border-radius:40%;
+      position:absolute;
+      border-radius:50%;
       opacity:.9;
       filter:drop-shadow(0 0 12px rgba(0,0,0,.9));
       animation:floatPlanet 28s ease-in-out infinite alternate;
@@ -133,7 +110,7 @@
 
     .orbit-arc{
       position:absolute;
-      border-radius:30%;
+      border-radius:50%;
       border:1px dashed rgba(151,216,242,.25);
       filter:blur(.5px);
     }
@@ -172,7 +149,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:5rem 1.5rem 3rem; /* room for fixed header */
+      padding:2.5rem 1.5rem 3rem;
     }
 
     .shell{
@@ -182,7 +159,7 @@
       display:grid;
       grid-template-columns:minmax(220px,280px) minmax(0,1fr);
       gap:2.5rem;
-      align-items:flex-start;
+      align-items:center;
     }
 
     .avatar-panel{
@@ -250,6 +227,7 @@
       box-shadow:0 0 40px rgba(151,216,242,.9);
     }
 
+    /* Replace drawn face with actual image */
     .avatar-face{
       width:100%;
       height:100%;
@@ -302,7 +280,7 @@
     }
 
     .metric{
-      padding:.7rem .8rem;
+      padding:.6rem .7rem;
       border-radius:.6rem;
       background:linear-gradient(145deg, rgba(10,12,28,.95), rgba(33,30,72,.95));
       border:1px solid rgba(90,112,255,.35);
@@ -311,7 +289,6 @@
         box-shadow .18s var(--e),
         border-color .18s var(--e),
         background .18s var(--e);
-      text-align:left;
     }
 
     .metric:hover{
@@ -334,8 +311,6 @@
     .metric-value{
       font-weight:600;
       color:var(--text-main);
-      font-size:.86rem;
-      word-wrap:break-word;
     }
 
     .content{
@@ -343,6 +318,8 @@
       position:relative;
       z-index:1;
     }
+
+    /* Removed .kicker since we no longer show the text, but keep in case you reuse it later */
 
     h1{
       font-family:Orbitron, system-ui, sans-serif;
@@ -369,7 +346,7 @@
       list-style:none;
       padding:0;
       margin:.4rem 0 .8rem;
-      display:none;
+      display:none; /* hidden because roles moved to metrics */
     }
 
     .subtitle-note{
@@ -379,55 +356,147 @@
     }
 
     .universe-row{
-      display:none;
+      display:flex;
+      flex-wrap:wrap;
+      gap:1.2rem;
+      margin-bottom:1.4rem;
+    }
+
+    .chip{
+      font-size:.78rem;
+      padding:.4rem .8rem;
+      border-radius:999px;
+      border:1px solid rgba(151,216,210,.4);
+      background:radial-gradient(circle at 0 0, rgba(151,216,210,.22), transparent 65%);
+      color:var(--text-main);
+      white-space:nowrap;
+      transition:
+        transform .18s var(--e),
+        box-shadow .18s var(--e),
+        background .18s var(--e),
+        border-color .18s var(--e);
+    }
+
+    .chip:hover{
+      transform:translateY(-1px) scale(1.03);
+      box-shadow:0 0 16px rgba(151,216,210,.85);
+      background:radial-gradient(circle at 0 0, rgba(151,216,210,.35), rgba(6,17,20,.95));
+      border-color:rgba(151,216,210,.9);
+    }
+
+    .panel{
+      border-radius:1rem;
+      background:linear-gradient(135deg, rgba(5,7,15,.95), rgba(18,22,45,.95));
+      border:1px solid rgba(80,98,210,.55);
+      padding:1rem 1rem 1.1rem;
+      box-shadow:0 0 32px rgba(0,0,0,.7);
+      position:relative;
+      overflow:hidden;
+      transition:
+        transform .22s var(--e),
+        box-shadow .22s var(--e),
+        border-color .22s var(--e);
+      margin-bottom:1.4rem;
+    }
+
+    .panel::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at 120% 0, rgba(151,216,242,.25), transparent 65%);
+      opacity:0;
+      transition:opacity .25s var(--e);
+    }
+
+    .panel:hover{
+      transform:translateY(-2px);
+      box-shadow:
+        0 0 28px rgba(80,98,210,.7),
+        0 0 46px rgba(0,0,0,.95);
+      border-color:rgba(151,216,242,.8);
+    }
+
+    .panel:hover::after{ opacity:1; }
+
+    .panel-title{
+      font-size:.88rem;
+      font-weight:600;
+      margin-bottom:.5rem;
+    }
+
+    .panel-text{
+      font-size:.86rem;
+      color:var(--text-muted);
+      line-height:1.6;
+    }
+
+    .cta-row{
+      margin-top:.6rem;
+      display:none; /* orbit button removed */
+    }
+
+    .contact-block{
+      margin-top:1.4rem;
+      font-size:.9rem;
+    }
+
+    .contact-heading{
+      margin:10px 0 4px;
+      font-family:Orbitron, system-ui, sans-serif;
+      font-size:1rem;
+    }
+
+    .contact-links{
+      list-style:none;
+      padding:0;
+      margin:.6rem 0 0;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .contact-links li a{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:800;
+      padding:10px 14px;
+      border-radius:999px;
+      border:none;
+      background:rgba(0,0,0,.28);
+      text-decoration:none;
+    }
+
+    .contact-links li a:hover{
+      background:var(--accent);
+      color:#041e0e;
+      text-decoration:none;
     }
 
     footer{
-      margin-top:auto;
       border-top:1px solid rgba(40,46,80,.9);
       background:radial-gradient(circle at 100% 120%, #190c3f 0%, #05030a 55%);
       color:var(--text-muted);
-      padding:1.1rem 1.5rem;
-       align-items:center;
+      padding:.9rem 1.5rem;
     }
 
     .footer-inner{
       max-width:1100px;
       margin:0 auto;
       display:flex;
-      flex-direction:column;
-      gap:.6rem;
-      font-size:.85rem;
-       align-items:center;
-    }
-
-    .footer-links{
-      display:flex;
-      flex-wrap:wrap;
-      gap:.75rem;
+      justify-content:space-between;
       align-items:center;
+      font-size:.8rem;
     }
 
-    .footer-links a{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(0,0,0,.28);
-      text-decoration:none;
-      font-weight:600;
-      font-size:.85rem;
-    }
-
-    .footer-links a:hover{
-      background:var(--accent);
-      color:#041e0e;
-      text-decoration:none;
+    .footer-stars{
+      letter-spacing:.2em;
+      font-size:.7rem;
+      color:#7174c7;
     }
 
     @media (max-width:780px){
-      main{ padding-top:4.5rem; }
+      main{ padding-top:1.5rem; }
       .shell{ grid-template-columns:minmax(0,1fr); }
       .avatar-panel{ order:1; }
       .content{ order:2; }
@@ -446,17 +515,6 @@
   </style>
 </head>
 <body>
-  <!-- Fixed menu -->
-  <header class="site-header">
-    <div class="site-header-inner">
-      <div class="site-logo">Mulinda's World</div>
-      <nav class="site-nav">
-        <a href="#home">Home</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>
-
   <!-- Real-universe background: sun + planets + orbits -->
   <div class="universe-layer" aria-hidden="true">
     <div class="sun"></div>
@@ -470,7 +528,7 @@
   </div>
 
   <!-- Starfield canvas -->
-  anvas class="starfield" id="starfield"></canvas>
+  <canvas class="starfield" id="starfield"></canvas>
 
   <main id="home">
     <div class="shell">
@@ -512,29 +570,50 @@
 
         <p class="subtitle">
           I’m <strong>Mulinda Israel Negondeni</strong>, a creative professional passionate about innovation,
-          growth, and new technologies.
+          growth, and new technologies. This world is rooted in the same universe you wake up in:
+          real physics, real time, and choices that actually change your trajectory.
         </p>
+
+        <ul class="roles" aria-label="Roles">
+          <li>Conceptualizer</li>
+          <li>Full Stack Developer</li>
+          <li>AI-Assisted Developer</li>
+          <li>Data Analyst</li>
+        </ul>
 
         <p class="subtitle-note">
           Use the menu at the top to explore my work, experiments, and the paths my orbit has taken so far.
         </p>
+
+        <div class="universe-row">
+          <span class="chip">Real physics · Real time</span>
+          <span class="chip">Stars, not shortcuts</span>
+          <span class="chip">One life · One orbit</span>
+        </div>
+
+        <!-- Universe logic panel and Trace my orbit removed as requested -->
+
+        <div class="contact-block" id="contact">
+          <p>
+            Leave a comment for me here:
+            <a href="https://forms.gle/26VeYKxNL98HJSBf7" target="_blank" rel="noopener">Comment Form</a>
+          </p>
+
+          <h2 class="contact-heading">Or contact me directly:</h2>
+          <ul class="contact-links">
+            <li><a href="https://github.com/Mulinda2019" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a></li>
+            <li><a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+            <li><a href="mailto:negondenimulindaisrael@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> Email</a></li>
+          </ul>
+        </div>
       </section>
     </div>
   </main>
 
   <footer>
-    <div class="footer-inner" id="contact">
-      <p>
-        Leave a comment for me here:
-        <a href="https://forms.gle/26VeYKxNL98HJSBf7" target="_blank" rel="noopener">Comment Form</a>
-      </p>
-      <div class="footer-links">
-        <span>Or contact me directly:</span>
-        <a href="https://github.com/Mulinda2019" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-        <a href="https://linkedin.com/in/mulindaisrael" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
-        <a href="mailto:negondenimulindaisrael@gmail.com" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> Email</a>
-      </div>
+    <div class="footer-inner">
       <div>© <span id="year"></span> Mulinda's World · Built in the real universe.</div>
+      <div class="footer-stars">⋆ ⋆ ⋆</div>
     </div>
   </footer>
 
@@ -588,4 +667,3 @@
   </script>
 </body>
 </html>
-
